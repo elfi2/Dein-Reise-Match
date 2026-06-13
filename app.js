@@ -28,7 +28,7 @@ const quizQuestions = [
         question: "Du schaust aus dem Fenster. Bei welchem Wetter schlägt deine innere Energie-Anzeige voll aus?",
         answers: [
             { text: "Flimmernde Hitze, bei der der Asphalt glüht und man jede Sekunde ins Wasser springen möchte.", option: "Heiß & Tropisch" },
-            { text: "Knackige, eiskalte Luft, die beim Einatmen in der Nase beißt und die Wangen sofort rot fährt.", option: "Kalt & Winterlich" },
+            { text: "Knackige, eiskalte Luft, die beim Einatmen in der Nase beißt und die Wangen sofort rot färbt.", option: "Kalt & Winterlich" },
             { text: "Ein frischer, unberechenbarer Wind, der dicke Wolken vorantreibt – perfekt, um sich zu bewegen.", option: "Mild & Wechselhaft" },
             { text: "Ein wolkenloser, tiefblauer Himmel, unter dem die Sonne so richtig brennt.", option: "Heiß & Tropisch" }
         ]
@@ -205,7 +205,7 @@ const matchNameElement = document.getElementById('match-name');
 if(startBtn) startBtn.addEventListener('click', startQuiz);
 if(restartBtn) restartBtn.addEventListener('click', startQuiz);
 
-// Sicherheitsnetz, falls das CSS verzögert lädt
+// Sicherheitsnetz blendet Bildschirme beim Laden direkt aus
 document.addEventListener("DOMContentLoaded", () => {
     if(quizScreen) quizScreen.classList.add('hidden');
     if(resultScreen) resultScreen.classList.add('hidden');
@@ -263,13 +263,13 @@ async function berechneErgebnis() {
     resultScreen.classList.remove('hidden');
     matchNameElement.innerText = "Berechne dein Match...";
     document.getElementById('match-description').innerText = "Deine Antworten werden mit unseren 12 Traumzielen abgeglichen...";
+    
+    const rankingListElement = document.getElementById('ranking-list');
+    if(rankingListElement) rankingListElement.innerHTML = "";
 
     try {
         const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
-
-        let bestesMatch = null;
-        let hoechstePunktzahl = -1;
 
         const kategorienSpalten = [
             'fokus', 'unterkuenfte', 'wetter', 'kulisse', 'transport', 
@@ -278,27 +278,63 @@ async function berechneErgebnis() {
             'lernfokus', 'co2', 'abend', 'zeitplan', 'wohlfuehl'
         ];
 
-        reisen.forEach(reise => {
+        // 1. Berechne Übereinstimmungen für jedes Ziel
+        let reisenMitPunkten = reisen.map(reise => {
             let punkte = 0;
             userAnswers.forEach((antwort, index) => {
                 const spaltenName = kategorienSpalten[index];
                 if (reise[spaltenName] === antwort) punkte++;
             });
-
-            if (punkte > hoechstePunktzahl) {
-                hoechstePunktzahl = punkte;
-                bestesMatch = reise;
-            }
+            let prozent = Math.round((punkte / quizQuestions.length) * 100);
+            return { ...reise, punkte, prozent };
         });
 
-        if (bestesMatch) {
-            matchNameElement.innerText = bestesMatch.name;
-            document.getElementById('match-description').innerText = `Genial! Du hast ${hoechstePunktzahl} von 20 Übereinstimmungen mit diesem Abenteuer. Pack deine Taschen!`;
+        // 2. Sortieren nach höchster Punktzahl zuerst
+        reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
+
+        // 3. Platz 1 oben dick anzeigen
+        const topMatch = reisenMitPunkten[0];
+        if (topMatch && topMatch.punkte > 0) {
+            matchNameElement.innerText = topMatch.name;
+            document.getElementById('match-description').innerText = 
+                `Genial! Du hast ${topMatch.punkte} von 20 Übereinstimmungen (${topMatch.prozent}%) mit diesem Abenteuer. Pack deine Taschen!`;
+            
+            // 4. Die restlichen Ränge darunter auflisten
+            if (rankingListElement) {
+                const headline = document.createElement('h3');
+                headline.innerText = "Deine weiteren Plätze:";
+                headline.style.color = "#0c4a6e";
+                headline.style.fontSize = "1.1rem";
+                headline.style.margin = "15px 0 10px 0";
+                rankingListElement.appendChild(headline);
+
+                for (let i = 1; i < reisenMitPunkten.length; i++) {
+                    const r = reisenMitPunkten[i];
+                    
+                    const item = document.createElement('div');
+                    item.style.display = "flex";
+                    item.style.justify = "space-between";
+                    item.style.padding = "10px 12px";
+                    item.style.marginBottom = "6px";
+                    item.style.borderRadius = "8px";
+                    item.style.backgroundColor = "#f8fafc";
+                    item.style.borderLeft = "4px solid #38bdf8";
+                    item.style.fontSize = "0.95rem";
+
+                    item.innerHTML = `
+                        <span style="font-weight: 600; color: #334155;">Platz ${i + 1}: ${r.name}</span>
+                        <span style="color: #64748b;">${r.prozent}% (${r.punkte}/20)</span>
+                    `;
+                    rankingListElement.appendChild(item);
+                }
+            }
         } else {
             matchNameElement.innerText = "Kein Match gefunden";
+            document.getElementById('match-description').innerText = "Es gab leider gar keine Treffer. Versuche es noch einmal!";
         }
     } catch (err) {
         console.error(err);
         matchNameElement.innerText = "Verbindungsfehler";
+        document.getElementById('match-description').innerText = "Fehler beim Laden der Reisen aus der Datenbank.";
     }
 }

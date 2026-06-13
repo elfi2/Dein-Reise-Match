@@ -19,14 +19,16 @@
         <div id="quiz-screen" class="screen hidden">
             <div class="progress-bar"><div id="progress"></div></div>
             <h2 id="question-text">Hier steht die Frage</h2>
-            <div id="answer-buttons" class="btn-grid">
-                </div>
+            <div id="answer-buttons" class="btn-grid"></div>
         </div>
 
         <div id="result-screen" class="screen hidden">
             <h2>Dein perfektes Match:</h2>
             <h1 id="match-name">Reiseziel-Name</h1>
             <p id="match-description">Hier kommt eine kurze, knackige Beschreibung hin.</p>
+            
+            <div id="ranking-list" style="margin: 25px 0; text-align: left; max-height: 300px; overflow-y: auto;"></div>
+
             <button id="cta-btn">Mehr Infos & Buchen</button>
             <button id="restart-btn">Quiz wiederholen</button>
         </div>

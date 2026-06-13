@@ -1,3 +1,4 @@
+/* Globale Stile & Reise-Vibe */
 body {
     margin: 0;
     padding: 0;
@@ -10,6 +11,7 @@ body {
     color: #1e293b;
 }
 
+/* Der Haupt-Container für das Quiz */
 .quiz-container {
     background-color: #ffffff;
     border-radius: 16px;
@@ -22,6 +24,7 @@ body {
     text-align: center;
 }
 
+/* Überschriften */
 h1 {
     color: #0369a1;
     font-size: 2rem;
@@ -42,6 +45,7 @@ p {
     margin-bottom: 30px;
 }
 
+/* Die Buttons im Quiz */
 .btn-grid {
     display: flex;
     flex-direction: column;
@@ -67,6 +71,7 @@ button:hover, .btn:hover {
     transform: translateY(-2px);
 }
 
+/* Primäre Aktions-Buttons (Start / Buchen) */
 #start-btn, #cta-btn {
     background-color: #0284c7;
     border: none;
@@ -92,6 +97,7 @@ button:hover, .btn:hover {
     background-color: #74808e;
 }
 
+/* Fortschrittsbalken */
 .progress-bar {
     width: 100%;
     height: 8px;
@@ -108,6 +114,20 @@ button:hover, .btn:hover {
     transition: width 0.3s ease;
 }
 
+/* Hilfsklasse zum Verstecken der Bildschirme */
 .hidden {
     display: none !important;
+}
+
+/* Schickes Styling für die Scrollbar der Rangliste */
+#ranking-list::-webkit-scrollbar {
+    width: 6px;
+}
+#ranking-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+}
+#ranking-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
 }
