@@ -5,24 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VAYO REISEN - Quiz</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://kit.fontawesome.com/your-code.js" crossorigin="anonymous"></script> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
     <div class="quiz-container">
         <div class="vayo-header">
-            <div class="logo-wrapper">
-                <span class="vayo-text">VAYO</span>
-                <div class="vayo-pin"></div>
+            <div class="logo-container">
+                <span class="vayo-logo-text">VAYO</span>
+                <div class="vayo-logo-icon">
+                    <div class="segment-pink"></div>
+                    <div class="segment-yellow"></div>
+                    <div class="segment-teal"></div>
+                    <div class="compass-arrow"></div>
+                </div>
             </div>
             <div class="logo-subtext">REISEN</div>
         </div>
 
         <div id="start-screen" class="screen">
             <h1>Welcher Reisetyp bist du?</h1>
-            <p>Dein Vibe. Deine Welt. Finde in 20 Fragen heraus, welches VAYO-Abenteuer perfekt zu dir passt!</p>
+            <p>Dein Vibe. Deine Welt. Finde in 20 kurzen Fragen heraus, welches VAYO-Abenteuer perfekt zu dir passt!</p>
             <button id="start-btn">Jetzt Quiz starten</button>
         </div>
 
@@ -33,8 +38,10 @@
         </div>
 
         <div id="result-screen" class="screen hidden">
-            <div id="match-icon-container"></div> <h2>Dein Match:</h2>
+            <div id="vayo-piktogramm-box"></div>
+            <h2>Dein perfektes Match:</h2>
             <h1 id="match-name">Reiseziel-Name</h1>
+            <h3 id="match-headline"></h3>
             <p id="match-description">Abgleich mit der Datenbank...</p>
             
             <div id="ranking-list"></div>

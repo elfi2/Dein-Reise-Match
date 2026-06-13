@@ -4,23 +4,76 @@ const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Hier definieren wir, welche Piktogramme (Icons) zu welchen Reisenamen passen
-const iconMapping = {
-    "Surf": "fa-solid fa-water",
-    "Ski": "fa-solid fa-person-skiing",
-    "Wandern": "fa-solid fa-mountain-sun",
-    "USA": "fa-solid fa-caravan",
-    "Roadtrip": "fa-solid fa-route",
-    "Stadt": "fa-solid fa-city",
-    "Kultur": "fa-solid fa-landmark",
-    "Party": "fa-solid fa-champagne-glasses",
-    "Beach": "fa-solid fa-umbrella-beach",
-    "Jungle": "fa-solid fa-leaf",
-    "Adventure": "fa-solid fa-fire-burner",
-    "Default": "fa-solid fa-map-location-dot"
+// Piktogramm-Mapping im Style des Brand-Boards & Zuweisung der Hintergrundfarben
+const piktogrammMapping = {
+    "TOSKANA": { icon: "fa-solid fa-mortar-pestle", color: "#FFAA00" },      // Genuss / Yellow
+    "ALPEN-TREKKING": { icon: "fa-solid fa-boot", color: "#00A896" },       // Active / Teal
+    "MALTA": { icon: "fa-solid fa-champagne-glasses", color: "#FF4A7A" },   // Community / Pink
+    "ISLAND": { icon: "fa-solid fa-caravan", color: "#FFAA00" },            // Roadtrip / Yellow
+    "ATLANTIK": { icon: "fa-solid fa-water", color: "#00A896" },            // Surfing / Teal
+    "West Coast": { icon: "fa-solid fa-van-shuttle", color: "#FFAA00" },    // Roadtrip / Yellow
+    "SCHOTTLAND": { icon: "fa-solid fa-fort-awesome", color: "#FF4A7A" },    // Culture / Pink
+    "SCHWEDEN": { icon: "fa-solid fa-campground", color: "#FF4A7A" },       // Community / Pink
+    "THAILAND": { icon: "fa-solid fa-leaf", color: "#00A896" },             // Jungle / Teal
+    "ÖSTERREICH": { icon: "fa-solid fa-person-skiing", color: "#00A896" },  // Active / Teal
+    "GRIECHENLAND": { icon: "fa-solid fa-spa", color: "#00A896" },          // Wellness / Teal
+    "NEW YORK": { icon: "fa-solid fa-city", color: "#FF4A7A" },             // Urban / Pink
+    "Default": { icon: "fa-solid fa-map-location-dot", color: "#00A896" }
 };
 
-// 2. Die 20 atmosphärischen Fragen
+// Emotionales Content-Portfolio (Storys & Headlines) für die Auswertung
+const produktPortfolio = {
+    "TOSKANA": {
+        headline: "Pasta, Amore & Sunset-Vibes",
+        story: "Pack die Sonnenbrille ein und schalt den Kopf aus. Gemeinsam mit deiner Crew ziehst du in eine traditionelle, wunderschöne Locanda inmitten von endlosen Olivenhainen. Hier ticken die Uhren langsamer. Tagsüber schlendern wir über farbenfrohe Wochenmärkte, verkosten das beste Olivenöl der Region und lernen von einer echten italienischen Nonna, wie man die perfekte Pasta selbst rollt. Abends sitzen wir alle an einer langen Tafel unter dem funkelnden Sternenhimmel, lachen, quatschen und genießen das Leben bei gutem Wein und hausgemachtem Essen. Dolce Vita auf VAYO-Art."
+    },
+    "ALPEN-TREKKING": {
+        headline: "Über den Wolken: Dein Alpen-Cross auf dem E5",
+        story: "Schnür die Boots – wir bezwingen die Alpen! Zusammen mit maximal 12 anderen Outdoorsüchtigen und einem Profi-Bergführer wanderst du auf dem legendären E5 von Deutschland nach Italien. Tagsüber spürst du die Sonne im Gesicht, während du sportliche Aufstiege meisterst und über ewiges Eis wanderst. Abends, wenn es in den Bergen knackig kühl wird, wartet das gemütlichste Kontrastprogramm: Urige Berghütten auf über 2.000 Metern, deftiges Bergsteiger-Essen und die unschlagbare Gemeinschaft im Matratzenlager. Der Moment, wenn du den Pass erreichst und ins Tal blickst? Unbezahlbar."
+    },
+    "MALTA": {
+        headline: "Escape the Ordinary: Deine Malta Party-Insel",
+        story: "Willkommen im Epizentrum des Sommers! St. Julian's wartet auf dich und deine Crew. Dein Hotel liegt mitten im Party-Hotspot Paceville – du bist also immer direkt im Geschehen. Tagsüber entfliehen wir dem Alltag auf der legendären VAYO-Boat-Party: Ein exklusives Boot, ein fetter DJ-Set-Vibe, Open Bar und der Sprung ins glasklare Mittelmeer. Sobald die Sonne untergeht, verwandelt sich die Insel in ein riesiges Festival. Unser junges Team sichert dir die VIP-Tickets für Schaumpartys, die angesagtesten Clubs und unvergessliche Nächte unter Palmen."
+    },
+    "ISLAND": {
+        headline: "Fire & Ice: Roadtrip um die isländische Ringstraße",
+        story: "Bereit für den ultimativen Roadtrip deines Lebens? Im exklusiven Allrad-Minibus und mit einem lokalen Guide am Steuer jagen wir einmal komplett um die isländische Ringstraße. Draußen ist es erfrischend kühl, während wir an gigantischen Wasserfällen vorbeiziehen, Geysire ausbrechen sehen und über massive Gletscher wandern. Das beste Gefühl? Wenn wir uns nach einem langen Tag voller epischer Naturmomente gemeinsam in einer heißen, dampfenden Thermalquelle aufwärmen. Wir übernachten in gemütlichen Holzhütten mitten in der Wildnis, kochen zusammen und jagen vielleicht sogar die Polarlichter."
+    },
+    "ATLANTIK": {
+        headline: "Catch the Wave: Glamping & Surf-Vibe in Moliets",
+        story: "Dein Sommerzuhause im Pinienwald direkt hinter den Dünen des Atlantiks. In Moliets-et-Maa erwartet dich unser voll durchorganisiertes Zelt- und Glampingcamp. Hier musst du dich um nichts kümmern – die legendäre Campküche versorgt dich mit Vollverpflegung. Schnapp dir dein Board: Zertifizierte Surflehrer bringen dich in Kleingruppen auf die perfekte Welle. Wenn du nicht gerade surfst, batteln wir uns beim Beachvolleyball-Turnier, machen Yoga bei Sonnenuntergang oder chillen im Open-Air-Kino direkt unter den Sternen. Das ist nicht nur unvergesslich, das ist eine Lebenseinstellung."
+    },
+    "West Coast": {
+        headline: "California Dreaming: Der epische West Coast Ride",
+        story: "Der amerikanische Traum, perfekt organisiert für deine Crew. Drei Wochen lang cruisen wir im exklusiven Reisebus von den steilen Straßen San Franciscos über den weltberühmten Highway 1 bis nach Los Angeles und weiter in die Glitzermetropole Las Vegas. Ein erfahrener Guide zeigt euch die coolsten Ecken abseits der Touri-Pfade. Ihr übernachtet in ikonischen, vorgebuchten US-Motels. Die Highlights jagen sich selbst: Erst erkunden wir die Gefängnisinsel Alcatraz, dann essen wir gemeinsam Pizza beim spektakulärsten Sonnenuntergang am Rande des Grand Canyon. Instagram wird glühen!"
+    },
+    "SCHOTTLAND": {
+        headline: "Ghosts, Castles & Live Music: Der Highlands-Vibe",
+        story: "Schal an, Kamera bereit – es geht ins magische Schottland. Die erste Hälfte der Reise verbringen wir in einem ultrastylischen Hostel mitten in Edinburgh. Wir zeigen dir die Stadt bei coolen Führungen und Nervenkitzel-Ghost-Walks bei Nacht. Danach steigt die Crew in unseren Tourbus und es geht tief hinein in die nebelverhangenen, kühlen Highlands. Wir erkunden die Geheimnisse von Loch Ness, wandern durch die epische Kulisse der Isle of Skye, besichtigen alte Burgen und wärmen uns abends im traditionellen Pub bei schottischer Live-Musik und ehrlicher Herzlichkeit auf."
+    },
+    "SCHWEDEN": {
+        headline: "Into the Wild: Das ultimative Kanu-Abenteuer",
+        story: "Handy aus, Natur an. Diese Reise ist eine echte Expedition in die skandinavische Wildnis. Ausgerüstet mit Kanus, wasserdichten Packtonnen und Proviant paddeln wir als Team über die spiegelglatten, einsamen Seen Schwedens. Wenn tagsüber die Sonne rauskommt, ist es perfekt warm zum Paddeln und Baden. Abends schlagen wir unter Anleitung unserer Guides unser Camp auf einer unbewohnten Insel auf. Gemeinsam Holz hacken, über dem offenen Lagerfeuer kochen, Geschichten erzählen und im Zelt einschlafen, während draußen nur die Stille Nordeuropas wartet. Das schweißt für immer zusammen."
+    },
+    "THAILAND": {
+        headline: "Tropeninzeln & Tuk-Tuks: Dein Asien-Abenteuer",
+        story: "Du willst nach Asien, hast aber keinen Bock, allein als Backpacker loszuziehen? We got you! Unser erfahrener VAYO-Guide führt eure Gruppe sicher durch das Land des Lächelns. Das Abenteuer startet im bunten Chaos von Bangkok zwischen glitzernden Tempeln und wilden Streetfood-Märkten. Mit dem Nachtzug geht es weiter in den tropischen Süden. Wir hoppen von Koh Samui über Koh Phangan bis nach Koh Tao. Freu dich auf Schnorcheln im warmen türkisfarbenen Meer, Kajaktouren durch Mangroven und legendäre Strandpartys. Alle Unterkünfte sind safe für euch vorgebucht!"
+    },
+    "ÖSTERREICH": {
+        headline: "Powder, Piste & Après-Ski: Saalbach Calling!",
+        story: "Rauf auf die Bretter! Wir checken ein in ein stylisches Jugendhotel direkt an der Skipiste im Skicircus Saalbach-Hinterglemm. Tagsüber pflügst du mit unseren Guiding-Gruppen durch den frischen Pulverschnee – egal ob du Anfänger bist oder schon die schwarzen Pisten rockst. Nachmittags treffen wir uns alle zum organisierten Après-Ski direkt am Hotel, um die Erfolge des Tages zu feiern. Und abends? Geht die Action weiter: Fackelwanderungen durch die verschneite Winterlandschaft, rasantes Nachtrodeln und epische Spieleabende im Gemeinschaftsraum mit deiner Crew."
+    },
+    "GRIECHENLAND": {
+        headline: "Slow Down: Deine Luxus-Auszeit am Ägäischen Meer",
+        story: "Gönn dir das ultimative Upgrade für Körper und Geist. Als exklusive Kleingruppe checken wir in ein erstklassiges 5-Sterne-Wellnessresort direkt am Meer ein. Vergiss den Alltagsstress: Dein Tag beginnt mit einer sanften Yoga- und Meditationssession am Strand, während die griechische Sonne langsam über dem Meer aufgeht. Im Paket ist alles für dein Wohlbefinden drin – von professionellen Ganzkörper-Massagen über Thalasso-Therapien bis hin zur luxuriösen Saunalandschaft. Abends schlemmen wir gemeinsam gehobene mediterrane Küche mit Blick auf die Wellen. Pure Erholung."
+    },
+    "NEW YORK": {
+        headline: "Empire State of Mind: Dein New York City Rausch",
+        story: "Bereit für den absoluten Großstadt-Flash im VAYO-Style? Wir bringen dich und deine Crew mitten nach Manhattan! Gemeinsam mit unserem City-Guide stürzt du dich in den Dschungel aus Wolkenkratzern. Wir stehen auf dem Empire State Building und schauen über das endlose Lichtermeer, erleben den Times Square bei Nacht, nehmen die Fähre zur Freiheitsstatue und machen ein entspanntes Picknick im Central Park. Wir scouten die hippsten Ecken in SoHo und Williamsburg (Brooklyn), gehen in den größten Malls shoppen und haben trotzdem genug Freizeit, um in kleinen Teams die Stadt zu erobern. NYC wartet auf dich!"
+    }
+};
+
+// Die 20 atmosphärischen Fragen
 const quizQuestions = [
     {
         question: "Du schließt am ersten Morgen im Urlaub die Augen und lauschst. Welches Geräusch lässt dein Herz höherspringen?",
@@ -151,7 +204,7 @@ const quizQuestions = [
     {
         question: "Du kommst zu einem Gruppenfoto zusammen. Wie groß ist die Crowd, die dich umgibt?",
         answers: [
-            { text: "Eine eingeschworene, überschaubare Truppe von knapp 10 Leuten – wir kennen nach zwei Tagen alle Insider-Witze.", option: "Intime Kleingruppe" },
+            { text: "Eine eingeschwonerne, überschaubare Truppe von knapp 10 Leuten – wir kennen nach zwei Tagen alle Insider-Witze.", option: "Intime Kleingruppe" },
             { text: "Eine solide Reisegruppe von rund 20 Leuten – perfekt, um jeden Tag mit jemand anderem zu quatschen.", option: "Mittlere Gruppe" },
             { text: "Eine riesige, wuselnde Menschenmenge – echtes Festival-Feeling, laute Stimmung und maximale Energie.", option: "Großgruppe" },
             { text: "Ein ganz exklusiver, kleiner Kreis, in dem es absolut ruhig und entspannt zugeht.", option: "Intime Kleingruppe" }
@@ -221,7 +274,6 @@ const matchNameElement = document.getElementById('match-name');
 if(startBtn) startBtn.addEventListener('click', startQuiz);
 if(restartBtn) restartBtn.addEventListener('click', startQuiz);
 
-// Sicherheitsnetz blendet Bildschirme beim Laden direkt aus
 document.addEventListener("DOMContentLoaded", () => {
     if(quizScreen) quizScreen.classList.add('hidden');
     if(resultScreen) resultScreen.classList.add('hidden');
@@ -274,21 +326,22 @@ function selectAnswer(e) {
     showNextQuestion();
 }
 
-// Hilfsfunktion zur sicheren Namensbereinigung
-function holeSauberenNamen(reiseObjekt) {
-    if (!reiseObjekt || !reiseObjekt.name) return "Unbekanntes Ziel";
-    let saubererName = reiseObjekt.name.replace(/^\d+\.\s*/, '').trim();
-    if (saubererName === "") {
-        saubererName = reiseObjekt.name;
-    }
-    return saubererName;
+// INTEGRIERTER NUMMERN-ABSCHEIDER & STRIPPER
+function holeSauberenNamen(nameRaw) {
+    if (!nameRaw) return "Unbekanntes VAYO-Match";
+    // Schneidet führende Nummern wie "6. West Coast USA" oder "1." oder "10. " ab
+    let sauber = nameRaw.replace(/^\d+\.\s*/, '').trim();
+    return sauber || nameRaw;
 }
 
-function holeIcon(name) {
-    for (let key in iconMapping) {
-        if (name.includes(key)) return iconMapping[key];
+// Findet das passende Icon und die zugehörige VAYO-Branding-Hintergrundfarbe
+function holePiktogrammMeta(nameClean) {
+    for (let schluessel in piktogrammMapping) {
+        if (nameClean.toLowerCase().includes(schluessel.toLowerCase())) {
+            return piktogrammMapping[schluessel];
+        }
     }
-    return iconMapping["Default"];
+    return piktogrammMapping["Default"];
 }
 
 async function berechneErgebnis() {
@@ -304,7 +357,6 @@ async function berechneErgebnis() {
 
         const kategorienSpalten = ['fokus', 'unterkuenfte', 'wetter', 'kulisse', 'transport', 'lage', 'unterkunft_art', 'dauer', 'zielgruppe', 'kulturraum', 'fitness', 'gepaeck', 'digital', 'verpflegung', 'gruppe', 'lernfokus', 'co2', 'abend', 'zeitplan', 'wohlfuehl'];
 
-        // 1. Berechne Übereinstimmungen für jedes Ziel
         let reisenMitPunkten = reisen.map(reise => {
             let punkte = 0;
             userAnswers.forEach((antwort, index) => {
@@ -315,35 +367,45 @@ async function berechneErgebnis() {
             return { ...reise, punkte, prozent };
         });
 
-        // 2. Sortieren nach höchster Punktzahl zuerst
         reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
-
-        // 3. Platz 1 oben dick anzeigen
         const topMatch = reisenMitPunkten[0];
+
         if (topMatch && topMatch.punkte > 0) {
-            const saubererName = holeSauberenNamen(topMatch);
-            matchNameElement.innerText = saubererName;
+            const saubererTopName = holeSauberenNamen(topMatch.name);
             
-            // PIKTOGRAMM SETZEN
-            const iconClass = holeIcon(saubererName);
-            const iconContainer = document.getElementById('match-icon-container');
-            if(iconContainer) iconContainer.innerHTML = `<i class="${iconClass}"></i>`;
+            // Setze bereinigten Titel & Piktogramm-Box-Styling
+            matchNameElement.innerText = saubererTopName;
             
-            document.getElementById('match-description').innerText = `Genial! Dein persönlicher Vibe passt zu ${topMatch.prozent}% zu diesem VAYO-Abenteuer.`;
+            const meta = holePiktogrammMeta(saubererTopName);
+            const piktoBox = document.getElementById('vayo-piktogramm-box');
+            if(piktoBox) {
+                piktoBox.innerHTML = `<i class="${meta.icon}"></i>`;
+                piktoBox.style.backgroundColor = meta.color;
+            }
+
+            // Hole passende VAYO-Brand Story & Headline aus dem Produkt-Portfolio
+            let portfolioKey = Object.keys(produktPortfolio).find(k => saubererTopName.toLowerCase().includes(k.toLowerCase()));
+            if (portfolioKey && produktPortfolio[portfolioKey]) {
+                document.getElementById('match-headline').innerText = produktPortfolio[portfolioKey].headline;
+                document.getElementById('match-description').innerText = produktPortfolio[portfolioKey].story;
+            } else {
+                document.getElementById('match-headline').innerText = "Dein ultimativer VAYO-Vibe!";
+                document.getElementById('match-description').innerText = `Genial! Dein persönlicher Vibe passt zu ${topMatch.prozent}% zu diesem VAYO-Abenteuer.`;
+            }
             
-            // 4. Die restlichen Ränge darunter auflisten
+            // 4. Die restlichen Ränge als Runner-Ups darunter auflisten
             if (rankingListElement) {
                 rankingListElement.innerHTML = "<h3>Deine weiteren Plätze:</h3>";
 
                 for (let i = 1; i < reisenMitPunkten.length; i++) {
                     const r = reisenMitPunkten[i];
-                    const bereinigterRangName = holeSauberenNamen(r);
+                    const bereinigterRangName = holeSauberenNamen(r.name);
                     
                     const item = document.createElement('div');
                     item.className = "ranking-item";
                     item.innerHTML = `
-                        <span>Platz ${i + 1}: ${bereinigterRangName}</span>
-                        <span>${r.prozent}%</span>
+                        <span class="rank-name">Platz ${i + 1}: ${bereinigterRangName}</span>
+                        <span class="rank-pct">${r.prozent}%</span>
                     `;
                     rankingListElement.appendChild(item);
                 }

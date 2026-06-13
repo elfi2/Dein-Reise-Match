@@ -1,3 +1,4 @@
+/* FARBCODES AUS DEM BRAND-BOARD */
 :root {
     --vayo-pink: #FF4A7A;
     --vayo-yellow: #FFAA00;
@@ -12,8 +13,6 @@ body {
     padding: 0;
     font-family: 'Open Sans', sans-serif;
     background-color: var(--vayo-bg);
-    background-image: radial-gradient(var(--vayo-dark) 0.5px, transparent 0.5px); /* Punkt-Muster aus dem Board */
-    background-size: 20px 20px;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -24,112 +23,208 @@ body {
 .quiz-container {
     background-color: var(--vayo-white);
     border-radius: 24px;
-    padding: 40px;
-    box-shadow: 15px 15px 0px var(--vayo-dark); /* Grober Schatten-Stil */
+    padding: 35px;
+    border: 4px solid var(--vayo-dark);
+    box-shadow: 12px 12px 0px var(--vayo-dark); /* Fetter, flacher Neo-Brutalismus Schatten */
     width: 100%;
-    max-width: 550px;
+    max-width: 520px;
     margin: 20px;
     box-sizing: border-box;
     text-align: center;
-    border: 3px solid var(--vayo-dark);
-}
-
-/* VAYO LOGO STYLING */
-.vayo-header {
-    margin-bottom: 30px;
-}
-
-.logo-wrapper {
-    display: inline-flex;
-    align-items: center;
     position: relative;
 }
 
-.vayo-text {
+/* BRANDING HEADER (EXAKT WIE DAS LOGO) */
+.vayo-header {
+    margin-bottom: 35px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vayo-logo-text {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 50px;
-    letter-spacing: -2px;
+    font-weight: 900;
+    font-size: 56px;
+    letter-spacing: -3px;
+    line-height: 1;
     color: var(--vayo-dark);
 }
 
-.vayo-pin {
-    width: 25px;
-    height: 25px;
-    background-color: var(--vayo-pink);
+.vayo-logo-icon {
+    width: 32px;
+    height: 32px;
+    border: 4px solid var(--vayo-dark);
     border-radius: 50% 50% 50% 0;
     transform: rotate(-45deg);
-    margin-left: 5px;
-    margin-top: -15px;
-    border: 3px solid var(--vayo-dark);
+    position: relative;
+    background-color: var(--vayo-white);
+    overflow: hidden;
+    margin-top: -6px;
+}
+
+/* Die exakten Farbsegmente des Pins */
+.segment-pink {
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    background-color: var(--vayo-pink);
+    top: 0; left: 0;
+}
+.segment-yellow {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: var(--vayo-yellow);
+    bottom: 0; left: 0;
+}
+.segment-teal {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: var(--vayo-teal);
+    bottom: 0; right: 0;
+}
+
+.compass-arrow {
+    position: absolute;
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 14px solid var(--vayo-dark);
+    top: 25%; left: 30%;
+    transform: rotate(45deg);
 }
 
 .logo-subtext {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 14px;
-    letter-spacing: 4px;
+    letter-spacing: 7px;
     color: var(--vayo-dark);
-    margin-top: -10px;
+    margin-top: 4px;
+    padding-left: 7px; /* Gleicht das Spacing am Ende aus */
 }
 
+/* TEXTE */
 h1 {
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.8rem;
-    margin-bottom: 15px;
+    font-weight: 800;
+    font-size: 2.2rem;
+    color: var(--vayo-dark);
+    margin: 10px 0;
 }
 
 h2 {
-    font-size: 1.2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
     color: var(--vayo-pink);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    margin: 5px 0;
 }
 
-/* BUTTONS */
+#match-headline {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.3rem;
+    color: var(--vayo-teal);
+    margin: 5px 0 15px 0;
+}
+
+p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #4B5563;
+    margin-bottom: 25px;
+}
+
+/* BUTTONS IM VAYO-STYLE */
 button, .btn {
     font-family: 'Montserrat', sans-serif;
-    background-color: var(--vayo-white);
-    border: 3px solid var(--vayo-dark);
-    color: var(--vayo-dark);
-    padding: 15px 20px;
-    border-radius: 12px;
-    font-size: 1rem;
     font-weight: 700;
+    padding: 16px 24px;
+    border-radius: 14px;
+    border: 3px solid var(--vayo-dark);
+    font-size: 1.05rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.15s ease-on-out;
     box-shadow: 4px 4px 0px var(--vayo-dark);
-    margin-bottom: 10px;
+    box-sizing: border-box;
 }
 
-button:hover {
+button:hover, .btn:hover {
     transform: translate(-2px, -2px);
-    box-shadow: 7px 7px 0px var(--vayo-dark);
+    box-shadow: 6px 6px 0px var(--vayo-dark);
+}
+
+button:active, .btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--vayo-dark);
 }
 
 #start-btn, #cta-btn {
-    background-color: var(--vayo-yellow);
+    background-color: var(--vayo-pink);
+    color: var(--vayo-white);
     width: 100%;
-    margin-top: 20px;
+}
+
+#start-btn:hover, #cta-btn:hover {
+    background-color: #e53e6b;
+}
+
+#restart-btn {
+    background-color: var(--vayo-white);
+    color: var(--vayo-dark);
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
 #answer-buttons .btn {
-    background-color: var(--vayo-bg);
+    background-color: var(--vayo-white);
+    color: var(--vayo-dark);
     text-align: left;
 }
 
 #answer-buttons .btn:hover {
     background-color: var(--vayo-teal);
-    color: white;
+    color: var(--vayo-white);
+}
+
+/* DYNAMISCHES PIKTOGRAMM IM BRAND-STYLE */
+#vayo-piktogramm-box {
+    width: 85px;
+    height: 85px;
+    border: 3px solid var(--vayo-dark);
+    border-radius: 18px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 42px;
+    box-shadow: 4px 4px 0px var(--vayo-dark);
 }
 
 /* PROGRESS BAR */
 .progress-bar {
     width: 100%;
-    height: 12px;
+    height: 14px;
     background-color: var(--vayo-bg);
-    border: 2px solid var(--vayo-dark);
-    border-radius: 10px;
+    border: 3px solid var(--vayo-dark);
+    border-radius: 20px;
     margin-bottom: 30px;
     overflow: hidden;
 }
@@ -137,29 +232,43 @@ button:hover {
 #progress {
     height: 100%;
     width: 0%;
-    background-color: var(--vayo-teal);
+    background-color: var(--vayo-yellow);
     transition: width 0.3s ease;
 }
 
-/* RESULT ICON */
-#match-icon-container {
-    font-size: 60px;
-    margin-bottom: 10px;
-    color: var(--vayo-pink);
+/* RUNNER-UPS LISTE */
+#ranking-list {
+    margin: 30px 0;
+    text-align: left;
 }
 
-/* RANKING */
-#ranking-list {
-    margin: 25px 0;
-    text-align: left;
+#ranking-list h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: var(--vayo-dark);
+    margin-bottom: 12px;
 }
 
 .ranking-item {
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    border-bottom: 2px solid var(--vayo-bg);
-    font-weight: 600;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: var(--vayo-bg);
+    border: 2px solid var(--vayo-dark);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.ranking-item .rank-name {
+    color: var(--vayo-dark);
+}
+
+.ranking-item .rank-pct {
+    color: var(--vayo-teal);
 }
 
 .hidden { display: none !important; }
