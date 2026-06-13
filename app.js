@@ -2,7 +2,8 @@
 const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// KORREKTUR: Nutzt jetzt die global geladene window.supabase Instanz fehlerfrei!
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // Piktogramm-Mapping passend zum VAYO-Branding
 const piktogrammMapping = {
@@ -288,4 +289,105 @@ function selectAnswer(e) {
     showNextQuestion();
 }
 
-function holeSa
+function holeSauberenNamen(nameRaw) {
+    if (!nameRaw) return "Unbekanntes VAYO-Match";
+    return nameRaw.replace(/^\d+\.\s*/, '').trim();
+}
+
+function findMatchingKey(saubererName) {
+    const nameUpper = saubererName.toUpperCase();
+    for (let k in produktPortfolio) {
+        if (nameUpper.includes(k.toUpperCase()) || k.toUpperCase().includes(nameUpper)) {
+            return k;
+        }
+    }
+    return null;
+}
+
+async function berechneErgebnis() {
+    quizScreen.classList.add('hidden');
+    resultScreen.classList.remove('hidden');
+    
+    const rankingListElement = document.getElementById('ranking-list');
+    const itinerarySteps = document.getElementById('itinerary-steps');
+    if(rankingListElement) rankingListElement.innerHTML = "";
+    if(itinerarySteps) itinerarySteps.innerHTML = "";
+
+    try {
+        const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
+        if (error) throw error;
+
+        const kategorienSpalten = ['fokus', 'unterkuenfte', 'wetter', 'kulisse', 'transport', 'lage', 'unterkunft_art', 'dauer', 'zielgruppe', 'kulturraum', 'fitness', 'gepaeck', 'digital', 'verpflegung', 'gruppe', 'lernfokus', 'co2', 'abend', 'zeitplan', 'wohlfuehl'];
+
+        let reisenMitPunkten = reisen.map(reise => {
+            let punkte = 0;
+            userAnswers.forEach((antwort, index) => {
+                if (reise[kategorienSpalten[index]] === antwort) punkte++;
+            });
+            return { ...reise, punkte, prozent: Math.round((punkte / quizQuestions.length) * 100) };
+        });
+
+        reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
+        const topMatch = reisenMitPunkten[0];
+
+        if (topMatch && topMatch.punkte > 0) {
+            const saubererTopName = holeSauberenNamen(topMatch.name);
+            matchNameElement.innerText = saubererTopName;
+            
+            // DYNAMISCHES PIKTOGRAMM ZUWEISEN & STYLEN
+            let mappingKey = Object.keys(piktogrammMapping).find(k => saubererTopName.toUpperCase().includes(k.toUpperCase()));
+            let meta = piktogrammMapping[mappingKey] || piktogrammMapping["Default"];
+            
+            const piktoBox = document.getElementById('vayo-piktogramm-box');
+            if(piktoBox) {
+                piktoBox.innerHTML = `<i class="${meta.icon}"></i>`;
+                piktoBox.style.backgroundColor = meta.color;
+            }
+
+            let portfolioKey = findMatchingKey(saubererTopName);
+            
+            if (portfolioKey && produktPortfolio[portfolioKey]) {
+                const zielData = produktPortfolio[portfolioKey];
+                document.getElementById('match-headline').innerText = zielData.headline;
+                document.getElementById('match-description').innerText = zielData.teaser;
+                
+                zielData.programm.forEach(schritt => {
+                    const parts = schritt.split(':');
+                    const stepDiv = document.createElement('div');
+                    stepDiv.className = "day-step";
+                    if(parts.length > 1) {
+                        stepDiv.innerHTML = `<span class="day-title">${parts[0]}:</span>${parts.slice(1).join(':')}`;
+                    } else {
+                        stepDiv.innerHTML = schritt;
+                    }
+                    itinerarySteps.appendChild(stepDiv);
+                });
+            } else {
+                document.getElementById('match-headline').innerText = "Dein VAYO-Abenteuer wartet!";
+                document.getElementById('match-description').innerText = `Genial! Dein persönlicher Charakter-Vibe hat eine Übereinstimmung von ${topMatch.prozent}% mit diesem Trip!`;
+            }
+            
+            if (rankingListElement) {
+                rankingListElement.innerHTML = "<h3>Deine weiteren Plätze:</h3>";
+
+                for (let i = 1; i < Math.min(reisenMitPunkten.length, 5); i++) {
+                    const r = reisenMitPunkten[i];
+                    const bereinigterRangName = holeSauberenNamen(r.name);
+                    
+                    const item = document.createElement('div');
+                    item.className = "ranking-item";
+                    item.innerHTML = `
+                        <span class="rank-name">Platz ${i + 1}: ${bereinigterRangName}</span>
+                        <span class="rank-pct">${r.prozent}%</span>
+                    `;
+                    rankingListElement.appendChild(item);
+                }
+            }
+        } else {
+            matchNameElement.innerText = "Berechnung läuft...";
+        }
+    } catch (err) {
+        console.error(err);
+        matchNameElement.innerText = "Verbindungsfehler";
+    }
+}
