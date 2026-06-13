@@ -171,4 +171,188 @@ const quizQuestions = [
         answers: [
             { text: "Stolz, weil ich den Planeten geschont habe und komplett auf dem Landweg oder per Schiene angereist bin.", option: "Sehr gering" },
             { text: "Ein Kompromiss – ein kurzer Flug innerhalb unseres Kontinents, um schnell im Urlaub zu sein.", option: "Mittlerer Fußabdruck" },
-            { text:
+            { text: "Pures Fernweh-Abenteuer – für dieses einmalige Ziel nehme ich den großen Flug um die halbe Welt in Kauf.", option: "Hoher Fußabdruck" },
+            { text: "Ich reise umweltfreundlich im Bus oder Zug und nutze meine eigene Muskelkraft vor Ort.", option: "Sehr gering" }
+        ]
+    },
+    {
+        question: "Die Sonne ist untergangen. Wo findet man dich um 23 Uhr?",
+        answers: [
+            { text: "Mit einem Drink in der Hand auf der Tanzfläche eines Clubs, während die Lichter flackern.", option: "Nachtleben & Clubs" },
+            { text: "Mit einer Decke umhüllt am Lagerfeuer, dem Knistern des Holzes lauschend, kurz vor dem Schlafen.", option: "Lagerfeuer & Naturruhe" },
+            { text: "In einer gemütlichen Runde bei guten Gesprächen, einem Gesellschaftsspiel oder einem Glas Wein auf der Terrasse.", option: "Geselliges Beisammensein" },
+            { text: "In einer coolen Rooftop-Bar mitten in den Straßenschluchten einer hell erleuchteten City.", option: "Nachtleben & Clubs" }
+        ]
+    },
+    {
+        question: "Wie sieht dein Endgegner im Urlaub aus? Was würde dich am meisten stressen?",
+        answers: [
+            { text: "Wenn wir den Bus oder den Guide verpassen, weil der Zeitplan extrem eng getaktet ist – ich brauche feste Strukturen.", option: "Streng durchgetaktet" },
+            { text: "Wenn der Tag komplett verplant ist und ich keine Sekunde Zeit habe, um einfach mal ziellos durch die Straßen zu treiben.", option: "Halb-organisiert" },
+            { text: "Wenn mir irgendjemand vorschreibt, wann ich aufzustehen habe – ich will absolute, ungeplante Freiheit.", option: "Freie Tagesgestaltung" },
+            { text: "Ein straff organisiertes Programm, bei dem man sich um keine Transfers selbst kümmern muss, finde ich eigentlich super.", option: "Halb-organisiert" }
+        ]
+    },
+    {
+        question: "Du postest ein Foto deiner Unterkunft. Welches visuuelle Feedback erwartest du von deinen Freunden?",
+        answers: [
+            { text: "„Wow, das sieht ja aus wie aus einem Design-Magazin! Total stylisch und edel!“", option: "Ästhetisch & Stilvoll" },
+            { text: "„Das sieht nach einem echten, ehrlichen Abenteuer aus! Richtig urig und authentisch!“", option: "Rustikal & Echt" },
+            { text: "„Mega geschmackvoll und ästhetisch eingerichtet, richtig zum Wohlfühlen!“", option: "Ästhetisch & Stilvoll" },
+            { text: "„Abenteuer pur! Hauptsache du hast ein Dach über dem Kopf, beneidenswert wild!“", option: "Rustikal & Echt" }
+        ]
+    }
+];
+
+let currentQuestionIndex = 0;
+let userAnswers = [];
+
+const startBtn = document.getElementById('start-btn');
+const restartBtn = document.getElementById('restart-btn');
+const ctaBtn = document.getElementById('cta-btn');
+const startScreen = document.getElementById('start-screen');
+const quizScreen = document.getElementById('quiz-screen');
+const resultScreen = document.getElementById('result-screen');
+const questionTextElement = document.getElementById('question-text');
+const answerButtonsElement = document.getElementById('answer-buttons');
+const progressElement = document.getElementById('progress');
+const matchNameElement = document.getElementById('match-name');
+
+if(startBtn) startBtn.addEventListener('click', startQuiz);
+if(restartBtn) restartBtn.addEventListener('click', startQuiz);
+
+// Sicherheitsnetz blendet Bildschirme beim Laden direkt aus
+document.addEventListener("DOMContentLoaded", () => {
+    if(quizScreen) quizScreen.classList.add('hidden');
+    if(resultScreen) resultScreen.classList.add('hidden');
+});
+
+function startQuiz() {
+    startScreen.classList.add('hidden');
+    resultScreen.classList.add('hidden');
+    quizScreen.classList.remove('hidden');
+    currentQuestionIndex = 0;
+    userAnswers = [];
+    showNextQuestion();
+}
+
+function showNextQuestion() {
+    resetAnswerButtons();
+    const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
+    if(progressElement) progressElement.style.width = progressPercent + '%';
+
+    if (currentQuestionIndex >= quizQuestions.length) {
+        berechneErgebnis();
+        return;
+    }
+
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+    if(questionTextElement) questionTextElement.innerText = currentQuestion.question;
+
+    currentQuestion.answers.forEach(answer => {
+        const button = document.createElement('button');
+        button.innerText = answer.text;
+        button.classList.add('btn');
+        button.dataset.option = answer.option; 
+        button.addEventListener('click', selectAnswer);
+        if(answerButtonsElement) answerButtonsElement.appendChild(button);
+    });
+}
+
+function resetAnswerButtons() {
+    if(answerButtonsElement) {
+        while (answerButtonsElement.firstChild) {
+            answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+        }
+    }
+}
+
+function selectAnswer(e) {
+    const selectedButton = e.target;
+    userAnswers.push(selectedButton.dataset.option);
+    currentQuestionIndex++;
+    showNextQuestion();
+}
+
+// Hilfsfunktion zur sicheren Namensbereinigung
+function holeSauberenNamen(reiseObjekt) {
+    if (!reiseObjekt || !reiseObjekt.name) return "Unbekanntes Ziel";
+    let saubererName = reiseObjekt.name.replace(/^\d+\.\s*/, '').trim();
+    if (saubererName === "") {
+        saubererName = reiseObjekt.name;
+    }
+    return saubererName;
+}
+
+function holeIcon(name) {
+    for (let key in iconMapping) {
+        if (name.includes(key)) return iconMapping[key];
+    }
+    return iconMapping["Default"];
+}
+
+async function berechneErgebnis() {
+    quizScreen.classList.add('hidden');
+    resultScreen.classList.remove('hidden');
+    
+    const rankingListElement = document.getElementById('ranking-list');
+    if(rankingListElement) rankingListElement.innerHTML = "";
+
+    try {
+        const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
+        if (error) throw error;
+
+        const kategorienSpalten = ['fokus', 'unterkuenfte', 'wetter', 'kulisse', 'transport', 'lage', 'unterkunft_art', 'dauer', 'zielgruppe', 'kulturraum', 'fitness', 'gepaeck', 'digital', 'verpflegung', 'gruppe', 'lernfokus', 'co2', 'abend', 'zeitplan', 'wohlfuehl'];
+
+        // 1. Berechne Übereinstimmungen für jedes Ziel
+        let reisenMitPunkten = reisen.map(reise => {
+            let punkte = 0;
+            userAnswers.forEach((antwort, index) => {
+                const spaltenName = kategorienSpalten[index];
+                if (reise[spaltenName] === antwort) punkte++;
+            });
+            let prozent = Math.round((punkte / quizQuestions.length) * 100);
+            return { ...reise, punkte, prozent };
+        });
+
+        // 2. Sortieren nach höchster Punktzahl zuerst
+        reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
+
+        // 3. Platz 1 oben dick anzeigen
+        const topMatch = reisenMitPunkten[0];
+        if (topMatch && topMatch.punkte > 0) {
+            const saubererName = holeSauberenNamen(topMatch);
+            matchNameElement.innerText = saubererName;
+            
+            // PIKTOGRAMM SETZEN
+            const iconClass = holeIcon(saubererName);
+            const iconContainer = document.getElementById('match-icon-container');
+            if(iconContainer) iconContainer.innerHTML = `<i class="${iconClass}"></i>`;
+            
+            document.getElementById('match-description').innerText = `Genial! Dein persönlicher Vibe passt zu ${topMatch.prozent}% zu diesem VAYO-Abenteuer.`;
+            
+            // 4. Die restlichen Ränge darunter auflisten
+            if (rankingListElement) {
+                rankingListElement.innerHTML = "<h3>Deine weiteren Plätze:</h3>";
+
+                for (let i = 1; i < reisenMitPunkten.length; i++) {
+                    const r = reisenMitPunkten[i];
+                    const bereinigterRangName = holeSauberenNamen(r);
+                    
+                    const item = document.createElement('div');
+                    item.className = "ranking-item";
+                    item.innerHTML = `
+                        <span>Platz ${i + 1}: ${bereinigterRangName}</span>
+                        <span>${r.prozent}%</span>
+                    `;
+                    rankingListElement.appendChild(item);
+                }
+            }
+        } else {
+            matchNameElement.innerText = "Kein Match gefunden";
+        }
+    } catch (err) {
+        console.error(err);
+        matchNameElement.innerText = "Verbindungsfehler";
+    }
+}
