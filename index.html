@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz-Ad: Welcher Reisetyp bist du?</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <div id="start-screen" class="screen">
+            <h1>Welcher Reisetyp bist du?</h1>
+            <p>Finde in 20 kurzen Fragen heraus, welches Abenteuer perfekt zu deiner Persönlichkeit passt!</p>
+            <button id="start-btn">Jetzt Quiz starten</button>
+        </div>
+
+        <div id="quiz-screen" class="screen hidden">
+            <div class="progress-bar"><div id="progress"></div></div>
+            <h2 id="question-text">Hier steht die Frage</h2>
+            <div id="answer-buttons" class="btn-grid">
+                </div>
+        </div>
+
+        <div id="result-screen" class="screen hidden">
+            <h2>Dein perfektes Match:</h2>
+            <h1 id="match-name">Reiseziel-Name</h1>
+            <p id="match-description">Hier kommt eine kurze, knackige Beschreibung hin.</p>
+            <button id="cta-btn">Mehr Infos & Buchen</button>
+            <button id="restart-btn">Quiz wiederholen</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
