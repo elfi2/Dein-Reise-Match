@@ -1,24 +1,27 @@
+// 1. Supabase Verbindung aufsetzen
 const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
+
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Zuordnung der Icons passend zu deinem Piktogrammstil & Farb-Vibe
+// Piktogramm-Mapping passend zum VAYO-Branding
 const piktogrammMapping = {
-    "TOSKANA": { icon: "fa-solid fa-mortar-pestle", color: "#FFAA00" },      // Genuss / Yellow
-    "ALPEN-TREKKING": { icon: "fa-solid fa-boot", color: "#00A896" },       // Active / Teal
-    "MALTA": { icon: "fa-solid fa-champagne-glasses", color: "#FF4A7A" },   // Community-Party / Pink
-    "ISLAND": { icon: "fa-solid fa-caravan", color: "#FFAA00" },            // Roadtrip / Yellow
-    "ATLANTIK": { icon: "fa-solid fa-water", color: "#00A896" },            // Surfing / Teal
-    "WEST COAST": { icon: "fa-solid fa-van-shuttle", color: "#FFAA00" },     // Roadtrip / Yellow
-    "SCHOTTLAND": { icon: "fa-solid fa-fort-awesome", color: "#FF4A7A" },    // Culture-Mystic / Pink
-    "SCHWEDEN": { icon: "fa-solid fa-campground", color: "#FF4A7A" },       // Community / Pink
-    "THAILAND": { icon: "fa-solid fa-leaf", color: "#00A896" },             // Jungle / Teal
-    "ÖSTERREICH": { icon: "fa-solid fa-person-skiing", color: "#00A896" },  // Active / Teal
-    "GRIECHENLAND": { icon: "fa-solid fa-spa", color: "#00A896" },          // Wellness / Teal
-    "NEW YORK": { icon: "fa-solid fa-city", color: "#FF4A7A" }              // Urban / Pink
+    "TOSKANA": { icon: "fa-solid fa-mortar-pestle", color: "#FFAA00" },
+    "ALPEN-TREKKING": { icon: "fa-solid fa-boot", color: "#00A896" },
+    "MALTA": { icon: "fa-solid fa-champagne-glasses", color: "#FF4A7A" },
+    "ISLAND": { icon: "fa-solid fa-caravan", color: "#FFAA00" },
+    "ATLANTIK": { icon: "fa-solid fa-water", color: "#00A896" },
+    "WEST COAST": { icon: "fa-solid fa-van-shuttle", color: "#FFAA00" },
+    "SCHOTTLAND": { icon: "fa-solid fa-fort-awesome", color: "#FF4A7A" },
+    "SCHWEDEN": { icon: "fa-solid fa-campground", color: "#FF4A7A" },
+    "THAILAND": { icon: "fa-solid fa-leaf", color: "#00A896" },
+    "ÖSTERREICH": { icon: "fa-solid fa-person-skiing", color: "#00A896" },
+    "GRIECHENLAND": { icon: "fa-solid fa-spa", color: "#00A896" },
+    "NEW YORK": { icon: "fa-solid fa-city", color: "#FF4A7A" },
+    "Default": { icon: "fa-solid fa-map-location-dot", color: "#00A896" }
 };
 
-// Das komplette Produkt-Portfolio mit emotionaler Brand-Story & Tagesplänen
+// Das komplette Produkt-Portfolio
 const produktPortfolio = {
     "TOSKANA": {
         headline: "Pasta, Amore & Sunset-Vibes",
@@ -149,7 +152,7 @@ const produktPortfolio = {
         headline: "Tropeninzeln & Tuk-Tuks: Dein Asien-Abenteuer",
         teaser: "Exotisch, heiß, voller Farben. Das Abenteuer startet im bunten Streetfood-Chaos Bangkoks. Per Nachtzug geht es in den Süden zum Inselhopping nach Koh Samui, Koh Phangan (Full Moon Party!) und Koh Tao.",
         programm: [
-            "Tag 1-3: Bangkok Flash. Langstreckenflug, Tuk-Tuk-Rennen & Streetfood auf der Khao San Road.",
+            "Tag 1-3: Bangkok Flash. Langstreckenflug, Tempel (Wat Pho), Tuk-Tuk-Rennen und Streetfood auf der Khao San Road.",
             "Tag 4: Der Nachtzug. Fahrt im legendären Schlafwagenzug nach Süden – echtes Backpacker-Feeling.",
             "Tag 5-8: Koh Samui Palmenparadies. Ausflüge zu versteckten Dschungel-Wasserfällen & Traumstränden.",
             "Tag 9-13: Koh Phangan Vibes. Fährenüberfahrt, Dschungelpfade erkunden & legendäre Full Moon Party.",
@@ -222,7 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if(quizScreen) quizScreen.classList.add('hidden');
     if(resultScreen) resultScreen.classList.add('hidden');
     
-    // Interaktiver Klick-Trigger für den Reiseplan
     const trigger = document.getElementById('vayo-details-trigger');
     if(trigger) {
         trigger.addEventListener('click', () => {
@@ -286,109 +288,4 @@ function selectAnswer(e) {
     showNextQuestion();
 }
 
-function holeSauberenNamen(nameRaw) {
-    if (!nameRaw) return "Unbekanntes VAYO-Match";
-    return nameRaw.replace(/^\d+\.\s*/, '').trim();
-}
-
-function findMatchingKey(saubererName) {
-    const nameUpper = saubererName.toUpperCase();
-    for (let k in produktPortfolio) {
-        if (nameUpper.includes(k.toUpperCase()) || k.toUpperCase().includes(nameUpper)) {
-            return k;
-        }
-    }
-    return null;
-}
-
-async function berechneErgebnis() {
-    quizScreen.classList.add('hidden');
-    resultScreen.classList.remove('hidden');
-    
-    const rankingListElement = document.getElementById('ranking-list');
-    const itinerarySteps = document.getElementById('itinerary-steps');
-    if(rankingListElement) rankingListElement.innerHTML = "";
-    if(itinerarySteps) itinerarySteps.innerHTML = "";
-
-    try {
-        const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
-        if (error) throw error;
-
-        const kategorienSpalten = ['fokus', 'unterkuenfte', 'wetter', 'kulisse', 'transport', 'lage', 'unterkunft_art', 'dauer', 'zielgruppe', 'kulturraum', 'fitness', 'gepaeck', 'digital', 'verpflegung', 'gruppe', 'lernfokus', 'co2', 'abend', 'zeitplan', 'wohlfuehl'];
-
-        let reisenMitPunkten = reisen.map(reise => {
-            let punkte = 0;
-            userAnswers.forEach((antwort, index) => {
-                if (reise[kategorienSpalten[index]] === antwort) punkte++;
-            });
-            return { ...reise, punkte, prozent: Math.round((punkte / quizQuestions.length) * 100) };
-        });
-
-        reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
-        const topMatch = reisenMitPunkten[0];
-
-        if (topMatch && topMatch.punkte > 0) {
-            const saubererTopName = holeSauberenNamen(topMatch.name);
-            matchNameElement.innerText = saubererTopName;
-            
-            // DYNAMISCHES PIKTOGRAMM ZUWEISEN & STYLEN
-            let mappingKey = Object.keys(piktogrammMapping).find(k => saubererTopName.toUpperCase().includes(k.toUpperCase()));
-            let meta = piktogrammMapping[mappingKey] || piktogrammMapping["Default"];
-            
-            const piktoBox = document.getElementById('vayo-piktogramm-box');
-            if(piktoBox) {
-                piktoBox.innerHTML = `<i class="${meta.icon}"></i>`;
-                piktoBox.style.backgroundColor = meta.color;
-            }
-
-            // INTEGRATION BRAND-STORY & REISEPLAN AUS PORTFOLIO
-            let portfolioKey = findMatchingKey(saubererTopName);
-            
-            if (portfolioKey && produktPortfolio[portfolioKey]) {
-                const zielData = produktPortfolio[portfolioKey];
-                document.getElementById('match-headline').innerText = zielData.headline;
-                document.getElementById('match-description').innerText = zielData.teaser;
-                
-                // Befülle den ausklappbaren Reiseplan Schritt für Schritt
-                zielData.programm.forEach(schritt => {
-                    const parts = schritt.split(':');
-                    const stepDiv = document.createElement('div');
-                    stepDiv.className = "day-step";
-                    if(parts.length > 1) {
-                        stepDiv.innerHTML = `<span class="day-title">${parts[0]}:</span>${parts.slice(1).join(':')}`;
-                    } else {
-                        stepDiv.innerText = schritt;
-                    }
-                    itinerarySteps.appendChild(stepDiv);
-                });
-            } else {
-                document.getElementById('match-headline').innerText = "Dein VAYO-Abenteuer wartet!";
-                document.getElementById('match-description').innerText = `Dein persönlicher Charakter-Vibe hat eine Übereinstimmung von ${topMatch.prozent}% mit diesem Trip!`;
-                if(itinerarySteps) itinerarySteps.innerHTML = "<div class='day-step'>Dein individueller VAYO-Reiseplan wird generiert...</div>";
-            }
-            
-            // 4. Die Runner-Ups sauber auflisten (Ohne Nummern)
-            if (rankingListElement) {
-                rankingListElement.innerHTML = "<h3>Deine weiteren Plätze:</h3>";
-
-                for (let i = 1; i < Math.min(reisenMitPunkten.length, 5); i++) {
-                    const r = reisenMitPunkten[i];
-                    const bereinigterRangName = holeSauberenNamen(r.name);
-                    
-                    const item = document.createElement('div');
-                    item.className = "ranking-item";
-                    item.innerHTML = `
-                        <span class="rank-name">Platz ${i + 1}: ${bereinigterRangName}</span>
-                        <span class="rank-pct">${r.prozent}%</span>
-                    `;
-                    rankingListElement.appendChild(item);
-                }
-            }
-        } else {
-            matchNameElement.innerText = "Berechnung läuft...";
-        }
-    } catch (err) {
-        console.error(err);
-        matchNameElement.innerText = "Verbindungsfehler";
-    }
-}
+function holeSa
