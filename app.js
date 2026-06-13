@@ -1,8 +1,8 @@
 // 1. Supabase Verbindung aufsetzen
-const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co/rest/v1/";
-const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD"; // Hier deinen vollen langen Key drinlassen!
+const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD"; 
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 2. Die 20 atmosphärischen Fragen
 const quizQuestions = [
@@ -48,7 +48,7 @@ const quizQuestions = [
             { text: "Das gemeinsame Lachen und die Musik im Bus, während die Autobahnschilder an uns vorbeiziehen.", option: "Fernreisebus" },
             { text: "Der Moment, in dem die Anschnallzeichen erlöschen und man unter sich die Wolkendecke Europas sieht.", option: "Kurzstreckenflug" },
             { text: "Das Kribbeln im Bauch beim nächtlichen Transatlantikflug, wenn man weiß: Gleich bin ich auf einem neuen Kontinent.", option: "Langstreckenflug" },
-            { text: "Das gleichmäßige Rattern der Schienen, während man entspannt aus dem Fenster schaut und die Landschaft an sich vorbeiziehen lässt.", option: "Zug" }
+            { text: "Das gleichmäßige Rattern der Schienen, während man entspannt aus dem Fenster schaut und die Landschaft an sich vorbeizeihen lässt.", option: "Zug" }
         ]
     },
     {
@@ -205,6 +205,12 @@ const matchNameElement = document.getElementById('match-name');
 if(startBtn) startBtn.addEventListener('click', startQuiz);
 if(restartBtn) restartBtn.addEventListener('click', startQuiz);
 
+// Sicherheitsnetz, falls das CSS verzögert lädt
+document.addEventListener("DOMContentLoaded", () => {
+    if(quizScreen) quizScreen.classList.add('hidden');
+    if(resultScreen) resultScreen.classList.add('hidden');
+});
+
 function startQuiz() {
     startScreen.classList.add('hidden');
     resultScreen.classList.add('hidden');
@@ -217,7 +223,7 @@ function startQuiz() {
 function showNextQuestion() {
     resetAnswerButtons();
     const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
-    progressElement.style.width = progressPercent + '%';
+    if(progressElement) progressElement.style.width = progressPercent + '%';
 
     if (currentQuestionIndex >= quizQuestions.length) {
         berechneErgebnis();
@@ -225,7 +231,7 @@ function showNextQuestion() {
     }
 
     const currentQuestion = quizQuestions[currentQuestionIndex];
-    questionTextElement.innerText = currentQuestion.question;
+    if(questionTextElement) questionTextElement.innerText = currentQuestion.question;
 
     currentQuestion.answers.forEach(answer => {
         const button = document.createElement('button');
@@ -233,13 +239,15 @@ function showNextQuestion() {
         button.classList.add('btn');
         button.dataset.option = answer.option; 
         button.addEventListener('click', selectAnswer);
-        answerButtonsElement.appendChild(button);
+        if(answerButtonsElement) answerButtonsElement.appendChild(button);
     });
 }
 
 function resetAnswerButtons() {
-    while (answerButtonsElement.firstChild) {
-        answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+    if(answerButtonsElement) {
+        while (answerButtonsElement.firstChild) {
+            answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+        }
     }
 }
 
