@@ -1,108 +1,135 @@
-/* Globale Stile & Reise-Vibe */
+:root {
+    --vayo-pink: #FF4A7A;
+    --vayo-yellow: #FFAA00;
+    --vayo-teal: #00A896;
+    --vayo-dark: #1A1D20;
+    --vayo-bg: #F8F6F0;
+    --vayo-white: #FFFFFF;
+}
+
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--vayo-bg);
+    background-image: radial-gradient(var(--vayo-dark) 0.5px, transparent 0.5px); /* Punkt-Muster aus dem Board */
+    background-size: 20px 20px;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #1e293b;
+    color: var(--vayo-dark);
 }
 
-/* Der Haupt-Container für das Quiz */
 .quiz-container {
-    background-color: #ffffff;
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    background-color: var(--vayo-white);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 15px 15px 0px var(--vayo-dark); /* Grober Schatten-Stil */
     width: 100%;
-    max-width: 600px;
+    max-width: 550px;
     margin: 20px;
     box-sizing: border-box;
     text-align: center;
+    border: 3px solid var(--vayo-dark);
 }
 
-/* Überschriften */
+/* VAYO LOGO STYLING */
+.vayo-header {
+    margin-bottom: 30px;
+}
+
+.logo-wrapper {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+}
+
+.vayo-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 50px;
+    letter-spacing: -2px;
+    color: var(--vayo-dark);
+}
+
+.vayo-pin {
+    width: 25px;
+    height: 25px;
+    background-color: var(--vayo-pink);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    margin-left: 5px;
+    margin-top: -15px;
+    border: 3px solid var(--vayo-dark);
+}
+
+.logo-subtext {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--vayo-dark);
+    margin-top: -10px;
+}
+
 h1 {
-    color: #0369a1;
-    font-size: 2rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.8rem;
     margin-bottom: 15px;
 }
 
 h2 {
-    color: #0c4a6e;
-    font-size: 1.4rem;
-    margin-bottom: 25px;
-    line-height: 1.4;
+    font-size: 1.2rem;
+    color: var(--vayo-pink);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-p {
-    color: #64748b;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 30px;
-}
-
-/* Die Buttons im Quiz */
-.btn-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
+/* BUTTONS */
 button, .btn {
-    background-color: #f0fdf4;
-    border: 2px solid #bbf7d0;
-    color: #166534;
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--vayo-white);
+    border: 3px solid var(--vayo-dark);
+    color: var(--vayo-dark);
     padding: 15px 20px;
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
-    text-align: center;
+    box-shadow: 4px 4px 0px var(--vayo-dark);
+    margin-bottom: 10px;
 }
 
-button:hover, .btn:hover {
-    background-color: #dcfce7;
-    border-color: #86efac;
-    transform: translateY(-2px);
+button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0px var(--vayo-dark);
 }
 
-/* Primäre Aktions-Buttons (Start / Buchen) */
 #start-btn, #cta-btn {
-    background-color: #0284c7;
-    border: none;
-    color: #ffffff;
-    font-size: 1.1rem;
-    padding: 16px 32px;
-    width: auto;
-    display: inline-block;
+    background-color: var(--vayo-yellow);
+    width: 100%;
+    margin-top: 20px;
 }
 
-#start-btn:hover, #cta-btn:hover {
-    background-color: #0369a1;
+#answer-buttons .btn {
+    background-color: var(--vayo-bg);
+    text-align: left;
 }
 
-#restart-btn {
-    background-color: #94a3b8;
-    border: none;
-    color: #ffffff;
-    margin-top: 15px;
+#answer-buttons .btn:hover {
+    background-color: var(--vayo-teal);
+    color: white;
 }
 
-#restart-btn:hover {
-    background-color: #74808e;
-}
-
-/* Fortschrittsbalken */
+/* PROGRESS BAR */
 .progress-bar {
     width: 100%;
-    height: 8px;
-    background-color: #f1f5f9;
-    border-radius: 4px;
+    height: 12px;
+    background-color: var(--vayo-bg);
+    border: 2px solid var(--vayo-dark);
+    border-radius: 10px;
     margin-bottom: 30px;
     overflow: hidden;
 }
@@ -110,24 +137,29 @@ button:hover, .btn:hover {
 #progress {
     height: 100%;
     width: 0%;
-    background-color: #38bdf8;
+    background-color: var(--vayo-teal);
     transition: width 0.3s ease;
 }
 
-/* Hilfsklasse zum Verstecken der Bildschirme */
-.hidden {
-    display: none !important;
+/* RESULT ICON */
+#match-icon-container {
+    font-size: 60px;
+    margin-bottom: 10px;
+    color: var(--vayo-pink);
 }
 
-/* Schickes Styling für die Scrollbar der Rangliste */
-#ranking-list::-webkit-scrollbar {
-    width: 6px;
+/* RANKING */
+#ranking-list {
+    margin: 25px 0;
+    text-align: left;
 }
-#ranking-list::-webkit-scrollbar-track {
-    background: #f1f5f9;
-    border-radius: 10px;
+
+.ranking-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 2px solid var(--vayo-bg);
+    font-weight: 600;
 }
-#ranking-list::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 10px;
-}
+
+.hidden { display: none !important; }
