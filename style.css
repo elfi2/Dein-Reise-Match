@@ -1,0 +1,113 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1e293b;
+}
+
+.quiz-container {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 600px;
+    margin: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+h1 {
+    color: #0369a1;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+h2 {
+    color: #0c4a6e;
+    font-size: 1.4rem;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+p {
+    color: #64748b;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.btn-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+button, .btn {
+    background-color: #f0fdf4;
+    border: 2px solid #bbf7d0;
+    color: #166534;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+button:hover, .btn:hover {
+    background-color: #dcfce7;
+    border-color: #86efac;
+    transform: translateY(-2px);
+}
+
+#start-btn, #cta-btn {
+    background-color: #0284c7;
+    border: none;
+    color: #ffffff;
+    font-size: 1.1rem;
+    padding: 16px 32px;
+    width: auto;
+    display: inline-block;
+}
+
+#start-btn:hover, #cta-btn:hover {
+    background-color: #0369a1;
+}
+
+#restart-btn {
+    background-color: #94a3b8;
+    border: none;
+    color: #ffffff;
+    margin-top: 15px;
+}
+
+#restart-btn:hover {
+    background-color: #74808e;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #f1f5f9;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+#progress {
+    height: 100%;
+    width: 0%;
+    background-color: #38bdf8;
+    transition: width 0.3s ease;
+}
+
+.hidden {
+    display: none !important;
+}
