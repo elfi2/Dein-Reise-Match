@@ -2,7 +2,7 @@
 const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // 2. Die 20 atmosphärischen Fragen
 const quizQuestions = [
