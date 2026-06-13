@@ -1,10 +1,10 @@
-// 1. Supabase Verbindung aufsetzen (Bleibt so wie du es eingetragen hast!)
+// 1. Supabase Verbindung aufsetzen
 const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co/rest/v1/";
-const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
+const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD"; // Hier deinen vollen langen Key drinlassen!
 
 const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 2. Die 20 ATMOSPHÄRISCHEN Fragen hinterlegen
+// 2. Die 20 atmosphärischen Fragen
 const quizQuestions = [
     {
         question: "Du schließt am ersten Morgen im Urlaub die Augen und lauschst. Welches Geräusch lässt dein Herz höherspringen?",
@@ -138,4 +138,159 @@ const quizQuestions = [
             { text: "Eine eingeschworene, überschaubare Truppe von knapp 10 Leuten – wir kennen nach zwei Tagen alle Insider-Witze.", option: "Intime Kleingruppe" },
             { text: "Eine solide Reisegruppe von rund 20 Leuten – perfekt, um jeden Tag mit jemand anderem zu quatschen.", option: "Mittlere Gruppe" },
             { text: "Eine riesige, wuselnde Menschenmenge – echtes Festival-Feeling, laute Stimmung und maximale Energie.", option: "Großgruppe" },
-            { text: "Ein ganz exklusiver, kleiner Kreis, in dem es absolut ruhig und entspannt zugeht.", option: "Intime
+            { text: "Ein ganz exklusiver, kleiner Kreis, in dem es absolut ruhig und entspannt zugeht.", option: "Intime Kleingruppe" }
+        ]
+    },
+    {
+        question: "Welche 'unsichtbare' Fähigkeit möchtest du unbedingt als Souvenir mit nach Hause nehmen?",
+        answers: [
+            { text: "Ich möchte stolz sagen können: 'Ich habe auf dieser Reise gelernt, wie man eine neue Sportart beherrscht oder richtig kocht!'", option: "Fähigkeit erlernen" },
+            { text: "Ich möchte stundenlang von der Geschichte, den Tempeln, den Gebräuchen und der Architektur des Landes erzählen können.", option: "Kultur & Geschichte" },
+            { text: "Gar keine Fähigkeit. Ich möchte einfach nur das Gefühl absoluter, tiefer Tiefenentspannung im Kopf mitbringen.", option: "Reine Erholung" },
+            { text: "Ich will meinen Körper in einer Disziplin (Skifahren, Surfen etc.) aufs nächste Level gebracht haben.", option: "Fähigkeit erlernen" }
+        ]
+    },
+    {
+        question: "Du blickst auf die Landkarte deiner Reise. Welches Gefühl löst der Weg dorthin in dir aus?",
+        answers: [
+            { text: "Stolz, weil ich den Planeten geschont habe und komplett auf dem Landweg oder per Schiene angereist bin.", option: "Sehr gering" },
+            { text: "Ein Kompromiss – ein kurzer Flug innerhalb unseres Kontinents, um schnell im Urlaub zu sein.", option: "Mittlerer Fußabdruck" },
+            { text: "Pures Fernweh-Abenteuer – für dieses einmalige Ziel nehme ich den großen Flug um die halbe Welt in Kauf.", option: "Hoher Fußabdruck" },
+            { text: "Ich reise umweltfreundlich im Bus oder Zug und nutze meine eigene Muskelkraft vor Ort.", option: "Sehr gering" }
+        ]
+    },
+    {
+        question: "Die Sonne ist untergangen. Wo findet man dich um 23 Uhr?",
+        answers: [
+            { text: "Mit einem Drink in der Hand auf der Tanzfläche eines Clubs, während die Lichter flackern.", option: "Nachtleben & Clubs" },
+            { text: "Mit einer Decke umhüllt am Lagerfeuer, dem Knistern des Holzes lauschend, kurz vor dem Schlafen.", option: "Lagerfeuer & Naturruhe" },
+            { text: "In einer gemütlichen Runde bei guten Gesprächen, einem Gesellschaftsspiel oder einem Glas Wein auf der Terrasse.", option: "Geselliges Beisammensein" },
+            { text: "In einer coolen Rooftop-Bar mitten in den Straßenschluchten einer hell erleuchteten City.", option: "Nachtleben & Clubs" }
+        ]
+    },
+    {
+        question: "Wie sieht dein Endgegner im Urlaub aus? Was würde dich am meisten stressen?",
+        answers: [
+            { text: "Wenn wir den Bus oder den Guide verpassen, weil der Zeitplan extrem eng getaktet ist – ich brauche feste Strukturen.", option: "Streng durchgetaktet" },
+            { text: "Wenn der Tag komplett verplant ist und ich keine Sekunde Zeit habe, um einfach mal ziellos durch die Straßen zu treiben.", option: "Halb-organisiert" },
+            { text: "Wenn mir irgendjemand vorschreibt, wann ich aufzustehen habe – ich will absolute, ungeplante Freiheit.", option: "Freie Tagesgestaltung" },
+            { text: "Ein straff organisiertes Programm, bei dem man sich um keine Transfers selbst kümmern muss, finde ich eigentlich super.", option: "Halb-organisiert" }
+        ]
+    },
+    {
+        question: "Du postest ein Foto deiner Unterkunft. Welches visuuelle Feedback erwartest du von deinen Freunden?",
+        answers: [
+            { text: "„Wow, das sieht ja aus wie aus einem Design-Magazin! Total stylisch und edel!“", option: "Ästhetisch & Stilvoll" },
+            { text: "„Das sieht nach einem echten, ehrlichen Abenteuer aus! Richtig urig und authentisch!“", option: "Rustikal & Echt" },
+            { text: "„Mega geschmackvoll und ästhetisch eingerichtet, richtig zum Wohlfühlen!“", option: "Ästhetisch & Stilvoll" },
+            { text: "„Abenteuer pur! Hauptsache du hast ein Dach über dem Kopf, beneidenswert wild!“", option: "Rustikal & Echt" }
+        ]
+    }
+];
+
+let currentQuestionIndex = 0;
+let userAnswers = [];
+
+const startBtn = document.getElementById('start-btn');
+const restartBtn = document.getElementById('restart-btn');
+const ctaBtn = document.getElementById('cta-btn');
+const startScreen = document.getElementById('start-screen');
+const quizScreen = document.getElementById('quiz-screen');
+const resultScreen = document.getElementById('result-screen');
+const questionTextElement = document.getElementById('question-text');
+const answerButtonsElement = document.getElementById('answer-buttons');
+const progressElement = document.getElementById('progress');
+const matchNameElement = document.getElementById('match-name');
+
+if(startBtn) startBtn.addEventListener('click', startQuiz);
+if(restartBtn) restartBtn.addEventListener('click', startQuiz);
+
+function startQuiz() {
+    startScreen.classList.add('hidden');
+    resultScreen.classList.add('hidden');
+    quizScreen.classList.remove('hidden');
+    currentQuestionIndex = 0;
+    userAnswers = [];
+    showNextQuestion();
+}
+
+function showNextQuestion() {
+    resetAnswerButtons();
+    const progressPercent = (currentQuestionIndex / quizQuestions.length) * 100;
+    progressElement.style.width = progressPercent + '%';
+
+    if (currentQuestionIndex >= quizQuestions.length) {
+        berechneErgebnis();
+        return;
+    }
+
+    const currentQuestion = quizQuestions[currentQuestionIndex];
+    questionTextElement.innerText = currentQuestion.question;
+
+    currentQuestion.answers.forEach(answer => {
+        const button = document.createElement('button');
+        button.innerText = answer.text;
+        button.classList.add('btn');
+        button.dataset.option = answer.option; 
+        button.addEventListener('click', selectAnswer);
+        answerButtonsElement.appendChild(button);
+    });
+}
+
+function resetAnswerButtons() {
+    while (answerButtonsElement.firstChild) {
+        answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+    }
+}
+
+function selectAnswer(e) {
+    const selectedButton = e.target;
+    userAnswers.push(selectedButton.dataset.option);
+    currentQuestionIndex++;
+    showNextQuestion();
+}
+
+async function berechneErgebnis() {
+    quizScreen.classList.add('hidden');
+    resultScreen.classList.remove('hidden');
+    matchNameElement.innerText = "Berechne dein Match...";
+    document.getElementById('match-description').innerText = "Deine Antworten werden mit unseren 12 Traumzielen abgeglichen...";
+
+    try {
+        const { data: reisen, error } = await supabase.from('reisen').select('*');
+        if (error) throw error;
+
+        let bestesMatch = null;
+        let hoechstePunktzahl = -1;
+
+        const kategorienSpalten = [
+            'fokus', 'unterkuenfte', 'wetter', 'kulisse', 'transport', 
+            'lage', 'unterkunft_art', 'dauer', 'zielgruppe', 'kulturraum', 
+            'fitness', 'gepaeck', 'digital', 'verpflegung', 'gruppe', 
+            'lernfokus', 'co2', 'abend', 'zeitplan', 'wohlfuehl'
+        ];
+
+        reisen.forEach(reise => {
+            let punkte = 0;
+            userAnswers.forEach((antwort, index) => {
+                const spaltenName = kategorienSpalten[index];
+                if (reise[spaltenName] === antwort) punkte++;
+            });
+
+            if (punkte > hoechstePunktzahl) {
+                hoechstePunktzahl = punkte;
+                bestesMatch = reise;
+            }
+        });
+
+        if (bestesMatch) {
+            matchNameElement.innerText = bestesMatch.name;
+            document.getElementById('match-description').innerText = `Genial! Du hast ${hoechstePunktzahl} von 20 Übereinstimmungen mit diesem Abenteuer. Pack deine Taschen!`;
+        } else {
+            matchNameElement.innerText = "Kein Match gefunden";
+        }
+    } catch (err) {
+        console.error(err);
+        matchNameElement.innerText = "Verbindungsfehler";
+    }
+}
