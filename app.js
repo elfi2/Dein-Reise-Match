@@ -219,7 +219,7 @@ const produktPortfolio = {
     }
 };
 
-// Die 10 knackigen Kernfragen
+// Die 10 fehlerfrei geschlossenen Kernfragen
 const quizQuestions = [
     {
         question: "Du schließt am ersten Morgen im Urlaub die Augen und lauschst. Welches Geräusch lässt dein Herz höherspringen?",
@@ -260,7 +260,7 @@ const quizQuestions = [
     {
         question: "Die Reise beginnt! Welcher Moment brennt sich als Erstes in dein Gedächtnis ein?",
         answers: [
-            { text: "Das gemeinsam Lachen und die Musik im Bus, während die Autobahnschilder an uns vorbeiziehen.", option: "Fernreisebus" },
+            { text: "Das gemeinsame Lachen und die Musik im Bus, während die Autobahnschilder an uns vorbeiziehen.", option: "Fernreisebus" },
             { text: "Der Moment, in dem die Anschnallzeichen erlöschen und man unter sich die Wolkendecke Europas sieht.", option: "Kurzstreckenflug" },
             { text: "Das Kribbeln im Bauch beim nächtlichen Transatlantikflug, wenn man weiß: Gleich bin ich auf einem neuen Kontinent.", option: "Langstreckenflug" },
             { text: "Das gleichmäßige Rattern der Schienen, während man entspannt aus dem Fenster schaut und die Landschaft an sich vorbeiziehen lässt.", option: "Zug" }
@@ -428,6 +428,7 @@ async function berechneErgebnis() {
         const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
 
+        // DIE REPARATUR: Genau 10 Spalten, die 1-zu-1 auf deine 10 gegebenen Antworten passen!
         const kategorienSpalten = ['fokus', 'unterkuenfte', 'wetter', 'kulisse', 'transport', 'lage', 'unterkunft_art', 'dauer', 'zielgruppe', 'abend'];
 
         let reisenMitPunkten = reisen.map(reise => {
