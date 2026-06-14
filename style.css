@@ -13,12 +13,12 @@ body {
     font-family: 'Open Sans', sans-serif;
     background-color: var(--vayo-bg);
     
-    /* KORREKTUR: Mit ./ für maximale Pfadsicherheit auf GitHub Pages */
-    background-image: url('./muster.jpg');
+    /* ABSOLUTER PFAD: Zwingt den Browser, das Bild direkt vom Server zu laden */
+    background-image: url('https://elfi2.github.io/Dein-Reise-Match/muster.jpg');
     background-position: bottom center;
     background-repeat: repeat-x; 
-    background-size: auto 120px; /* Höhe des Musters */
-    background-attachment: stroke;
+    background-size: auto 120px; /* Höhe deines stylischen Festival-Musters */
+    background-attachment: fixed; /* Hält das Muster beim Scrollen fest am Boden */
     
     min-height: 100vh;
     display: flex;
@@ -36,7 +36,7 @@ body {
     box-shadow: 12px 12px 0px var(--vayo-dark);
     width: 100%;
     max-width: 540px;
-    /* Der untere Abstand (160px) sorgt dafür, dass die Box niemals das Muster überlagert */
+    /* Großzügiger unterer Abstand, damit das Quiz niemals das Muster verdeckt */
     margin: 40px 20px 160px 20px; 
     box-sizing: border-box;
     text-align: center;
