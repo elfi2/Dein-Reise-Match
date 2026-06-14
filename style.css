@@ -13,12 +13,12 @@ body {
     font-family: 'Open Sans', sans-serif;
     background-color: var(--vayo-bg);
     
-    /* ABSOLUTER PFAD: Zwingt den Browser, das Bild direkt vom Server zu laden */
-    background-image: url('https://elfi2.github.io/Dein-Reise-Match/muster.jpg');
+    /* BOMBENSICHER: Das VAYO-Muster als direkter SVG-Code im CSS – lädt ohne Bilddatei garantiert! */
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='120' viewBox='0 0 1200 120' preserveAspectRatio='none'><rect width='1200' height='120' fill='%23FF4A7A'/><rect x='100' width='80' height='120' fill='%2300A896'/><rect x='180' width='40' height='120' fill='%23FFAA00'/><rect x='300' width='120' height='120' fill='%231A1D20'/><rect x='500' width='60' height='120' fill='%2300A896'/><rect x='650' width='100' height='120' fill='%23FFAA00'/><rect x='850' width='50' height='120' fill='%23FF4A7A'/><rect x='950' width='120' height='120' fill='%231A1D20'/><path d='M0,60 Q25,30 50,60 T100,60 T150,60 T200,60 T250,60 T300,60 T350,60 T400,60 T450,60 T500,60 T550,60 T600,60 T650,60 T700,60 T750,60 T800,60 T850,60 T900,60 T950,60 T1000,60 T1050,60 T1100,60 T1150,60 T1200,60' fill='none' stroke='%231A1D20' stroke-width='4'/><path d='M0,30 L1200,30 M0,90 L1200,90' fill='none' stroke='%231A1D20' stroke-width='2' stroke-dasharray='10,10'/></svg>");
     background-position: bottom center;
     background-repeat: repeat-x; 
-    background-size: auto 120px; /* Höhe deines stylischen Festival-Musters */
-    background-attachment: fixed; /* Hält das Muster beim Scrollen fest am Boden */
+    background-size: auto 120px; 
+    background-attachment: fixed;
     
     min-height: 100vh;
     display: flex;
@@ -36,7 +36,6 @@ body {
     box-shadow: 12px 12px 0px var(--vayo-dark);
     width: 100%;
     max-width: 540px;
-    /* Großzügiger unterer Abstand, damit das Quiz niemals das Muster verdeckt */
     margin: 40px 20px 160px 20px; 
     box-sizing: border-box;
     text-align: center;
