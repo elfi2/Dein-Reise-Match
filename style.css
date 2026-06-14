@@ -13,11 +13,12 @@ body {
     font-family: 'Open Sans', sans-serif;
     background-color: var(--vayo-bg);
     
-    /* NEU: Das VAYO-Muster am unteren Bildschirmrand einbinden */
-    background-image: url('muster.jpg');
+    /* KORREKTUR: Mit ./ für maximale Pfadsicherheit auf GitHub Pages */
+    background-image: url('./muster.jpg');
     background-position: bottom center;
-    background-repeat: repeat-x; /* Wiederholt das Muster unendlich nach links und rechts */
-    background-size: auto 120px; /* Setzt die Höhe des Musters auf knackige 120px */
+    background-repeat: repeat-x; 
+    background-size: auto 120px; /* Höhe des Musters */
+    background-attachment: stroke;
     
     min-height: 100vh;
     display: flex;
@@ -35,11 +36,12 @@ body {
     box-shadow: 12px 12px 0px var(--vayo-dark);
     width: 100%;
     max-width: 540px;
-    margin: 20px 20px 140px 20px; /* Erhöhter unterer Abstand (140px), damit die Box niemals das Muster überlagert */
+    /* Der untere Abstand (160px) sorgt dafür, dass die Box niemals das Muster überlagert */
+    margin: 40px 20px 160px 20px; 
     box-sizing: border-box;
     text-align: center;
     position: relative;
-    z-index: 10; /* Sorgt dafür, dass die Box immer sauber vor dem Hintergrund schwebt */
+    z-index: 10;
 }
 
 /* VAYO LOGO DESIGN */
@@ -124,7 +126,7 @@ h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem;
 #match-headline { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.35rem; color: var(--vayo-teal); margin: 5px 0 15px 0; }
 p { font-size: 1rem; line-height: 1.6; color: #374151; }
 
-/* BILD-RAHMEN FÜR DIE HOCHGELADENEN PNGS */
+/* BILD-RAHMEN FÜR DIE PNGS */
 #vayo-piktogramm-box {
     width: 120px;
     height: 120px;
