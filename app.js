@@ -4,148 +4,17 @@ const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// REINE VEKTORGRAFIKEN (SVGS) IM ORIGINALEN VAYO NEO-BRUTALISMUS STIL
-const vayoCustomIcons = {
-    // 1. Pizza (Toskana)
-    "PIZZA": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#FFAA00" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <path d="M25,25 L75,25 L50,80 Z" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4" stroke-linejoin="round"/>
-        <circle cx="45" cy="40" r="4" fill="#00A896" stroke="#1A1D20" stroke-width="2"/>
-        <circle cx="55" cy="55" r="4" fill="#00A896" stroke="#1A1D20" stroke-width="2"/>
-        <path d="M22,25 Q50,15 78,25" fill="none" stroke="#1A1D20" stroke-width="4"/>
-    </svg></div>`,
-
-    // 2. Berg (Alpen-Trekking)
-    "BERG": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#FFAA00" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <polygon points="50,15 15,80 85,80" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4" stroke-linejoin="round"/>
-        <polygon points="50,15 40,35 50,45 58,32" fill="#F8F6F0" stroke="#1A1D20" stroke-width="3" stroke-linejoin="round"/>
-        <polygon points="68,45 50,80 85,80" fill="#00A896" stroke="#1A1D20" stroke-width="3" stroke-linejoin="round"/>
-    </svg></div>`,
-
-    // 3. Diskokugel (Malta)
-    "DISKOKUGEL": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#1A1D20" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <line x1="50" y1="4" x2="50" y2="25" stroke="#FFAA00" stroke-width="4"/>
-        <circle cx="50" cy="52" r="24" fill="#FF4A7A" stroke="#F8F6F0" stroke-width="4"/>
-        <line x1="30" y1="52" x2="70" y2="52" stroke="#F8F6F0" stroke-width="2"/>
-        <line x1="50" y1="32" x2="50" y2="72" stroke="#F8F6F0" stroke-width="2"/>
-        <circle cx="20" cy="25" r="3" fill="#00A896"/>
-        <circle cx="78" cy="32" r="4" fill="#FFAA00"/>
-    </svg></div>`,
-
-    // 4. Wasserfall / Ringstraße (Island)
-    "WASSERFALL": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#00A896" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <rect x="35" y="25" width="30" height="55" fill="#F8F6F0" stroke="#1A1D20" stroke-width="4"/>
-        <path d="M12,25 L35,25 L35,80 L12,80 Z" fill="#FFAA00" stroke="#1A1D20" stroke-width="4"/>
-        <path d="M65,25 L88,25 L88,80 L65,80 Z" fill="#FFAA00" stroke="#1A1D20" stroke-width="4"/>
-        <line x1="42" y1="35" x2="42" y2="70" stroke="#1A1D20" stroke-width="2"/>
-        <line x1="58" y1="42" x2="58" y2="75" stroke="#1A1D20" stroke-width="2"/>
-    </svg></div>`,
-
-    // 5. Surfbrett (Atlantik Frankreich Surf)
-    "SURFBRETT": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#00A896" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <path d="M20,65 Q40,45 70,65" fill="none" stroke="#1A1D20" stroke-width="4" stroke-linecap="round"/>
-        <path d="M50,15 C35,30 35,65 50,82 C65,65 65,30 50,15 Z" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4"/>
-        <line x1="50" y1="15" x2="50" y2="82" stroke="#1A1D20" stroke-width="3"/>
-    </svg></div>`,
-
-    // 6. Golden Gate Bridge / Roadtrip (West Coast USA)
-    "BRIDGE": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#00A896" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <line x1="25" y1="20" x2="25" y2="80" stroke="#1A1D20" stroke-width="5"/>
-        <line x1="75" y1="20" x2="75" y2="80" stroke="#1A1D20" stroke-width="5"/>
-        <path d="M10,35 Q50,65 90,35" fill="none" stroke="#FF4A7A" stroke-width="4"/>
-        <line x1="10" y1="55" x2="90" y2="55" stroke="#1A1D20" stroke-width="4"/>
-    </svg></div>`,
-
-    // 7. Highland Rind (Schottland)
-    "COW": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#FFAA00" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <rect x="30" y="35" width="40" height="35" rx="10" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4"/>
-        <path d="M20,25 Q35,40 40,40 M80,25 Q65,40 60,40" fill="none" stroke="#F8F6F0" stroke-width="5" stroke-linecap="round"/>
-        <circle cx="42" cy="48" r="3" fill="#1A1D20"/>
-        <circle cx="58" cy="48" r="3" fill="#1A1D20"/>
-    </svg></div>`,
-
-    // 8. Kanu (Schweden Kanu)
-    "KANU": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#00A896" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <path d="M15,45 C35,65 65,65 85,45 C75,52 25,52 15,45 Z" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4" stroke-linejoin="round"/>
-        <line x1="35" y1="30" x2="65" y2="55" stroke="#FFAA00" stroke-width="4" stroke-linecap="round"/>
-    </svg></div>`,
-
-    // 9. Thailändischer Tempel (Thailand)
-    "TEMPEL": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#FFAA00" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <path d="M25,75 L75,75 L65,45 L35,45 Z" fill="#00A896" stroke="#1A1D20" stroke-width="4"/>
-        <path d="M35,45 L65,45 L50,18 Z" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4"/>
-        <rect x="44" y="58" width="12" height="17" fill="#1A1D20"/>
-    </svg></div>`,
-
-    // 10. Skier (Österreich Ski-Camp)
-    "SKIER": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <line x1="38" y1="15" x2="38" y2="85" stroke="#1A1D20" stroke-width="4" stroke-linecap="round"/>
-        <line x1="54" y1="15" x2="54" y2="85" stroke="#1A1D20" stroke-width="4" stroke-linecap="round"/>
-        <path d="M38,15 Q38,8 46,10 M54,15 Q54,8 62,10" fill="none" stroke="#1A1D20" stroke-width="4"/>
-        <line x1="28" y1="25" x2="68" y2="75" stroke="#FFAA00" stroke-width="3"/>
-    </svg></div>`,
-
-    // 11. Steinstapel / Wellness (Griechenland)
-    "STEINSTAPEL": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#FFAA00" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <ellipse cx="50" cy="72" rx="24" ry="10" fill="#1A1D20" stroke="#1A1D20" stroke-width="2"/>
-        <ellipse cx="50" cy="54" rx="18" ry="8" fill="#00A896" stroke="#1A1D20" stroke-width="3"/>
-        <ellipse cx="50" cy="38" rx="12" ry="6" fill="#FF4A7A" stroke="#1A1D20" stroke-width="3"/>
-        <circle cx="50" cy="24" r="5" fill="#F8F6F0" stroke="#1A1D20" stroke-width="3"/>
-    </svg></div>`,
-
-    // 12. Skyline (New York City)
-    "SKYLINE": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <rect x="4" y="4" width="92" height="92" rx="20" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4" rx="16"/>
-        <rect x="15" y="45" width="16" height="35" fill="#1A1D20"/>
-        <rect x="38" y="25" width="20" height="55" fill="#00A896" stroke="#1A1D20" stroke-width="3"/>
-        <rect x="65" y="38" width="18" height="42" fill="#FFAA00" stroke="#1A1D20" stroke-width="3"/>
-        <line x1="48" y1="25" x2="48" y2="10" stroke="#1A1D20" stroke-width="3"/>
-    </svg></div>`,
-
-    "Default": `<div class="vayo-svg-wrapper"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="92" height="92" rx="20" fill="#00A896" stroke="#1A1D20" stroke-width="4" rx="16"/><circle cx="50" cy="50" r="20" fill="#FF4A7A" stroke="#1A1D20" stroke-width="4"/></svg></div>`
-};
-
-// Ordnet deine echten Reisenamen perfekt den neuen Vector-Bildern zu
-const piktogrammMapping = {
-    "TOSKANA": "PIZZA",       
-    "ALPEN": "BERG",          
-    "TREKKING": "BERG",        
-    "MALTA": "DISKOKUGEL", 
-    "ISLAND": "WASSERFALL",
-    "SURF": "SURFBRETT",              
-    "ATLANTIK": "SURFBRETT",          
-    "WEST COAST": "BRIDGE",   
-    "USA": "BRIDGE",        
-    "SCHOTTLAND": "COW",    
-    "SCHWEDEN": "KANU",     
-    "KANU": "KANU",         
-    "THAILAND": "TEMPEL",    
-    "SKI": "SKIER",       
-    "ÖSTERREICH": "SKIER",
-    "GRIECHENLAND": "STEINSTAPEL",  
-    "NEW YORK": "SKYLINE"
-};
-
-// Das komplette Produkt-Portfolio
+// Das komplette Produkt-Portfolio abgeglichen mit deinen exakten GitHub-Bildern
 const produktPortfolio = {
     "TOSKANA": {
         headline: "Pasta, Amore & Sunset-Vibes",
         teaser: "Entschleunigung pur unter der Sonne Italiens. Zusammen mit deiner Crew ziehst du in eine wunderschöne Locanda inmitten von Olivenhainen. Pasta kochen mit Nonna, Weinverkostungen und lange Abende unter dem Sternenhimmel.",
+        img: "toskana.png",
         programm: [
             "Tag 1: Benvenuto! Anreise, Check-in in der Locanda & Welcome-Drink im Olivenhain.",
             "Tag 2: Markt & Aperitivo. Frische Zutaten scouten auf dem Wochenmarkt & Aperitivo-Workshop.",
             "Tag 3: Pasta-Masterklasse. Der große, traditionelle Kochkurs mit Nonna Francesca.",
-            "Tag 4: Pizza, Pizza & Pop-Art. Halbtagesausflug nach Pisa zum schiefen Turm & Pizza-Testing.",
+            "Tag 4: Pisa, Pizza & Pop-Art. Halbtagesausflug nach Pisa zum schiefen Turm & Pizza-Testing.",
             "Tag 5: Liquid Gold. Wanderung durch Olivenhaine mit anschließender Weinverkostung.",
             "Tag 6: Pool-Chillout & Festa. Relaxen am Pool und großes Abschieds-BBQ unter den Sternen.",
             "Tag 7: Arrivederci. Gemeinsames Frühstück und entspannte Heimreise."
@@ -154,6 +23,21 @@ const produktPortfolio = {
     "ALPEN": {
         headline: "Über den Wolken: Dein Alpen-Cross auf dem E5",
         teaser: "Schnür die Boots – wir bezwingen die Alpen! Zusammen mit Outdoorsüchtigen und einem Profi-Bergführer wanderst du auf dem legendären E5 von Deutschland nach Italien. Atemberaubende Gletscher treffen auf urigen Hüttenzauber.",
+        img: "alpen-trekking.png",
+        programm: [
+            "Tag 1: Startschuss Oberstdorf. Ausrüstungs-Check & Aufstieg zur Kemptner Hütte.",
+            "Tag 2: Die Königsetappe. Über die Grenze nach Österreich mit Abstieg ins malerische Lechtal.",
+            "Tag 3: Gipfelsturm & Hüttenzauber. Aufstieg zur Memminger Hütte auf über 2.200 Meter.",
+            "Tag 4: Ewiges Eis. Querung des Venet-Massivs mit Blick auf die Ötztaler Gletscher.",
+            "Tag 5: Grenzgänger nach Italien. Über das Timmelsjoch direkt in die Südtiroler Sonne.",
+            "Tag 6: Finale in Meran. Letzter Abstieg in den Palmen-Vibe Südtiroler Täler & große Pizza-Feier.",
+            "Tag 7: Tschüss Berge. Gemeinsames Frühstück und entspannte Rückreise per Zug."
+        ]
+    },
+    "TREKKING": {
+        headline: "Über den Wolken: Dein Alpen-Cross auf dem E5",
+        teaser: "Schnür die Boots – wir bezwingen die Alpen! Zusammen mit Outdoorsüchtigen und einem Profi-Bergführer wanderst du auf dem legendären E5 von Deutschland nach Italien. Atemberaubende Gletscher treffen auf urigen Hüttenzauber.",
+        img: "alpen-trekking.png",
         programm: [
             "Tag 1: Startschuss Oberstdorf. Ausrüstungs-Check & Aufstieg zur Kemptner Hütte.",
             "Tag 2: Die Königsetappe. Über die Grenze nach Österreich mit Abstieg ins malerische Lechtal.",
@@ -167,6 +51,7 @@ const produktPortfolio = {
     "MALTA": {
         headline: "Escape the Ordinary: Deine Malta Party-Insel",
         teaser: "Pulsierende Beats, türkisblaues Wasser und schlaflose Nächte. Dein Hotel liegt direkt im Party-Hotspot Paceville. Legendäre VAYO-Boat-Partys, Open-Air-Club-Nights und Klippenspringen warten auf dich.",
+        img: "malta.png",
         programm: [
             "Tag 1: Welcome to Malta. Flug, Hotel-Transfer & erstes Warm-up im Club-Viertel Paceville.",
             "Tag 2: Beach-Vibes & Sunset. Chillen am Golden Bay Beach & abendlicher VAYO Bar-Crawl.",
@@ -183,6 +68,7 @@ const produktPortfolio = {
     "ISLAND": {
         headline: "Fire & Ice: Roadtrip um die isländische Ringstraße",
         teaser: "Mystisch, episch, absolut wild. Im Allrad-Minibus jagen wir einmal komplett um die Insel. Gewaltige Wasserfälle, ausbrechende Geysire, Gletscherwanderungen und Entspannung in kochend heißen Thermalflüssen.",
+        img: "island.png",
         programm: [
             "Tag 1: Reykjavik Calling. Flug nach Island, Kennenlernen beim isländischen Streetfood.",
             "Tag 2: The Golden Circle. Thingvellir-Nationalpark, Geysire und der goldene Gullfoss-Wasserfall.",
@@ -201,6 +87,7 @@ const produktPortfolio = {
     "SURF": {
         headline: "Catch the Wave: Glamping & Surf-Vibe in Moliets",
         teaser: "Salziges Haar, Barfuß-Gefühl und endlose Strandtage. Dein Camp liegt im Pinienwald direkt hinter den Dünen Frankreichs. Surfkurse mit Profis, Sunset-Yoga, Beachvolleyball und Open-Air-Kino unter den Sternen.",
+        img: "frankreichsurf.png",
         programm: [
             "Tag 1-2: Der Road-Vibe. Entspannte Nachtanreise im Fernreisebus & Camp-Einzug.",
             "Tag 3: Erster Surf-Check. Board-Ausgabe, erste Surf-Session & Wellen-Theorie am Strand.",
@@ -220,13 +107,13 @@ const produktPortfolio = {
     "ATLANTIK": {
         headline: "Catch the Wave: Glamping & Surf-Vibe in Moliets",
         teaser: "Salziges Haar, Barfuß-Gefühl und endlose Strandtage. Dein Camp liegt im Pinienwald direkt hinter den Dünen Frankreichs. Surfkurse mit Profis, Sunset-Yoga, Beachvolleyball und Open-Air-Kino unter den Sternen.",
-        programm: [
-            "Tag 1-14: Siehe detailliertes VAYO Surf- & Glamping-Programm an Frankreichs Atlantikküste."
-        ]
+        img: "frankreichsurf.png",
+        programm: ["Tag 1-14: Siehe detailliertes VAYO Surf- & Glamping-Programm an Frankreichs Atlantikküste."]
     },
     "COAST": {
         headline: "California Dreaming: Der epische West Coast Ride",
         teaser: "Freiheit, Megacitys und Roadtrip-Nostalgie. Drei Wochen lang cruisen wir im Reisebus von San Francisco über den Highway 1 nach Los Angeles, zum Grand Canyon und mitten in den Glitzer-Rausch von Las Vegas.",
+        img: "westcoastusa.png",
         programm: [
             "Tag 1-3: San Francisco Vibes. Langstreckenflug, Cable Car fahren & Ausflug zur Gefängnisinsel Alcatraz.",
             "Tag 4-5: Highway 1. Stopps an der rauen Pazifikküste in Big Sur & Monterey zur Seelöwen-Beobachtung.",
@@ -242,6 +129,7 @@ const produktPortfolio = {
     "SCHOTTLAND": {
         headline: "Ghosts, Castles & Live Music: Der Highlands-Vibe",
         teaser: "Rau, mystisch und voller Kultur. Entdecke Edinburgh bei nächtlichen Ghost-Walks, fahre im Tourbus tief in die Highlands, besichtige Loch Ness und wärme dich abends im Pub bei schottischer Folk-Livemusik.",
+        img: "schottland.png",
         programm: [
             "Tag 1: Edinburgh Welcome. Flug, Check-in im Central-Hostel & erste gemütliche Pub-Runde.",
             "Tag 2: Royal Mile & Castle. Erkundung der historischen Burg auf dem massiven Vulkanfels.",
@@ -258,6 +146,7 @@ const produktPortfolio = {
     "SCHWEDEN": {
         headline: "Into the Wild: Das ultimative Kanu-Abenteuer",
         teaser: "Back to the roots, Teamwork und absolute Freiheit. Ausgerüstet mit Kanus und Packtonnen paddeln wir über einsame Seen, schlagen Wildnis-Camps auf unbewohnten Inseln auf und kochen über offenem Lagerfeuer.",
+        img: "schwedenkanu.png",
         programm: [
             "Tag 1-2: Das Wildnis-Intro. Bus- und Fähranreise nach Schweden & Basecamp-Briefing.",
             "Tag 3: Das erste Paddeln. Absetzen der Boote und Aufschlagen von Camp 1 auf einer einsamen Insel.",
@@ -273,6 +162,7 @@ const produktPortfolio = {
     "THAILAND": {
         headline: "Tropeninzeln & Tuk-Tuks: Dein Asien-Abenteuer",
         teaser: "Exotisch, heiß, voller Farben. Das Abenteuer startet im bunten Streetfood-Chaos Bangkoks. Per Nachtzug geht es in den Süden zum Inselhopping nach Koh Samui, Koh Phangan (Full Moon Party!) und Koh Tao.",
+        img: "thailand.png",
         programm: [
             "Tag 1-3: Bangkok Flash. Langstreckenflug, Tempel (Wat Pho), Tuk-Tuk-Rennen und Streetfood auf der Khao San Road.",
             "Tag 4: Der Nachtzug. Fahrt im legendären Schlafwagenzug nach Süden – echtes Backpacker-Feeling.",
@@ -286,6 +176,7 @@ const produktPortfolio = {
     "SKI": {
         headline: "Powder, Piste & Après-Ski: Saalbach Calling!",
         teaser: "Schneegestöber, Muskelkater und Hüttengaudi. Wir wohnen im stylischen VAYO-Jugendhotel direkt an der Skipiste im Skicircus Saalbach. Guiding-Gruppen im Tiefschnee, Nachtrodeln und Pistenpartys erwarten dich.",
+        img: "ski-camp.png",
         programm: [
             "Tag 1: Auf die Piste! Busanreise der Wintersport-Crew, Check-in & Verleihmaterial abholen.",
             "Tag 2: Line-up im Schnee. Einteilung der Ski- & Boarder-Gruppen nach Level & Kennenlern-Spiele.",
@@ -299,6 +190,7 @@ const produktPortfolio = {
     "GRIECHENLAND": {
         headline: "Slow Down: Deine Luxus-Auszeit am Ägäischen Meer",
         teaser: "Tiefenentspannt, ästhetisch und Premium. Gönn dir das ultimative Wellness-Upgrade in einer exklusiven Kleingruppe im 5-Sterne-Resort. Sunrise-Yoga am Strand, Massagen und einsame Bootstrips.",
+        img: "griechenland.png",
         programm: [
             "Tag 1: Kalimera & Chill. Flug nach Griechenland, Transfer zum Luxus-Resort & Sunset-Dinner.",
             "Tag 2: Sunrise Yoga & Thalasso. Yoga am Strand bei Sonnenaufgang & Thalasso-Therapie im Spa.",
@@ -312,6 +204,7 @@ const produktPortfolio = {
     "NEW YORK": {
         headline: "Empire State of Mind: Dein New York City Rausch",
         teaser: "Urban, ikonisch, laut – die Stadt, die niemals schläft! Erkunde Manhattan mit unserem City-Guide: Empire State Building bei Nacht, Fahrradtour durch den Central Park, Brooklyn Bridge und Shopping in SoHo.",
+        img: "newyorkcity.png",
         programm: [
             "Tag 1: Welcome to the Jungle. Langstreckenflug & Ankunft. Abends: Times Square bei Nacht!",
             "Tag 2: Top of the World. Aussichtsplattform Empire State Building & Spaziergang auf der High Line.",
@@ -347,7 +240,7 @@ const quizQuestions = [
         ]
     },
     {
-        question: "Du schaust aus dem Fenster. Bei welchem Wetter schlägt deine innere Energie-Anzeige voll aus?",
+        question: "Du schausch aus dem Fenster. Bei welchem Wetter schlägt deine innere Energie-Anzeige voll aus?",
         answers: [
             { text: "Flimmernde Hitze, bei der der Asphalt glüht und man jede Sekunde ins Wasser springen möchte.", option: "Heiß & Tropisch" },
             { text: "Knackige, eiskalte Luft, die beim Einatmen in der Nase beißt und die Wangen sofort rot färbt.", option: "Kalt & Winterlich" },
@@ -599,11 +492,15 @@ function holeSauberenNamen(nameRaw) {
     return nameRaw.replace(/^\d+\.\s*/, '').trim();
 }
 
+// INTEGRIERTE SUCHE: Erkennt nun deine exakten Fragmente aus der Datenbank ("Ski-Camp", "Frankreich Surf" etc.)
 function findMatchingKey(saubererName) {
-    const nameUpper = saubererName.toUpperCase().replace('-', ' ');
+    const nameUpper = saubererName.toUpperCase().replace('-', ' ').trim();
     for (let k in produktPortfolio) {
         const keyUpper = k.toUpperCase();
-        if (nameUpper.includes(keyUpper) || keyUpper.includes(nameUpper)) {
+        // Erkennt ob der Name im Key oder der Key im Namen vorkommt
+        if (nameUpper.includes(keyUpper) || keyUpper.includes(nameUpper) || 
+            (nameUpper === "SKI CAMP" && keyUpper === "SKI") || 
+            (nameUpper === "FRANKREICH SURF" && keyUpper === "SURF")) {
             return k;
         }
     }
@@ -640,22 +537,19 @@ async function berechneErgebnis() {
             const saubererTopName = holeSauberenNamen(topMatch.name);
             matchNameElement.innerText = saubererTopName;
             
-            // DYNAMISCHES CUSTOM VECTOR PIKTOGRAMM RENDERN
-            let mappingKey = Object.keys(piktogrammMapping).find(k => saubererTopName.toUpperCase().replace('-', ' ').includes(k.toUpperCase()));
-            let targetIconKey = piktogrammMapping[mappingKey] || "Default";
-            
-            const piktoBox = document.getElementById('vayo-piktogramm-box');
-            if(piktoBox && vayoCustomIcons[targetIconKey]) {
-                piktoBox.innerHTML = vayoCustomIcons[targetIconKey];
-            }
-
             let portfolioKey = findMatchingKey(saubererTopName);
-            
+            const piktoBox = document.getElementById('vayo-piktogramm-box');
+
             if (portfolioKey && produktPortfolio[portfolioKey]) {
                 const zielData = produktPortfolio[portfolioKey];
                 document.getElementById('match-headline').innerText = zielData.headline;
                 document.getElementById('match-description').innerText = zielData.teaser;
                 
+                // RENDERT DAS ECHTE PNG-BILD IM FETTEN RAHMEN
+                if (piktoBox && zielData.img) {
+                    piktoBox.innerHTML = `<img src="${zielData.img}" alt="VAYO Vibe">`;
+                }
+
                 zielData.programm.forEach(schritt => {
                     const parts = schritt.split(':');
                     const stepDiv = document.createElement('div');
@@ -670,6 +564,7 @@ async function berechneErgebnis() {
             } else {
                 document.getElementById('match-headline').innerText = "Dein VAYO-Abenteuer wartet!";
                 document.getElementById('match-description').innerText = `Genial! Dein persönlicher Charakter-Vibe hat eine Übereinstimmung von ${topMatch.prozent}% mit diesem Trip!`;
+                if(piktoBox) piktoBox.innerHTML = "";
             }
             
             if (rankingListElement) {
