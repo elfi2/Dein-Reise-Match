@@ -179,7 +179,37 @@ button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--v
 
 #ranking-list { margin: 25px 0; text-align: left; }
 #ranking-list h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; margin-bottom: 10px;}
-.ranking-item { display: flex; justify-content: space-between; padding: 14px; background-color: var(--vayo-white); border: 3px solid var(--vayo-dark); box-shadow: 3px 3px 0px var(--vayo-dark); border-radius: 12px; margin-bottom: 10px; font-weight: 700; font-size: 0.95rem; }
+
+/* OPTIMIERTE BRUTALISMUS-LISTENKARTEN FÜR INTERAKTIVEN KLICK */
+.ranking-item { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 14px; 
+    background-color: var(--vayo-white); 
+    border: 3px solid var(--vayo-dark); 
+    box-shadow: 4px 4px 0px var(--vayo-dark); 
+    border-radius: 12px; 
+    margin-bottom: 12px; 
+    font-weight: 700; 
+    font-size: 0.95rem; 
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.ranking-item:hover {
+    background-color: var(--vayo-bg);
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0px var(--vayo-dark);
+}
+
+/* Visuelle Markierung für die gerade aktiv ausgewählte Reisekarte */
+.ranking-item.active-card {
+    background-color: #e6f7f4; /* Sanfter VAYO-Teal Schimmer */
+    border-color: var(--vayo-teal);
+    box-shadow: 2px 2px 0px var(--vayo-teal);
+    transform: translate(2px, 2px);
+}
+
 .ranking-pct { color: var(--vayo-teal); }
 
 .hidden { display: none !important; }
