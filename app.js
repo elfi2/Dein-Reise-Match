@@ -4,24 +4,29 @@ const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Piktogramm-Mapping passend zum VAYO-Branding
+// Piktogramm-Mapping exakt abgeglichen mit deinen echten CI-Kategorien & Farben
 const piktogrammMapping = {
-    "TOSKANA": { icon: "fa-solid fa-mortar-pestle", color: "#FFAA00" },
-    "ALPEN-TREKKING": { icon: "fa-solid fa-boot", color: "#00A896" },
-    "MALTA": { icon: "fa-solid fa-champagne-glasses", color: "#FF4A7A" },
-    "ISLAND": { icon: "fa-solid fa-caravan", color: "#FFAA00" },
-    "ATLANTIK": { icon: "fa-solid fa-water", color: "#00A896" },
-    "WEST COAST": { icon: "fa-solid fa-van-shuttle", color: "#FFAA00" },
-    "SCHOTTLAND": { icon: "fa-solid fa-fort-awesome", color: "#FF4A7A" },
-    "SCHWEDEN": { icon: "fa-solid fa-campground", color: "#FF4A7A" },
-    "THAILAND": { icon: "fa-solid fa-leaf", color: "#00A896" },
-    "ÖSTERREICH": { icon: "fa-solid fa-person-skiing", color: "#00A896" },
-    "GRIECHENLAND": { icon: "fa-solid fa-spa", color: "#00A896" },
-    "NEW YORK": { icon: "fa-solid fa-city", color: "#FF4A7A" },
+    "TOSKANA": { icon: "fa-solid fa-mortar-pestle", color: "#FFAA00" },      // Genuss / Yellow
+    "ALPEN": { icon: "fa-solid fa-mountain", color: "#FFAA00" },            // Active-Mountain / Yellow
+    "TREKKING": { icon: "fa-solid fa-compass", color: "#FFAA00" },          // Active / Yellow
+    "MALTA": { icon: "fa-solid fa-champagne-glasses", color: "#FF4A7A" },   // Community-Party / Pink
+    "ISLAND": { icon: "fa-solid fa-route", color: "#FFAA00" },              // Roadtrip / Yellow
+    "SURF": { icon: "fa-solid fa-water", color: "#00A896" },                // Surfing / Teal
+    "ATLANTIK": { icon: "fa-solid fa-water", color: "#00A896" },            // Surfing / Teal
+    "WEST COAST": { icon: "fa-solid fa-van-shuttle", color: "#FFAA00" },     // Roadtrip / Yellow
+    "COAST": { icon: "fa-solid fa-van-shuttle", color: "#FFAA00" },          // Roadtrip / Yellow
+    "SCHOTTLAND": { icon: "fa-solid fa-fort-awesome", color: "#FF4A7A" },    // Culture / Pink
+    "SCHWEDEN": { icon: "fa-solid fa-campground", color: "#FF4A7A" },       // Community / Pink
+    "KANU": { icon: "fa-solid fa-campground", color: "#FF4A7A" },           // Community / Pink
+    "THAILAND": { icon: "fa-solid fa-leaf", color: "#00A896" },             // Jungle / Teal
+    "SKI": { icon: "fa-solid fa-person-skiing", color: "#00A896" },         // Active-Winter / Teal
+    "ÖSTERREICH": { icon: "fa-solid fa-person-skiing", color: "#00A896" },  // Active / Teal
+    "GRIECHENLAND": { icon: "fa-solid fa-spa", color: "#00A896" },          // Wellness / Teal
+    "NEW YORK": { icon: "fa-solid fa-city", color: "#FF4A7A" },             // Urban-Culture / Pink
     "Default": { icon: "fa-solid fa-map-location-dot", color: "#00A896" }
 };
 
-// Das komplette Produkt-Portfolio
+// Das lückenlose Produkt-Portfolio mit flexibler Erkennung deiner Datenbank-Namen
 const produktPortfolio = {
     "TOSKANA": {
         headline: "Pasta, Amore & Sunset-Vibes",
@@ -36,7 +41,7 @@ const produktPortfolio = {
             "Tag 7: Arrivederci. Gemeinsames Frühstück und entspannte Heimreise."
         ]
     },
-    "ALPEN-TREKKING": {
+    "ALPEN": {
         headline: "Über den Wolken: Dein Alpen-Cross auf dem E5",
         teaser: "Schnür die Boots – wir bezwingen die Alpen! Zusammen mit Outdoorsüchtigen und einem Profi-Bergführer wanderst du auf dem legendären E5 von Deutschland nach Italien. Atemberaubende Gletscher treffen auf urigen Hüttenzauber.",
         programm: [
@@ -70,7 +75,7 @@ const produktPortfolio = {
         teaser: "Mystisch, episch, absolut wild. Im Allrad-Minibus jagen wir einmal komplett um die Insel. Gewaltige Wasserfälle, ausbrechende Geysire, Gletscherwanderungen und Entspannung in kochend heißen Thermalflüssen.",
         programm: [
             "Tag 1: Reykjavik Calling. Flug nach Island, Kennenlernen beim isländischen Streetfood.",
-            "Tag 2: The Golden Circle. Thingvellir-Nationalpark, Geysire und the goldene Gullfoss-Wasserfall.",
+            "Tag 2: The Golden Circle. Thingvellir-Nationalpark, Geysire und der goldene Gullfoss-Wasserfall.",
             "Tag 3: Wasserfälle & Black Sand. Die Südküste mit dem schwarzen Vulkanstrand von Vik.",
             "Tag 4: Eisberge zum Anfassen. Bootstour auf der magischen Gletscherlagune Jökulsárlón.",
             "Tag 5: Die wilden Ostfjorde. Fahrt durch raue Fjorde und kleine Fischerdörfer zu unserer Holzhütte.",
@@ -83,7 +88,7 @@ const produktPortfolio = {
             "Tag 12: Farewell Island. Transfer zum Flughafen und Rückflug."
         ]
     },
-    "ATLANTIK": {
+    "SURF": {
         headline: "Catch the Wave: Glamping & Surf-Vibe in Moliets",
         teaser: "Salziges Haar, Barfuß-Gefühl und endlose Strandtage. Dein Camp liegt im Pinienwald direkt hinter den Dünen Frankreichs. Surfkurse mit Profis, Sunset-Yoga, Beachvolleyball und Open-Air-Kino unter den Sternen.",
         programm: [
@@ -102,7 +107,14 @@ const produktPortfolio = {
             "Tag 14-15: Rollin' Home. Packen, Abschiedstränen und entspannte Busrückreise."
         ]
     },
-    "WEST COAST": {
+    "ATLANTIK": {
+        headline: "Catch the Wave: Glamping & Surf-Vibe in Moliets",
+        teaser: "Salziges Haar, Barfuß-Gefühl und endlose Strandtage. Dein Camp liegt im Pinienwald direkt hinter den Dünen Frankreichs. Surfkurse mit Profis, Sunset-Yoga, Beachvolleyball und Open-Air-Kino unter den Sternen.",
+        programm: [
+            "Tag 1-14: Siehe detailliertes VAYO Surf- & Glamping-Programm an Frankreichs Atlantikküste."
+        ]
+    },
+    "COAST": {
         headline: "California Dreaming: Der epische West Coast Ride",
         teaser: "Freiheit, Megacitys und Roadtrip-Nostalgie. Drei Wochen lang cruisen wir im Reisebus von San Francisco über den Highway 1 nach Los Angeles, zum Grand Canyon und mitten in den Glitzer-Rausch von Las Vegas.",
         programm: [
@@ -161,7 +173,7 @@ const produktPortfolio = {
             "Tag 21: Kop khun khrap, Thailand! Rückflug nach Europa."
         ]
     },
-    "ÖSTERREICH": {
+    "SKI": {
         headline: "Powder, Piste & Après-Ski: Saalbach Calling!",
         teaser: "Schneegestöber, Muskelkater und Hüttengaudi. Wir wohnen im stylischen VAYO-Jugendhotel direkt an der Skipiste im Skicircus Saalbach. Guiding-Gruppen im Tiefschnee, Nachtrodeln und Pistenpartys erwarten dich.",
         programm: [
@@ -266,7 +278,7 @@ const quizQuestions = [
             { text: "Das weiche Gras direkt unter meiner Isomatte und den robusten Stoff der Zeltwand.", option: "Zelt & Camp" },
             { text: "Eine knarzende Holzpritsche oder ein rustikales Stockbett, auf dem schon hunderte Abenteurer vor mir geschlafen haben.", option: "Hostel & Hütte" },
             { text: "Ein frisch gemachtes, absolut sauberes Standard-Bett in einem Zimmer, das funktional und gemütlich ist.", option: "Mittelklasse-Hotel" },
-            { text: "Eine riesige, schneeweiße Bettdecke mit unzähligen Kissen und der Duft von edlen Raumölen im Resort.", option: "Luxushotel & Resort" }
+            { text: "Eine riesige, schneeweiße Bettdecke mit unzählinen Kissen und der Duft von edlen Raumölen im Resort.", option: "Luxushotel & Resort" }
         ]
     },
     {
@@ -477,10 +489,12 @@ function holeSauberenNamen(nameRaw) {
     return nameRaw.replace(/^\d+\.\s*/, '').trim();
 }
 
+// KORRIGIERTE PARSER-LOGIK: Erkennt nun Fragmente ("Ski-Camp" passt zu "SKI") fehlerfrei!
 function findMatchingKey(saubererName) {
-    const nameUpper = saubererName.toUpperCase();
+    const nameUpper = saubererName.toUpperCase().replace('-', ' ');
     for (let k in produktPortfolio) {
-        if (nameUpper.includes(k.toUpperCase()) || k.toUpperCase().includes(nameUpper)) {
+        const keyUpper = k.toUpperCase();
+        if (nameUpper.includes(keyUpper) || keyUpper.includes(nameUpper)) {
             return k;
         }
     }
@@ -518,7 +532,7 @@ async function berechneErgebnis() {
             matchNameElement.innerText = saubererTopName;
             
             // DYNAMISCHES PIKTOGRAMM ZUWEISEN & STYLEN
-            let mappingKey = Object.keys(piktogrammMapping).find(k => saubererTopName.toUpperCase().includes(k.toUpperCase()));
+            let mappingKey = Object.keys(piktogrammMapping).find(k => saubererTopName.toUpperCase().replace('-', ' ').includes(k.toUpperCase()));
             let meta = piktogrammMapping[mappingKey] || piktogrammMapping["Default"];
             
             const piktoBox = document.getElementById('vayo-piktogramm-box');
