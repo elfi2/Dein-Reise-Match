@@ -4,7 +4,7 @@ const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Das komplette Produkt-Portfolio abgeglichen mit deinen exakten GitHub-Bildnamen
+// Das komplette Produkt-Portfolio gekoppelt an deine exakten PNG-Bildnamen
 const produktPortfolio = {
     "TOSKANA": {
         headline: "Pasta, Amore & Sunset-Vibes",
@@ -219,7 +219,6 @@ const produktPortfolio = {
     }
 };
 
-// Die 10 knackigen Kernfragen
 const quizQuestions = [
     {
         question: "Du schließt am ersten Morgen im Urlaub die Augen und lauschst. Welches Geräusch lässt dein Herz höherspringen?",
@@ -404,7 +403,6 @@ function holeSauberenNamen(nameRaw) {
     return nameRaw.replace(/^\d+\.\s*/, '').trim();
 }
 
-// OPTIMIERTER VERGLEICH: Vergleicht Strings komplett unabhängig von Groß- und Kleinschreibung!
 function findMatchingKey(saubererName) {
     const nameUpper = saubererName.toUpperCase().replace('-', ' ').trim();
     for (let k in produktPortfolio) {
@@ -460,7 +458,7 @@ function zeigeAusgewaehlteReise(index) {
         });
     } else {
         document.getElementById('match-headline').innerText = "Dein VAYO-Abenteuer wartet!";
-        document.getElementById('match-description').innerText = `Genial! Dein persönlicher Charakter-Vibe hat eine Übereinstimmung von ${reise.prozent}% mit diesem Trip!`;
+        document.getElementById('match-description').innerText = `Genial! Dein persönlicher Charakter-Vibe hat eine Übereinstimmung von ${reisen.prozent}% mit diesem Trip!`;
         if(piktoBox) piktoBox.innerHTML = "";
         if(itinerarySteps) itinerarySteps.innerHTML = "<div class='day-step'>Reiseplan wird geladen...</div>";
     }

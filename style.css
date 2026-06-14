@@ -13,12 +13,11 @@ body {
     font-family: 'Open Sans', sans-serif;
     background-color: var(--vayo-bg);
     
-    /* REPARATUR: Lädt dein echtes hochgeladenes Bild mit der doppelten Endung muster.jpg.png */
     background-image: url('muster.jpg.png');
     background-position: bottom center;
     background-repeat: repeat-x; 
-    background-size: auto 120px; /* Die Höhe des Musters am unteren Rand */
-    background-attachment: fixed; /* Fixiert das Muster bombenfest am Boden beim Scrollen */
+    background-size: auto 120px; 
+    background-attachment: fixed; 
     
     min-height: 100vh;
     display: flex;
@@ -28,15 +27,15 @@ body {
     box-sizing: border-box;
 }
 
+/* DÜNNE LINIE: Haupt-Kasten von 4px auf 2px reduziert */
 .quiz-container {
     background-color: var(--vayo-white);
     border-radius: 24px;
     padding: 35px;
-    border: 4px solid var(--vayo-dark);
-    box-shadow: 12px 12px 0px var(--vayo-dark);
+    border: 2px solid var(--vayo-dark);
+    box-shadow: 6px 6px 0px var(--vayo-dark);
     width: 100%;
     max-width: 540px;
-    /* Der Abstand nach unten (160px) sorgt dafür, dass die Box das Muster am Boden nie überlappt */
     margin: 40px 20px 160px 20px; 
     box-sizing: border-box;
     text-align: center;
@@ -67,10 +66,11 @@ body {
     color: var(--vayo-dark);
 }
 
+/* DÜNNE LINIE: Logo-Kreis von 4px auf 2px reduziert */
 .vayo-logo-icon {
     width: 36px;
     height: 36px;
-    border: 4px solid var(--vayo-dark);
+    border: 2px solid var(--vayo-dark);
     border-radius: 50%;
     position: relative;
     background-color: var(--vayo-white);
@@ -126,7 +126,7 @@ h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem;
 #match-headline { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.35rem; color: var(--vayo-teal); margin: 5px 0 15px 0; }
 p { font-size: 1rem; line-height: 1.6; color: #374151; }
 
-/* BILD-RAHMEN FÜR DIE PNGS */
+/* DÜNNE LINIE: Piktogramm-Rahmen auf 2px harmonisiert */
 #vayo-piktogramm-box {
     width: 120px;
     height: 120px;
@@ -140,17 +140,18 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
     width: 100%;
     height: 100%;
     object-fit: contain;
-    border: 4px solid var(--vayo-dark);
+    border: 2px solid var(--vayo-dark);
     border-radius: 20px;
-    box-shadow: 5px 5px 0px var(--vayo-dark);
+    box-shadow: 4px 4px 0px var(--vayo-dark);
 }
 
+/* DÜNNE LINIE: Buttons und Badges auf einheitliche 2px gesetzt */
 .details-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background-color: var(--vayo-bg);
-    border: 3px solid var(--vayo-dark);
+    border: 2px solid var(--vayo-dark);
     padding: 12px 22px;
     border-radius: 12px;
     font-family: 'Montserrat', sans-serif;
@@ -159,13 +160,13 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
     cursor: pointer;
     margin: 5px 0 25px 0;
     transition: all 0.1s ease;
-    box-shadow: 4px 4px 0px var(--vayo-dark);
+    box-shadow: 3px 3px 0px var(--vayo-dark);
 }
-.details-badge:hover { background-color: var(--vayo-yellow); transform: translate(-1px, -1px); box-shadow: 5px 5px 0px var(--vayo-dark); }
+.details-badge:hover { background-color: var(--vayo-yellow); transform: translate(-1px, -1px); box-shadow: 4px 4px 0px var(--vayo-dark); }
 
 .itinerary-box {
     background-color: var(--vayo-bg);
-    border: 3px solid var(--vayo-dark);
+    border: 2px solid var(--vayo-dark);
     border-radius: 16px;
     padding: 20px;
     margin-bottom: 25px;
@@ -178,27 +179,30 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
 .day-step:last-child { border-bottom: none; }
 .day-title { font-weight: 800; color: var(--vayo-pink); }
 
-button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding: 16px 24px; border-radius: 14px; border: 3px solid var(--vayo-dark); box-shadow: 4px 4px 0px var(--vayo-dark); cursor: pointer; transition: all 0.1s ease; }
-button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--vayo-dark); }
+button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding: 16px 24px; border-radius: 14px; border: 2px solid var(--vayo-dark); box-shadow: 3px 3px 0px var(--vayo-dark); cursor: pointer; transition: all 0.1s ease; }
+button:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0px var(--vayo-dark); }
 #start-btn, #cta-btn { background-color: var(--vayo-pink); color: white; width: 100%; }
 #restart-btn { background-color: white; width: 100%; margin-top: 10px; }
 .btn-grid { display: flex; flex-direction: column; gap: 12px; }
-#answer-buttons .btn { background-color: var(--vayo-white); text-align: left; }
+
+/* DÜNNE LINIE: Antwortbuttons im Quiz auf 2px gesetzt */
+#answer-buttons .btn { background-color: var(--vayo-white); text-align: left; border: 2px solid var(--vayo-dark); }
 #answer-buttons .btn:hover { background-color: var(--vayo-teal); color: white; }
 
-.progress-bar { width: 100%; height: 12px; background-color: var(--vayo-bg); border: 3px solid var(--vayo-dark); border-radius: 20px; margin-bottom: 30px; overflow: hidden; }
+.progress-bar { width: 100%; height: 12px; background-color: var(--vayo-bg); border: 2px solid var(--vayo-dark); border-radius: 20px; margin-bottom: 30px; overflow: hidden; }
 #progress { height: 100%; width: 0%; background-color: var(--vayo-teal); transition: width 0.3s ease; }
 
 #ranking-list { margin: 25px 0; text-align: left; }
 #ranking-list h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; margin-bottom: 10px;}
 
+/* DÜNNE LINIE: Ergebnis-Listenkarten auf einheitliche 2px umgestellt */
 .ranking-item { 
     display: flex; 
     justify-content: space-between; 
     padding: 14px; 
     background-color: var(--vayo-white); 
-    border: 3px solid var(--vayo-dark); 
-    box-shadow: 4px 4px 0px var(--vayo-dark); 
+    border: 2px solid var(--vayo-dark); 
+    box-shadow: 3px 3px 0px var(--vayo-dark); 
     border-radius: 12px; 
     margin-bottom: 12px; 
     font-weight: 700; 
@@ -210,14 +214,14 @@ button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--v
 .ranking-item:hover {
     background-color: var(--vayo-bg);
     transform: translate(-1px, -1px);
-    box-shadow: 5px 5px 0px var(--vayo-dark);
+    box-shadow: 4px 4px 0px var(--vayo-dark);
 }
 
 .ranking-item.active-card {
     background-color: #e6f7f4; 
     border-color: var(--vayo-teal);
     box-shadow: 2px 2px 0px var(--vayo-teal);
-    transform: translate(2px, 2px);
+    transform: translate(1px, 1px);
 }
 
 .ranking-pct { color: var(--vayo-teal); }
