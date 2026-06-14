@@ -12,11 +12,19 @@ body {
     padding: 0;
     font-family: 'Open Sans', sans-serif;
     background-color: var(--vayo-bg);
+    
+    /* NEU: Das VAYO-Muster am unteren Bildschirmrand einbinden */
+    background-image: url('muster.jpg');
+    background-position: bottom center;
+    background-repeat: repeat-x; /* Wiederholt das Muster unendlich nach links und rechts */
+    background-size: auto 120px; /* Setzt die Höhe des Musters auf knackige 120px */
+    
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     color: var(--vayo-dark);
+    box-sizing: border-box;
 }
 
 .quiz-container {
@@ -27,9 +35,11 @@ body {
     box-shadow: 12px 12px 0px var(--vayo-dark);
     width: 100%;
     max-width: 540px;
-    margin: 20px;
+    margin: 20px 20px 140px 20px; /* Erhöhter unterer Abstand (140px), damit die Box niemals das Muster überlagert */
     box-sizing: border-box;
     text-align: center;
+    position: relative;
+    z-index: 10; /* Sorgt dafür, dass die Box immer sauber vor dem Hintergrund schwebt */
 }
 
 /* VAYO LOGO DESIGN */
@@ -180,7 +190,6 @@ button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--v
 #ranking-list { margin: 25px 0; text-align: left; }
 #ranking-list h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; margin-bottom: 10px;}
 
-/* OPTIMIERTE BRUTALISMUS-LISTENKARTEN FÜR INTERAKTIVEN KLICK */
 .ranking-item { 
     display: flex; 
     justify-content: space-between; 
@@ -202,9 +211,8 @@ button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--v
     box-shadow: 5px 5px 0px var(--vayo-dark);
 }
 
-/* Visuelle Markierung für die gerade aktiv ausgewählte Reisekarte */
 .ranking-item.active-card {
-    background-color: #e6f7f4; /* Sanfter VAYO-Teal Schimmer */
+    background-color: #e6f7f4; 
     border-color: var(--vayo-teal);
     box-shadow: 2px 2px 0px var(--vayo-teal);
     transform: translate(2px, 2px);
