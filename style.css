@@ -13,12 +13,12 @@ body {
     font-family: 'Open Sans', sans-serif;
     background-color: var(--vayo-bg);
     
-    /* KORREKTUR: Der Pfad matcht jetzt exakt deine Datei "muster.jpg.png" */
-    background-image: url('https://elfi2.github.io/Dein-Reise-Match/muster.jpg.png');
+    /* REPARATUR: Lädt dein echtes hochgeladenes Bild mit der doppelten Endung muster.jpg.png */
+    background-image: url('muster.jpg.png');
     background-position: bottom center;
     background-repeat: repeat-x; 
-    background-size: auto 120px; /* Höhe deines stylischen Festival-Musters */
-    background-attachment: fixed; /* Hält das Muster beim Scrollen fest am Boden */
+    background-size: auto 120px; /* Die Höhe des Musters am unteren Rand */
+    background-attachment: fixed; /* Fixiert das Muster bombenfest am Boden beim Scrollen */
     
     min-height: 100vh;
     display: flex;
@@ -36,7 +36,7 @@ body {
     box-shadow: 12px 12px 0px var(--vayo-dark);
     width: 100%;
     max-width: 540px;
-    /* Großzügiger unterer Abstand, damit das Quiz niemals das Muster verdeckt */
+    /* Der Abstand nach unten (160px) sorgt dafür, dass die Box das Muster am Boden nie überlappt */
     margin: 40px 20px 160px 20px; 
     box-sizing: border-box;
     text-align: center;
