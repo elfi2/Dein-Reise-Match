@@ -4,7 +4,7 @@ const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Das komplette Produkt-Portfolio gekoppelt an deine exakten PNG-Bilddateien
+// Das komplette Produkt-Portfolio abgeglichen mit deinen exakten GitHub-Bildnamen
 const produktPortfolio = {
     "TOSKANA": {
         headline: "Pasta, Amore & Sunset-Vibes",
@@ -87,7 +87,7 @@ const produktPortfolio = {
     "SURF": {
         headline: "Catch the Wave: Glamping & Surf-Vibe in Moliets",
         teaser: "Salziges Haar, Barfuß-Gefühl und endlose Strandtage. Dein Camp liegt im Pinienwald direkt hinter den Dünen Frankreichs. Surfkurse mit Profis, Sunset-Yoga, Beachvolleyball und Open-Air-Kino unter den Sternen.",
-        img: "frankreichsurf.png",
+        img: "frankreich surf.png",
         programm: [
             "Tag 1-2: Der Road-Vibe. Entspannte Nachtanreise im Fernreisebus & Camp-Einzug.",
             "Tag 3: Erster Surf-Check. Board-Ausgabe, erste Surf-Session & Wellen-Theorie am Strand.",
@@ -107,13 +107,13 @@ const produktPortfolio = {
     "ATLANTIK": {
         headline: "Catch the Wave: Glamping & Surf-Vibe in Moliets",
         teaser: "Salziges Haar, Barfuß-Gefühl und endlose Strandtage. Dein Camp liegt im Pinienwald direkt hinter den Dünen Frankreichs. Surfkurse mit Profis, Sunset-Yoga, Beachvolleyball und Open-Air-Kino unter den Sternen.",
-        img: "frankreichsurf.png",
+        img: "frankreich surf.png",
         programm: ["Tag 1-14: Siehe detailliertes VAYO Surf- & Glamping-Programm an Frankreichs Atlantikküste."]
     },
     "COAST": {
         headline: "California Dreaming: Der epische West Coast Ride",
         teaser: "Freiheit, Megacitys und Roadtrip-Nostalgie. Drei Wochen lang cruisen wir im Reisebus von San Francisco über den Highway 1 nach Los Angeles, zum Grand Canyon und mitten in den Glitzer-Rausch von Las Vegas.",
-        img: "westcoastusa.png",
+        img: "west coast usa.png",
         programm: [
             "Tag 1-3: San Francisco Vibes. Langstreckenflug, Cable Car fahren & Ausflug zur Gefängnisinsel Alcatraz.",
             "Tag 4-5: Highway 1. Stopps an der rauen Pazifikküste in Big Sur & Monterey zur Seelöwen-Beobachtung.",
@@ -146,7 +146,7 @@ const produktPortfolio = {
     "SCHWEDEN": {
         headline: "Into the Wild: Das ultimative Kanu-Abenteuer",
         teaser: "Back to the roots, Teamwork und absolute Freiheit. Ausgerüstet mit Kanus und Packtonnen paddeln wir über einsame Seen, schlagen Wildnis-Camps auf unbewohnten Inseln auf und kochen über offenem Lagerfeuer.",
-        img: "schwedenkanu.png",
+        img: "schweden kanu.png",
         programm: [
             "Tag 1-2: Das Wildnis-Intro. Bus- und Fähranreise nach Schweden & Basecamp-Briefing.",
             "Tag 3: Das erste Paddeln. Absetzen der Boote und Aufschlagen von Camp 1 auf einer einsamen Insel.",
@@ -204,7 +204,7 @@ const produktPortfolio = {
     "NEW YORK": {
         headline: "Empire State of Mind: Dein New York City Rausch",
         teaser: "Urban, ikonisch, laut – die Stadt, die niemals schläft! Erkunde Manhattan mit unserem City-Guide: Empire State Building bei Nacht, Fahrradtour durch den Central Park, Brooklyn Bridge und Shopping in SoHo.",
-        img: "newyorkcity.png",
+        img: "new york city.png",
         programm: [
             "Tag 1: Welcome to the Jungle. Langstreckenflug & Ankunft. Abends: Times Square bei Nacht!",
             "Tag 2: Top of the World. Aussichtsplattform Empire State Building & Spaziergang auf der High Line.",
@@ -263,7 +263,7 @@ const quizQuestions = [
             { text: "Das gemeinsame Lachen und die Musik im Bus, während die Autobahnschilder an uns vorbeiziehen.", option: "Fernreisebus" },
             { text: "Der Moment, in dem die Anschnallzeichen erlöschen und man unter sich die Wolkendecke Europas sieht.", option: "Kurzstreckenflug" },
             { text: "Das Kribbeln im Bauch beim nächtlichen Transatlantikflug, wenn man weiß: Gleich bin ich auf einem neuen Kontinent.", option: "Langstreckenflug" },
-            { text: "Das gleichmäßige Rattern der Schienen, während man entspannt aus dem Fenster schaut und die Landschaft an sich vorbeizeihen lässt.", option: "Zug" }
+            { text: "Das gleichmäßige Rattern der Schienen, während man entspannt aus dem Fenster schaut und die Landschaft an sich vorbeizehen lässt.", option: "Zug" }
         ]
     },
     {
@@ -315,7 +315,7 @@ const quizQuestions = [
 
 let currentQuestionIndex = 0;
 let userAnswers = [];
-let topMatchesZwischenspeicher = []; // Hier sichern wir die Top 5 für die Klick-Logik
+let topMatchesZwischenspeicher = [];
 
 const startBtn = document.getElementById('start-btn');
 const restartBtn = document.getElementById('restart-btn');
@@ -404,20 +404,22 @@ function holeSauberenNamen(nameRaw) {
     return nameRaw.replace(/^\d+\.\s*/, '').trim();
 }
 
+// OPTIMIERTER VERGLEICH: Vergleicht Strings komplett unabhängig von Groß- und Kleinschreibung!
 function findMatchingKey(saubererName) {
     const nameUpper = saubererName.toUpperCase().replace('-', ' ').trim();
     for (let k in produktPortfolio) {
         const keyUpper = k.toUpperCase();
         if (nameUpper.includes(keyUpper) || keyUpper.includes(nameUpper) || 
-            (nameUpper === "SKI CAMP" && keyUpper === "SKI") || 
-            (nameUpper === "FRANKREICH SURF" && keyUpper === "SURF")) {
+            (nameUpper.includes("SKI") && keyUpper === "SKI") || 
+            (nameUpper.includes("SURF") && keyUpper === "SURF") ||
+            (nameUpper.includes("WEST COAST") && keyUpper === "COAST") ||
+            (nameUpper.includes("NEW YORK") && keyUpper === "NEW YORK")) {
             return k;
         }
     }
     return null;
 }
 
-// DYNAMISCHE RENDERING-FUNKTION: Tauscht alle Bild- und Textdaten live aus, wenn ein Platz angeklickt wird
 function zeigeAusgewaehlteReise(index) {
     const reise = topMatchesZwischenspeicher[index];
     if (!reise) return;
@@ -425,7 +427,6 @@ function zeigeAusgewaehlteReise(index) {
     const saubererName = holeSauberenNamen(reise.name);
     matchNameElement.innerText = saubererName;
 
-    // Status-Titel dynamisch anpassen
     const statusTitle = document.getElementById('match-status-title');
     if(statusTitle) {
         statusTitle.innerText = index === 0 ? "Dein perfektes Match:" : `VAYO Match (Platz ${index + 1}):`;
@@ -464,7 +465,6 @@ function zeigeAusgewaehlteReise(index) {
         if(itinerarySteps) itinerarySteps.innerHTML = "<div class='day-step'>Reiseplan wird geladen...</div>";
     }
 
-    // Visuelle Aktiv-Markierung auf den Listenelementen umschalten
     document.querySelectorAll('.ranking-item').forEach((item, idx) => {
         if(idx === index) {
             item.classList.add('active-card');
@@ -473,7 +473,6 @@ function zeigeAusgewaehlteReise(index) {
         }
     });
 
-    // Reiseplan-Box automatisch einklappen, wenn ein neues Ziel gewählt wird
     const box = document.getElementById('vayo-full-itinerary');
     const trigger = document.getElementById('vayo-details-trigger');
     if(box) box.classList.add('hidden');
@@ -503,13 +502,10 @@ async function berechneErgebnis() {
 
         reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
         
-        // Sichert die Top 5 im globalen Zwischenspeicher ab
         topMatchesZwischenspeicher = reisenMitPunkten.slice(0, 5);
 
-        // Rendert Platz 1 als Standard-Anzeige beim Laden
         zeigeAusgewaehlteReise(0);
         
-        // Baut die interaktive Klick-Liste darunter auf
         if (rankingListElement) {
             rankingListElement.innerHTML = "<h3>Klicke auf eine Reise für Details:</h3>";
 
@@ -518,14 +514,13 @@ async function berechneErgebnis() {
                 
                 const item = document.createElement('div');
                 item.className = "ranking-item";
-                if(i === 0) item.classList.add('active-card'); // Platz 1 startet aktiv
+                if(i === 0) item.classList.add('active-card');
                 
                 item.innerHTML = `
                     <span class="rank-name">Platz ${i + 1}: ${bereinigterRangName}</span>
                     <span class="rank-pct">${r.prozent}%</span>
                 `;
                 
-                // Triggert den Live-Wechsel ohne Neuladen der Seite
                 item.addEventListener('click', () => zeigeAusgewaehlteReise(i));
                 rankingListElement.appendChild(item);
             });
