@@ -3,100 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VAYO Reisen - Finde deinen Vibe</title>
+    <title>VAYO REISEN - Quiz</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-    <div class="vayo-main-card">
-        
-        <header>
-            <img src="logo.png" alt="VAYO REISEN" id="logo" onerror="this.style.display='none'">
-            <h1>VAYO REISEN</h1>
-        </header>
-
-        <main>
-            <section id="start-screen" class="screen">
-                <h2>Welcher VAYO-Vibe bist du?</h2>
-                <p>Mach das Quiz und finde heraus, welches Abenteuer perfekt zu deinem Charakter passt.</p>
-                <button id="start-btn" class="btn">Quiz starten</button>
-            </section>
-
-            <section id="quiz-screen" class="screen hidden">
-                <div class="progress-bar">
-                    <div id="progress"></div>
+    <div class="quiz-container">
+        <div class="vayo-header">
+            <div class="logo-container">
+                <span class="vayo-logo-text">VAYO</span>
+                <div class="vayo-logo-icon">
+                    <div class="segment-pink"></div>
+                    <div class="segment-yellow"></div>
+                    <div class="segment-teal"></div>
+                    <div class="compass-arrow"></div>
                 </div>
-                <h2 id="question-text">Frage lädt...</h2>
-                <div id="answer-buttons" class="btn-grid">
-                    </div>
-            </section>
+            </div>
+            <div class="logo-subtext">REISEN</div>
+        </div>
 
-            <section id="result-screen" class="screen hidden">
-                <div class="result-container">
-                    
-                    <div class="top-match-card">
-                        <div id="vayo-piktogramm-box">
-                            </div>
-                        <h3 id="match-status-title">Dein perfektes Match:</h3>
-                        <h2 id="match-name">Wird berechnet...</h2>
-                        <h4 id="match-headline"></h4>
-                        <p id="match-description"></p>
-                        
-                        <button id="vayo-details-trigger" class="btn outline-btn">Vollständigen Reiseplan anzeigen</button>
-                        
-                        <div id="vayo-full-itinerary" class="hidden">
-                            <div id="itinerary-steps"></div>
-                        </div>
-                    </div>
+        <div id="start-screen" class="screen">
+            <h1>Welcher Reisetyp bist du?</h1>
+            <p>Dein Vibe. Deine Welt. Finde in 20 kurzen Fragen heraus, welches VAYO-Abenteuer perfekt zu dir passt!</p>
+            <button id="start-btn">Jetzt Quiz starten</button>
+        </div>
 
-                    <div class="ranking-board">
-                        <h3 class="ranking-title">Klicke auf eine Reise für Details:</h3>
-                        <div id="ranking-list">
-                            </div>
-                        <button id="cta-btn" class="btn primary-btn">Jetzt unverbindlich anfragen</button>
-                        <button id="restart-btn" class="btn outline-btn">Quiz wiederholen</button>
-                    </div>
+        <div id="quiz-screen" class="screen hidden">
+            <div class="progress-bar"><div id="progress"></div></div>
+            <h2 id="question-text">Hier steht die Frage</h2>
+            <div id="answer-buttons" class="btn-grid"></div>
+        </div>
 
+        <div id="result-screen" class="screen hidden">
+            <div class="result-left">
+                <div id="vayo-piktogramm-box"></div>
+                <h2>Dein perfektes Match:</h2>
+                <h1 id="match-name">Reiseziel-Name</h1>
+                <h3 id="match-headline"></h3>
+                <p id="match-description">Abgleich mit der Datenbank...</p>
+                
+                <div id="vayo-details-trigger" class="details-badge">
+                    <i class="fa-solid fa-circle-info"></i> Vollständigen Reiseplan anzeigen
                 </div>
-            </section>
-        </main>
+                
+                <div id="vayo-full-itinerary" class="itinerary-box hidden">
+                    <h4>Dein Programm von Tag zu Tag:</h4>
+                    <div id="itinerary-steps"></div>
+                </div>
+            </div>
+
+            <div class="result-right">
+                <div id="ranking-list"></div>
+
+                <div class="btn-grid">
+                    <button id="cta-btn">Jetzt unverbindlich anfragen</button>
+                    <button id="restart-btn">Quiz wiederholen</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="contact-modal" class="modal-overlay hidden">
         <div class="modal-content">
-            <span class="close-btn" id="close-modal-btn">&times;</span>
-            <h2>Abenteuer anfragen</h2>
-            <p>Trag dich ein und wir melden uns bei dir!</p>
+            <span id="close-modal-btn" class="close-btn">&times;</span>
+            <h2>Anfrage senden</h2>
+            <p>Sichere dir deinen Platz für dein VAYO-Match! Fülle kurz das Formular aus.</p>
             
             <form id="vayo-contact-form">
-                <label for="user-name">Dein Name</label>
-                <input type="text" id="user-name" name="user-name" required placeholder="z.B. Max Mustermann">
+                <input type="hidden" id="form-match-destination">
 
-                <label for="user-dob">Geburtsdatum</label>
-                <input type="date" id="user-dob" name="user-dob" required>
+                <label for="form-name">Name</label>
+                <input type="text" id="form-name" placeholder="Dein Name" required>
 
-                <label for="trip-selection">Wunschreise</label>
-                <select id="trip-selection" name="trip-selection" required>
-                    <option value="">Bitte wählen...</option>
+                <label for="form-email">E-Mail-Adresse</label>
+                <input type="email" id="form-email" placeholder="deine@email.de" required>
+
+                <label for="form-zeitraum">Wunschzeitraum</label>
+                <select id="form-zeitraum" required>
+                    <option value="" disabled selected>Bitte wählen...</option>
+                    <option value="Sommer 2026">Sommer 2026</option>
+                    <option value="Herbst 2026">Herbst 2026</option>
+                    <option value="Winter 2026/2027">Winter 2026 / 2027</option>
+                    <option value="Flexibel">Ich bin flexibel</option>
                 </select>
 
-                <div id="date-selection-container" class="hidden">
-                    <label for="date-selection">Wähle deinen Termin</label>
-                    <select id="date-selection" name="date-selection" required>
-                        </select>
-                </div>
+                <label for="form-nachricht">Deine Nachricht (Optional)</label>
+                <textarea id="form-nachricht" rows="4" placeholder="Gibt es noch etwas, das wir wissen sollten?"></textarea>
 
-                <label for="user-remarks">Anmerkungen (optional)</label>
-                <textarea id="user-remarks" name="user-remarks" rows="3" placeholder="Besondere Wünsche, Allergien, Fragen..."></textarea>
-
-                <button type="submit" class="btn primary-btn" id="submit-contact-btn">Kostenlos anfragen</button>
+                <button type="submit" id="submit-contact-btn" class="btn">Unverbindlich anfragen</button>
             </form>
-            
+
             <div id="success-message" class="hidden">
-                <h3>Erfolgreich gesendet! 🎉</h3>
-                <p>Wir haben deine Anfrage erhalten und melden uns in Kürze bei dir.</p>
+                <h3>Vielen Dank!</h3>
+                <p>Deine Anfrage wurde erfolgreich übermittelt. Deine Crew meldet sich bald bei dir!</p>
             </div>
         </div>
     </div>
