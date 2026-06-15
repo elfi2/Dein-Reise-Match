@@ -27,7 +27,6 @@ body {
     box-sizing: border-box;
 }
 
-/* HAUPT-CONTAINER: Überall exakt 3px Linie, kein 3D-Schatten */
 .quiz-container {
     background-color: var(--vayo-white);
     border-radius: 24px;
@@ -42,82 +41,18 @@ body {
     z-index: 10;
 }
 
-/* VAYO LOGO DESIGN */
+/* NEUES LOGO STYLING */
 .vayo-header {
     margin-bottom: 35px;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.vayo-logo-text {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 900;
-    font-size: 58px;
-    letter-spacing: -3px;
-    line-height: 1;
-    color: var(--vayo-dark);
-}
-
-/* LOGO KREIS: Überall exakt 3px Linie */
-.vayo-logo-icon {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--vayo-dark);
-    border-radius: 50%;
-    position: relative;
-    background-color: var(--vayo-white);
-    overflow: hidden;
-    display: inline-block;
-}
-
-.segment-pink {
-    position: absolute;
-    width: 100%;
-    height: 50%;
-    background-color: var(--vayo-pink);
-    top: 0; left: 0;
-}
-.segment-yellow {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    background-color: var(--vayo-yellow);
-    bottom: 0; left: 0;
-}
-.segment-teal {
-    position: absolute;
-    width: 50%;
-    height: 50%;
-    background-color: var(--vayo-teal);
-    bottom: 0; right: 0;
-}
-
-.compass-arrow {
-    position: absolute;
-    width: 0; height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    border-bottom: 14px solid var(--vayo-dark);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(45deg);
-    z-index: 5;
-}
-
-.logo-subtext {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 14px;
-    letter-spacing: 7px;
-    color: var(--vayo-dark);
-    margin-top: 6px;
-    padding-left: 7px;
+.vayo-logo-img {
+    height: 65px; /* Perfekte Höhe, damit es genau wie das Original wirkt */
+    width: auto;
+    object-fit: contain;
 }
 
 h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 2.2rem; margin: 10px 0; }
@@ -125,7 +60,6 @@ h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem;
 #match-headline { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.35rem; color: var(--vayo-teal); margin: 5px 0 15px 0; }
 p { font-size: 1rem; line-height: 1.6; color: #374151; }
 
-/* BILD-BOX IM ERGEBNIS: Überall exakt 3px Linie, kein Schatten */
 #vayo-piktogramm-box {
     width: 120px;
     height: 120px;
@@ -143,7 +77,6 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
     border-radius: 20px;
 }
 
-/* BADGE & BUTTONS: Überall exakt 3px Linie, Schatten gelöscht */
 .details-badge {
     display: inline-flex;
     align-items: center;
@@ -181,7 +114,6 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 #restart-btn { background-color: white; width: 100%; margin-top: 10px; }
 .btn-grid { display: flex; flex-direction: column; gap: 12px; }
 
-/* ANTWORT-BUTTONS: Überall exakt 3px Linie */
 #answer-buttons .btn { background-color: var(--vayo-white); text-align: left; border: 3px solid var(--vayo-dark); }
 #answer-buttons .btn:hover { background-color: var(--vayo-teal); color: white; }
 
@@ -191,7 +123,6 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 #ranking-list { margin: 25px 0; text-align: left; }
 #ranking-list h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; margin-bottom: 10px;}
 
-/* ERGEBNIS-KARTEN (Platz 1-5): Überall exakt 3px Linie, kein Schatten */
 .ranking-item { 
     display: flex; 
     justify-content: space-between; 
