@@ -28,6 +28,7 @@ body {
     box-sizing: border-box;
 }
 
+/* BASIS-KASTEN: Standardmäßig flexibel für Start und Auflösung (wie davor) */
 .quiz-container {
     background-color: var(--vayo-white);
     border-radius: 24px;
@@ -41,20 +42,22 @@ body {
     position: relative;
     z-index: 10;
     
-    /* REPARATUR: Feste Höhe statt Mindesthöhe friert den Kasten komplett starr ein */
-    height: 640px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
 
-/* Regelt das Verhalten innerhalb der Box, damit alles starr bleibt */
+/* GEZIELTE REGELUNG: Nur wenn der Quiz-Screen aktiv ist, friert der Kasten starr auf 640px ein! */
+.quiz-container:has(#quiz-screen:not(.hidden)) {
+    height: 640px;
+}
+
+/* Regelt das Verhalten innerhalb der Box */
 .screen {
     display: flex;
     flex-direction: column;
     height: 100%;
     flex-grow: 1;
-    overflow: hidden; /* Verhindert, dass Ränder unschön rausbrechen */
 }
 
 .vayo-header {
@@ -129,7 +132,7 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 #start-btn, #cta-btn { background-color: var(--vayo-pink); color: white; width: 100%; }
 #restart-btn { background-color: white; width: 100%; margin-top: 10px; }
 
-/* Die Antwortbox nimmt den restlichen Platz ein */
+/* Die Antwortbox im Quiz zieht sich dynamisch auf */
 .btn-grid { 
     display: flex; 
     flex-direction: column; 
@@ -139,7 +142,6 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     justify-content: flex-end;
 } 
 
-/* Verhindert Verzerrungen und verteilt die Buttons harmonisch */
 #answer-buttons .btn { 
     background-color: var(--vayo-white); 
     text-align: left; 
@@ -182,9 +184,3 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 .ranking-pct { color: var(--vayo-teal); }
 
 .hidden { display: none !important; }
-
-/* Erlaubt dem Ergebnisbildschirm bei Bedarf zu scrollen, da die Top 5 sonst die feste Höhe sprengen */
-#result-screen {
-    overflow-y: auto;
-    padding-right: 5px;
-}
