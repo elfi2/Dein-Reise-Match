@@ -11,14 +11,13 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Open Sans', sans-serif;
-    
     background-color: var(--vayo-pink);
     
     background-image: url('muster.jpg.png');
     background-position: bottom center;
     background-repeat: repeat-x; 
     background-size: auto 120px; 
-    background-attachment: fixed; 
+    background-attachment: fixed; /* Muster bleibt auf allen Geräten unbeweglich am Boden */
     
     min-height: 100vh;
     display: flex;
@@ -28,7 +27,7 @@ body {
     box-sizing: border-box;
 }
 
-/* BASIS-KASTEN */
+/* BASIS-KASTEN (Desktop Standard) */
 .quiz-container {
     background-color: var(--vayo-white);
     border-radius: 24px;
@@ -37,7 +36,7 @@ body {
     width: 100%;
     max-width: 540px;
     
-    /* REPARATUR: margin-bottom auf 60px gesetzt, damit die Box exakt in der Mitte des 120px-Musters aufhört! */
+    /* Desktop: Endet präzise in der vertikalen Mitte des 120px hohen Boden-Musters */
     margin: 40px 20px 60px 20px; 
     
     box-sizing: border-box;
@@ -56,9 +55,11 @@ body {
     height: 640px;
 }
 
-/* REGELUNG 2: Bei der Auflösung wird der Kasten für eine bessere Übersicht auf 780px geweitet */
+/* REGELUNG 2: Bei der Auflösung auf DESKTOP wird der Kasten starr fixiert und scrollt nur innen */
 .quiz-container:has(#result-screen:not(.hidden)) {
-    max-width: 780px;
+    max-width: 740px;
+    max-height: calc(100vh - 140px); 
+    overflow-y: auto; 
 }
 
 /* Regelt das Verhalten innerhalb der Box */
@@ -193,17 +194,26 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 
 .hidden { display: none !important; }
 
-/* MOBILE OPTIMIERUNG */
+/* =======================================================
+   REPARATUR: MOBILE AUSNAHMEREGELN FÜR DIE AUFLÖSUNG
+   ======================================================= */
 @media (max-width: 600px) {
+    /* Hebelt das interne Scrollen und die Höhenbegrenzung auf Smartphones komplett aus */
+    .quiz-container:has(#result-screen:not(.hidden)) {
+        max-height: none !important; 
+        overflow-y: visible !important; 
+        height: auto !important;
+    }
+
     .quiz-container:has(#quiz-screen:not(.hidden)) {
         height: auto;
-        min-height: calc(100vh - 120px); 
+        min-height: calc(100vh - 160px); 
     }
     
     .quiz-container {
-        padding: 20px;
-        /* Auch mobil an das Muster angepasst */
-        margin: 15px 15px 50px 15px; 
+        padding: 25px 20px;
+        /* Verhindert Überlappungen am unteren Rand durch das fixierte Muster */
+        margin: 20px 15px 140px 15px; 
         border-radius: 16px;
     }
     
@@ -218,9 +228,5 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     #answer-buttons .btn {
         padding: 12px 16px;
         font-size: 0.88rem; 
-    }
-    
-    #quiz-screen {
-        overflow-y: auto;
     }
 }
