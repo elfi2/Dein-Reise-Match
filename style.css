@@ -12,7 +12,6 @@ body {
     padding: 0;
     font-family: 'Open Sans', sans-serif;
     
-    /* ÄNDERUNG 1: Hintergrund ist jetzt euer Corporate-Pink statt Beige */
     background-color: var(--vayo-pink);
     
     background-image: url('muster.jpg.png');
@@ -42,27 +41,28 @@ body {
     position: relative;
     z-index: 10;
     
-    /* ÄNDERUNG 2: Feste Mindesthöhe stoppt das lästige Springen zwischen den Fragen */
-    min-height: 580px;
+    /* REPARATUR: Feste Höhe statt Mindesthöhe friert den Kasten komplett starr ein */
+    height: 640px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
 
-/* Sorgt dafür, dass die Screens innerhalb der Box die Höhe sauber ausnutzen */
+/* Regelt das Verhalten innerhalb der Box, damit alles starr bleibt */
 .screen {
     display: flex;
     flex-direction: column;
     height: 100%;
     flex-grow: 1;
+    overflow: hidden; /* Verhindert, dass Ränder unschön rausbrechen */
 }
 
-/* NEUES LOGO STYLING */
 .vayo-header {
-    margin-bottom: 35px;
+    margin-bottom: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .vayo-logo-img {
@@ -128,12 +128,29 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
 button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding: 16px 24px; border-radius: 14px; border: 3px solid var(--vayo-dark); cursor: pointer; transition: background-color 0.1s ease; }
 #start-btn, #cta-btn { background-color: var(--vayo-pink); color: white; width: 100%; }
 #restart-btn { background-color: white; width: 100%; margin-top: 10px; }
-.btn-grid { display: flex; flex-direction: column; gap: 12px; margin-top: auto; } /* Drückt die Antworten nach unten */
 
-#answer-buttons .btn { background-color: var(--vayo-white); text-align: left; border: 3px solid var(--vayo-dark); }
+/* Die Antwortbox nimmt den restlichen Platz ein */
+.btn-grid { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 12px; 
+    margin-top: auto; 
+    flex-grow: 1;
+    justify-content: flex-end;
+} 
+
+/* Verhindert Verzerrungen und verteilt die Buttons harmonisch */
+#answer-buttons .btn { 
+    background-color: var(--vayo-white); 
+    text-align: left; 
+    border: 3px solid var(--vayo-dark); 
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
 #answer-buttons .btn:hover { background-color: var(--vayo-teal); color: white; }
 
-.progress-bar { width: 100%; height: 12px; background-color: var(--vayo-bg); border: 3px solid var(--vayo-dark); border-radius: 20px; margin-bottom: 30px; overflow: hidden; }
+.progress-bar { width: 100%; height: 12px; background-color: var(--vayo-bg); border: 3px solid var(--vayo-dark); border-radius: 20px; margin-bottom: 20px; overflow: hidden; flex-shrink: 0; }
 #progress { height: 100%; width: 0%; background-color: var(--vayo-teal); transition: width 0.3s ease; }
 
 #ranking-list { margin: 25px 0; text-align: left; }
@@ -165,3 +182,9 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 .ranking-pct { color: var(--vayo-teal); }
 
 .hidden { display: none !important; }
+
+/* Erlaubt dem Ergebnisbildschirm bei Bedarf zu scrollen, da die Top 5 sonst die feste Höhe sprengen */
+#result-screen {
+    overflow-y: auto;
+    padding-right: 5px;
+}
