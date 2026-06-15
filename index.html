@@ -3,62 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VAYO Quiz</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <title>VAYO Reisen - Finde deinen Vibe</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-    <div class="quiz-container">
-        <div class="vayo-header">
-            <img src="logo.png" alt="VAYO Logo" class="vayo-logo-img">
-        </div>
+    <header>
+        <img src="logo.png" alt="VAYO Reisen Logo" id="logo" onerror="this.style.display='none'">
+        <h1>VAYO REISEN</h1>
+    </header>
 
-        <div id="start-screen" class="screen">
-            <h1>Finde dein perfektes Match!</h1>
-            <p>Beantworte ein paar kurze Fragen und wir zeigen dir, welche Reiseziele am besten zu deinem Reisestil passen.</p>
-            <div class="btn-grid">
-                <button id="start-btn">Quiz starten</button>
-            </div>
-        </div>
+    <main>
+        <section id="start-screen" class="screen">
+            <h2>Welcher VAYO-Vibe bist du?</h2>
+            <p>Mach das Quiz und finde heraus, welches Abenteuer perfekt zu deinem Charakter passt.</p>
+            <button id="start-btn" class="btn">Quiz starten</button>
+        </section>
 
-        <div id="quiz-screen" class="screen hidden">
+        <section id="quiz-screen" class="screen hidden">
             <div class="progress-bar">
                 <div id="progress"></div>
             </div>
-            <h2 id="question-text">Hier steht die Frage?</h2>
+            <h2 id="question-text">Frage lädt...</h2>
             <div id="answer-buttons" class="btn-grid">
                 </div>
-        </div>
+        </section>
 
-        <div id="result-screen" class="screen hidden">
-            <div class="result-left">
-                <div id="vayo-piktogramm-box"></div>
-                <h2 id="match-status-title">Dein perfektes Match:</h2>
-                <h1 id="match-name">Reiseziel-Name</h1>
-                <h3 id="match-headline"></h3>
-                <p id="match-description">Abgleich mit der Datenbank...</p>
-                
-                <div id="vayo-details-trigger" class="details-badge">
-                    Vollständigen Reiseplan anzeigen
+        <section id="result-screen" class="screen hidden">
+            <div class="result-container">
+                <div class="top-match-card">
+                    <div id="vayo-piktogramm-box"></div>
+                    <h3 id="match-status-title" class="highlight-text">Dein perfektes Match:</h3>
+                    <h2 id="match-name">Wird berechnet...</h2>
+                    <h4 id="match-headline"></h4>
+                    <p id="match-description"></p>
+                    
+                    <button id="vayo-details-trigger" class="btn outline-btn">Vollständigen Reiseplan anzeigen</button>
+                    
+                    <div id="vayo-full-itinerary" class="hidden">
+                        <div id="itinerary-steps"></div>
+                    </div>
                 </div>
-                
-                <div id="vayo-full-itinerary" class="itinerary-box hidden">
-                    <h4>Dein Programm von Tag zu Tag:</h4>
-                    <div id="itinerary-steps"></div>
+
+                <div class="ranking-board">
+                    <div id="ranking-list">
+                        </div>
+                    <button id="cta-btn" class="btn primary-btn">Jetzt unverbindlich anfragen</button>
+                    <button id="restart-btn" class="btn outline-btn">Quiz wiederholen</button>
                 </div>
             </div>
+        </section>
+    </main>
+
+    <div id="contact-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal-btn">&times;</span>
+            <h2>Abenteuer anfragen</h2>
+            <p>Trag dich ein und wir melden uns bei dir!</p>
             
-            <div class="result-right">
-                <div id="ranking-list"></div>
-                <button id="cta-btn">Jetzt unverbindlich anfragen</button>
-                <button id="restart-btn">Quiz wiederholen</button>
+            <form id="vayo-contact-form">
+                <label for="user-name">Dein Name</label>
+                <input type="text" id="user-name" name="user-name" required placeholder="z.B. Max Mustermann">
+
+                <label for="user-dob">Geburtsdatum</label>
+                <input type="date" id="user-dob" name="user-dob" required>
+
+                <label for="trip-selection">Wunschreise</label>
+                <select id="trip-selection" name="trip-selection" required>
+                    <option value="">Bitte wählen...</option>
+                </select>
+
+                <div id="date-selection-container" class="hidden">
+                    <label for="date-selection">Wähle deinen Termin</label>
+                    <select id="date-selection" name="date-selection" required>
+                        </select>
+                </div>
+
+                <label for="user-remarks">Anmerkungen (optional)</label>
+                <textarea id="user-remarks" name="user-remarks" rows="3" placeholder="Besondere Wünsche, Allergien, Fragen..."></textarea>
+
+                <button type="submit" class="btn" id="submit-contact-btn">Kostenlos anfragen</button>
+            </form>
+            
+            <div id="success-message" class="hidden">
+                <h3>Erfolgreich gesendet! 🎉</h3>
+                <p>Wir haben deine Anfrage erhalten und melden uns in Kürze bei dir.</p>
             </div>
         </div>
     </div>
