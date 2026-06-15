@@ -17,7 +17,7 @@ body {
     background-position: bottom center;
     background-repeat: repeat-x; 
     background-size: auto 120px; 
-    background-attachment: fixed; /* Muster bleibt auf allen Geräten unbeweglich am Boden */
+    background-attachment: fixed; 
     
     min-height: 100vh;
     display: flex;
@@ -27,7 +27,7 @@ body {
     box-sizing: border-box;
 }
 
-/* BASIS-KASTEN (Desktop Standard) */
+/* BASIS-KASTEN */
 .quiz-container {
     background-color: var(--vayo-white);
     border-radius: 24px;
@@ -35,34 +35,29 @@ body {
     border: 3px solid var(--vayo-dark);
     width: 100%;
     max-width: 540px;
-    
-    /* Desktop: Endet präzise in der vertikalen Mitte des 120px hohen Boden-Musters */
     margin: 40px 20px 60px 20px; 
-    
     box-sizing: border-box;
-    text-align: center;
     position: relative;
     z-index: 10;
     
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    transition: max-width 0.2s ease, height 0.1s ease;
+    transition: max-width 0.25s ease; /* Macht das Aufweiten beim Ergebnis geschmeidig */
 }
 
-/* REGELUNG 1: Während des Quizes friert der Kasten starr auf 640px Höhe ein */
+/* Während des Quizes starr auf 640px Höhe */
 .quiz-container:has(#quiz-screen:not(.hidden)) {
     height: 640px;
 }
 
-/* REGELUNG 2: Bei der Auflösung auf DESKTOP wird der Kasten starr fixiert und scrollt nur innen */
+/* NEU: Luxuriöse Breite auf dem Laptop für die Auflösung */
 .quiz-container:has(#result-screen:not(.hidden)) {
-    max-width: 740px;
+    max-width: 980px; /* Perfekte Breitbild-Ansicht */
     max-height: calc(100vh - 140px); 
     overflow-y: auto; 
 }
 
-/* Regelt das Verhalten innerhalb der Box */
 .screen {
     display: flex;
     flex-direction: column;
@@ -70,6 +65,42 @@ body {
     flex-grow: 1;
 }
 
+/* NEU: Das zweispaltige Desktop-Layout für das Ergebnis */
+@media (min-width: 769px) {
+    #result-screen {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr; /* Links Haupttreffer, rechts die Liste */
+        gap: 35px;
+        text-align: left; /* Sieht zweispaltig sauberer aus */
+    }
+    
+    /* Header (Logo) geht über beide Spalten hinweg oben drüber */
+    .quiz-container:has(#result-screen:not(.hidden)) .vayo-header {
+        grid-column: span 2;
+        margin-bottom: 15px;
+    }
+    
+    /* Linke Spalte (Das perfekte Match) */
+    .result-left {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Rechte Spalte (Rangliste & Actions) */
+    .result-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        border-left: 2px dashed #cbd5e1;
+        padding-left: 35px;
+    }
+    
+    #vayo-piktogramm-box { margin: 0 0 20px 0; }
+    .details-badge { align-self: flex-start; }
+    #restart-btn { margin-top: auto; } /* Drückt den Wiederholen-Button ganz nach unten */
+}
+
+/* STANDARD STYLINGS */
 .vayo-header {
     margin-bottom: 25px;
     display: flex;
@@ -92,7 +123,6 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
 #vayo-piktogramm-box {
     width: 120px;
     height: 120px;
-    margin: 0 auto 20px auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -130,7 +160,7 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
     padding: 20px;
     margin-bottom: 25px;
     text-align: left;
-    max-height: 280px;
+    max-height: 250px;
     overflow-y: auto;
 }
 .itinerary-box h4 { font-family: 'Montserrat', sans-serif; margin-top: 0; color: var(--vayo-dark); border-bottom: 2px solid var(--vayo-dark); padding-bottom: 8px; }
@@ -164,7 +194,7 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 .progress-bar { width: 100%; height: 12px; background-color: var(--vayo-bg); border: 3px solid var(--vayo-dark); border-radius: 20px; margin-bottom: 20px; overflow: hidden; flex-shrink: 0; }
 #progress { height: 100%; width: 0%; background-color: var(--vayo-teal); transition: width 0.3s ease; }
 
-#ranking-list { margin: 25px 0; text-align: left; }
+#ranking-list { margin: 0 0 25px 0; text-align: left; }
 #ranking-list h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; margin-bottom: 10px;}
 
 .ranking-item { 
@@ -180,25 +210,14 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     cursor: pointer;
     transition: background-color 0.1s ease;
 }
-
-.ranking-item:hover {
-    background-color: var(--vayo-bg);
-}
-
-.ranking-item.active-card {
-    background-color: #e6f7f4; 
-    border-color: var(--vayo-teal);
-}
-
+.ranking-item:hover { background-color: var(--vayo-bg); }
+.ranking-item.active-card { background-color: #e6f7f4; border-color: var(--vayo-teal); }
 .ranking-pct { color: var(--vayo-teal); }
 
 .hidden { display: none !important; }
 
-/* =======================================================
-   REPARATUR: MOBILE AUSNAHMEREGELN FÜR DIE AUFLÖSUNG
-   ======================================================= */
-@media (max-width: 600px) {
-    /* Hebelt das interne Scrollen und die Höhenbegrenzung auf Smartphones komplett aus */
+/* MOBILE OPTIMIERUNG */
+@media (max-width: 768px) {
     .quiz-container:has(#result-screen:not(.hidden)) {
         max-height: none !important; 
         overflow-y: visible !important; 
@@ -212,7 +231,6 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     
     .quiz-container {
         padding: 25px 20px;
-        /* Verhindert Überlappungen am unteren Rand durch das fixierte Muster */
         margin: 20px 15px 140px 15px; 
         border-radius: 16px;
     }
@@ -220,13 +238,8 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     h1 { font-size: 1.6rem; }
     h2 { font-size: 0.95rem; }
     #match-headline { font-size: 1.15rem; }
-    
-    .vayo-logo-img {
-        height: 50px; 
-    }
-    
-    #answer-buttons .btn {
-        padding: 12px 16px;
-        font-size: 0.88rem; 
-    }
+    .vayo-logo-img { height: 50px; }
+    #answer-buttons .btn { padding: 12px 16px; font-size: 0.88rem; }
+    #quiz-screen { overflow-y: auto; }
+    #vayo-piktogramm-box { margin: 0 auto 20px auto; }
 }
