@@ -43,7 +43,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    transition: max-width 0.25s ease; /* Macht das Aufweiten beim Ergebnis geschmeidig */
+    transition: max-width 0.25s ease;
 }
 
 /* Während des Quizes starr auf 640px Höhe */
@@ -51,9 +51,9 @@ body {
     height: 640px;
 }
 
-/* NEU: Luxuriöse Breite auf dem Laptop für die Auflösung */
+/* NEU: Die extra-breite Laptop-Ansicht (jetzt 1100px!) */
 .quiz-container:has(#result-screen:not(.hidden)) {
-    max-width: 980px; /* Perfekte Breitbild-Ansicht */
+    max-width: 1100px; 
     max-height: calc(100vh - 140px); 
     overflow-y: auto; 
 }
@@ -65,25 +65,32 @@ body {
     flex-grow: 1;
 }
 
-/* NEU: Das zweispaltige Desktop-Layout für das Ergebnis */
+/* Das zweispaltige Desktop-Layout */
 @media (min-width: 769px) {
     #result-screen {
         display: grid;
-        grid-template-columns: 1.2fr 1fr; /* Links Haupttreffer, rechts die Liste */
-        gap: 35px;
-        text-align: left; /* Sieht zweispaltig sauberer aus */
+        grid-template-columns: 1.2fr 1fr; 
+        gap: 45px; /* Etwas mehr Luft zwischen den Spalten */
+        text-align: left; 
     }
     
-    /* Header (Logo) geht über beide Spalten hinweg oben drüber */
     .quiz-container:has(#result-screen:not(.hidden)) .vayo-header {
         grid-column: span 2;
         margin-bottom: 15px;
     }
     
-    /* Linke Spalte (Das perfekte Match) */
+    /* NEU: Linke Spalte ist jetzt komplett in der Mitte zentriert */
     .result-left {
         display: flex;
         flex-direction: column;
+        align-items: center; /* Zentriert Piktogramm und Buttons */
+        text-align: center;  /* Zentriert den Text */
+    }
+    
+    /* Der Text IN der Reiseplan-Box bleibt linksbündig für die Lesbarkeit */
+    .result-left .itinerary-box {
+        width: 100%;
+        text-align: left;
     }
     
     /* Rechte Spalte (Rangliste & Actions) */
@@ -92,12 +99,11 @@ body {
         flex-direction: column;
         justify-content: flex-start;
         border-left: 2px dashed #cbd5e1;
-        padding-left: 35px;
+        padding-left: 45px; /* Abstand zur Trennlinie angepasst */
     }
     
     #vayo-piktogramm-box { margin: 0 0 20px 0; }
-    .details-badge { align-self: flex-start; }
-    #restart-btn { margin-top: auto; } /* Drückt den Wiederholen-Button ganz nach unten */
+    #restart-btn { margin-top: auto; } 
 }
 
 /* STANDARD STYLINGS */
@@ -233,6 +239,18 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
         padding: 25px 20px;
         margin: 20px 15px 140px 15px; 
         border-radius: 16px;
+    }
+    
+    /* Mobil soll auch links alles mittig zentriert bleiben */
+    .result-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .result-left .itinerary-box {
+        width: 100%;
+        text-align: left;
     }
     
     h1 { font-size: 1.6rem; }
