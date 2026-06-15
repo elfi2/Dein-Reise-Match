@@ -10,8 +10,7 @@ let currentQuestionIndex = 0;
 let userAnswers = [];
 let topMatchesZwischenspeicher = [];
 
-// 3. Fiktive (oder echte) Termine für das Dropdown
-// Du kannst diese Daten hier jederzeit ganz einfach anpassen
+// 3. Feste Termine für das Dropdown-Menü im Anfrageformular
 const verfuegbareTermine = {
     "1. Toskana": ["15.08.2026 - 22.08.2026", "10.09.2026 - 17.09.2026"],
     "2. Alpen-Trekking": ["01.07.2026 - 08.07.2026", "15.07.2026 - 22.07.2026", "12.08.2026 - 19.08.2026"],
@@ -172,6 +171,8 @@ function zeigeAusgewaehlteReise(index) {
         
         if (piktoBox && zielData.img) {
             piktoBox.innerHTML = `<img src="${zielData.img}?t=${new Date().getTime()}" alt="VAYO Vibe">`;
+        } else {
+            if(piktoBox) piktoBox.innerText = "VAYO Vibe";
         }
 
         zielData.programm.forEach(schritt => {
@@ -232,8 +233,6 @@ async function berechneErgebnis() {
         zeigeAusgewaehlteReise(0);
         
         if (rankingListElement) {
-            rankingListElement.innerHTML = "<h3>Klicke auf eine Reise für Details:</h3>";
-
             topMatchesZwischenspeicher.forEach((r, i) => {
                 const bereinigterRangName = holeSauberenNamen(r.name);
                 
@@ -255,7 +254,7 @@ async function berechneErgebnis() {
     }
 }
 
-// --- NEU: MODAL & ANFRAGE LOGIK ---
+// --- MODAL & ANFRAGE SPEICHERUNG ---
 const contactModal = document.getElementById('contact-modal');
 const closeModalBtn = document.getElementById('close-modal-btn');
 const tripSelect = document.getElementById('trip-selection');
@@ -265,23 +264,20 @@ const contactForm = document.getElementById('vayo-contact-form');
 const successMessage = document.getElementById('success-message');
 const submitBtn = document.getElementById('submit-contact-btn');
 
-// Funktion zum Befüllen der Termine basierend auf der Reise-Auswahl
 function ladeTermine(reiseKey) {
     dateSelect.innerHTML = '<option value="">Bitte Termin wählen...</option>';
-    const termine = verfuegbareTermine[reiseKey] || ["Auf Anfrage"];
+    const appointments = verfuegbareTermine[reiseKey] || ["Auf Anfrage"];
     
-    termine.forEach(termin => {
+    appointments.forEach(termin => {
         const option = document.createElement('option');
         option.value = termin;
         option.textContent = termin;
         dateSelect.appendChild(option);
     });
     
-    // Termin-Feld einblenden, wenn Termine da sind
     dateSelectContainer.classList.remove('hidden');
 }
 
-// Wenn sich die Reiseauswahl ändert, passe die Termine an
 if(tripSelect) {
     tripSelect.addEventListener('change', (e) => {
         const selectedKey = e.target.value;
@@ -293,16 +289,13 @@ if(tripSelect) {
     });
 }
 
-// Modal öffnen
 if(ctaBtn) {
     ctaBtn.addEventListener('click', () => {
-        // Formular Reset
         contactForm.reset();
         contactForm.classList.remove('hidden');
         successMessage.classList.add('hidden');
         dateSelectContainer.classList.add('hidden');
         
-        // Reise Dropdown befüllen
         tripSelect.innerHTML = '<option value="">Bitte wählen...</option>';
         reiseDetails.forEach(reise => {
             const option = document.createElement('option');
@@ -311,7 +304,6 @@ if(ctaBtn) {
             tripSelect.appendChild(option);
         });
 
-        // Top-Match vorauswählen und Termine laden
         if (topMatchesZwischenspeicher.length > 0) {
             const topMatchKey = topMatchesZwischenspeicher[0].name;
             tripSelect.value = topMatchKey;
@@ -322,17 +314,15 @@ if(ctaBtn) {
     });
 }
 
-// Modal schließen
 if(closeModalBtn) {
     closeModalBtn.addEventListener('click', () => {
         contactModal.classList.add('hidden');
     });
 }
 
-// Formular in die Supabase Datenbank senden!
 if(contactForm) {
     contactForm.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Verhindert das Neuladen der Seite
+        e.preventDefault(); 
         
         submitBtn.innerText = "Wird gesendet...";
         submitBtn.disabled = true;
@@ -344,7 +334,6 @@ if(contactForm) {
         const remarksValue = document.getElementById('user-remarks').value;
 
         try {
-            // Daten an die neue 'anfragen' Tabelle schicken
             const { error } = await supabaseClient
                 .from('anfragen')
                 .insert([
@@ -359,7 +348,6 @@ if(contactForm) {
 
             if (error) throw error;
 
-            // Erfolgsmeldung zeigen
             contactForm.classList.add('hidden');
             successMessage.classList.remove('hidden');
 
