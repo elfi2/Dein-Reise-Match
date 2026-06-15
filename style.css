@@ -1,257 +1,279 @@
 :root {
-    --vayo-pink: #FF4A7A;
-    --vayo-yellow: #FFAA00;
-    --vayo-teal: #00A896;
     --vayo-dark: #1A1D20;
-    --vayo-bg: #F8F6F0;
     --vayo-white: #FFFFFF;
+    --vayo-bg: #F4F6F8;
+    --vayo-teal: #00A896;
+    --vayo-pink: #FF5A5F;
+    --vayo-gray: #E0E0E0;
 }
 
 body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--vayo-bg);
+    color: var(--vayo-dark);
     margin: 0;
     padding: 0;
-    font-family: 'Open Sans', sans-serif;
-    background-color: var(--vayo-pink);
-    
-    background-image: url('muster.jpg.png');
-    background-position: bottom center;
-    background-repeat: repeat-x; 
-    background-size: auto 120px; 
-    background-attachment: fixed; 
-    
-    min-height: 100vh;
-    display: block; 
-    box-sizing: border-box;
-}
-
-/* BASIS-KASTEN */
-.quiz-container {
-    background-color: var(--vayo-white);
-    border-radius: 24px;
-    padding: 35px;
-    border: 3px solid var(--vayo-dark);
-    width: calc(100% - 40px); 
-    max-width: 540px;
-    margin: 10vh auto 120px auto; 
-    box-sizing: border-box;
-    position: relative;
-    z-index: 10;
-    
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    transition: max-width 0.25s ease;
+    align-items: center;
 }
 
-.quiz-container:has(#quiz-screen:not(.hidden)) {
-    height: 640px;
+header {
+    text-align: center;
+    padding: 20px;
 }
 
-.quiz-container:has(#result-screen:not(.hidden)) {
-    max-width: 1100px; 
-    max-height: none; 
-    overflow-y: visible; 
+#logo {
+    max-width: 150px;
+    margin-bottom: 10px;
+}
+
+h1, h2, h3, h4 {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0 0 15px 0;
 }
 
 .screen {
+    width: 90%;
+    max-width: 1000px;
+    background: var(--vayo-white);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    height: 10px;
+    background: var(--vayo-gray);
+    border-radius: 5px;
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+#progress {
+    height: 100%;
+    width: 0%;
+    background: var(--vayo-teal);
+    transition: width 0.3s ease;
+}
+
+/* Buttons */
+.btn {
+    background-color: var(--vayo-dark);
+    color: var(--vayo-white);
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.btn-grid {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    flex-grow: 1;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
-/* Das zweispaltige Desktop-Layout */
-@media (min-width: 769px) {
-    #result-screen {
-        display: grid;
-        grid-template-columns: 1.2fr 1fr; 
-        gap: 45px; 
-        text-align: left; 
-        /* align-items: start; WURDE ENTFERNT, damit die Spalten wieder gleich lang werden */
-    }
-    
-    .quiz-container:has(#result-screen:not(.hidden)) .vayo-header {
-        grid-column: span 2;
-        margin-bottom: 15px;
-    }
-    
-    .result-left {
-        display: flex;
-        flex-direction: column;
-        align-items: center; 
-        text-align: center;  
-    }
-    
-    .result-left .itinerary-box {
-        width: 100%;
-        text-align: left;
-    }
-    
-    .result-right {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        border-left: 1.5px solid #cbd5e1;
-        padding-left: 45px; 
-        /* height: fit-content; WURDE ENTFERNT, damit die Trennlinie mit dem Reiseplan nach unten wächst */
-    }
-    
-    #vayo-piktogramm-box { margin: 0 0 20px 0; }
-    #restart-btn { margin-top: 15px; } 
+.outline-btn {
+    background-color: transparent;
+    color: var(--vayo-dark);
+    border: 2px solid var(--vayo-dark);
+    margin-top: 15px;
 }
 
-/* STANDARD STYLINGS */
-.vayo-header {
-    margin-bottom: 25px;
+.primary-btn {
+    background-color: var(--vayo-pink);
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+/* Result Container (2 Spalten Layout) */
+.result-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-shrink: 0;
+    flex-wrap: wrap;
+    gap: 40px;
+    text-align: left;
 }
 
-.vayo-logo-img {
-    height: 65px; 
-    width: auto;
-    object-fit: contain;
+.top-match-card {
+    flex: 2;
+    min-width: 300px;
+    background: var(--vayo-bg);
+    padding: 30px;
+    border-radius: 15px;
 }
 
-h1 { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 2.2rem; margin: 10px 0; }
-h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--vayo-pink); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px;}
-#match-headline { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.35rem; color: var(--vayo-teal); margin: 5px 0 15px 0; }
-p { font-size: 1rem; line-height: 1.6; color: #374151; }
+.ranking-board {
+    flex: 1;
+    min-width: 250px;
+}
 
-#vayo-piktogramm-box {
-    width: 120px;
-    height: 120px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.highlight-text {
+    color: var(--vayo-pink);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#match-name {
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+}
+
+#match-headline {
+    color: var(--vayo-teal);
+    margin-bottom: 20px;
 }
 
 #vayo-piktogramm-box img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+/* Ranking Liste */
+.ranking-item {
+    background: var(--vayo-white);
+    border: 2px solid var(--vayo-gray);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
+.ranking-item:hover {
+    border-color: var(--vayo-dark);
+}
+
+.active-card {
+    border-color: var(--vayo-teal);
+    background-color: rgba(0, 168, 150, 0.05);
+}
+
+/* Reiseplan Box */
+#vayo-full-itinerary {
+    margin-top: 20px;
+    background: var(--vayo-white);
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 4px solid var(--vayo-teal);
+}
+
+.day-step {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.day-title {
+    font-weight: bold;
+    color: var(--vayo-dark);
+    margin-right: 5px;
+}
+
+/* POP-UP MODAL STYLINGS */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    border: 3px solid var(--vayo-dark);
-    border-radius: 20px;
-}
-
-.details-badge {
-    display: inline-flex;
-    align-items: center;
+    background-color: rgba(26, 29, 32, 0.85);
+    display: flex;
     justify-content: center;
-    background-color: var(--vayo-bg);
-    border: 3px solid var(--vayo-dark);
-    padding: 12px 22px;
-    border-radius: 12px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 0.95rem;
-    cursor: pointer;
-    margin: 5px 0 25px 0;
-    transition: background-color 0.1s ease;
+    align-items: center;
+    z-index: 1000;
 }
-.details-badge:hover { background-color: var(--vayo-yellow); }
 
-/* Reiseplan: Jetzt mit durchgezogenen Linien (solid) */
-.itinerary-box {
-    background-color: var(--vayo-bg);
+.modal-content {
+    background-color: var(--vayo-white);
+    padding: 30px;
+    border-radius: 20px;
     border: 3px solid var(--vayo-dark);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 25px;
+    width: 90%;
+    max-width: 450px;
+    position: relative;
     text-align: left;
-    max-height: none; 
-    overflow-y: visible; 
+    box-sizing: border-box;
+    max-height: 90vh;
+    overflow-y: auto;
 }
-.itinerary-box h4 { font-family: 'Montserrat', sans-serif; margin-top: 0; color: var(--vayo-dark); border-bottom: 2px solid var(--vayo-dark); padding-bottom: 8px; }
-.day-step { margin-bottom: 12px; font-size: 0.9rem; line-height: 1.5; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; }
-.day-step:last-child { border-bottom: none; }
-.day-title { font-weight: 800; color: var(--vayo-pink); }
 
-button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding: 16px 24px; border-radius: 14px; border: 3px solid var(--vayo-dark); cursor: pointer; transition: background-color 0.1s ease; }
-#start-btn, #cta-btn { background-color: var(--vayo-pink); color: white; width: 100%; }
-#restart-btn { background-color: white; width: 100%; margin-top: 10px; }
-
-.btn-grid { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 12px; 
-    margin-top: auto; 
-    flex-grow: 1;
-    justify-content: flex-end;
-} 
-
-#answer-buttons .btn { 
-    background-color: var(--vayo-white); 
-    text-align: left; 
-    border: 3px solid var(--vayo-dark); 
-    padding: 14px 20px;
-    font-size: 0.95rem;
-    line-height: 1.4;
-}
-#answer-buttons .btn:hover { background-color: var(--vayo-teal); color: white; }
-
-.progress-bar { width: 100%; height: 12px; background-color: var(--vayo-bg); border: 3px solid var(--vayo-dark); border-radius: 20px; margin-bottom: 20px; overflow: hidden; flex-shrink: 0; }
-#progress { height: 100%; width: 0%; background-color: var(--vayo-teal); transition: width 0.3s ease; }
-
-#ranking-list { margin: 0 0 25px 0; text-align: left; }
-#ranking-list h3 { font-family: 'Montserrat', sans-serif; font-size: 1.05rem; margin-bottom: 10px;}
-
-.ranking-item { 
-    display: flex; 
-    justify-content: space-between; 
-    padding: 14px; 
-    background-color: var(--vayo-white); 
-    border: 3px solid var(--vayo-dark); 
-    border-radius: 12px; 
-    margin-bottom: 12px; 
-    font-weight: 700; 
-    font-size: 0.95rem; 
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    font-weight: 800;
     cursor: pointer;
-    transition: background-color 0.1s ease;
+    color: var(--vayo-dark);
+    line-height: 1;
 }
-.ranking-item:hover { background-color: var(--vayo-bg); }
-.ranking-item.active-card { background-color: #e6f7f4; border-color: var(--vayo-teal); }
-.ranking-pct { color: var(--vayo-teal); }
 
-.hidden { display: none !important; }
+#vayo-contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
 
-/* MOBILE OPTIMIERUNG */
-@media (max-width: 768px) {
-    .quiz-container:has(#result-screen:not(.hidden)) {
-        max-height: none !important; 
-        overflow-y: visible !important; 
-        height: auto !important;
-    }
+#vayo-contact-form label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--vayo-dark);
+    margin-bottom: -10px;
+}
 
-    .quiz-container:has(#quiz-screen:not(.hidden)) {
-        height: auto;
-        min-height: calc(100vh - 160px); 
-    }
-    
-    .quiz-container {
-        padding: 25px 20px;
-        margin: 5vh auto 140px auto; 
-        border-radius: 16px;
-    }
-    
-    .result-left {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    .result-left .itinerary-box {
-        width: 100%;
-        text-align: left;
-    }
-    
-    h1 { font-size: 1.6rem; }
-    h2 { font-size: 0.95rem; }
-    #match-headline { font-size: 1.15rem; }
-    .vayo-logo-img { height: 50px; }
-    #answer-buttons .btn { padding: 12px 16px; font-size: 0.88rem; }
-    #quiz-screen { overflow-y: auto; }
-    #vayo-piktogramm-box { margin: 0 auto 20px auto; }
+#vayo-contact-form input,
+#vayo-contact-form select,
+#vayo-contact-form textarea {
+    padding: 14px;
+    border: 2px solid var(--vayo-dark);
+    border-radius: 12px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+    background-color: var(--vayo-bg);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#vayo-contact-form textarea {
+    resize: vertical;
+}
+
+#submit-contact-btn {
+    background-color: var(--vayo-teal);
+    color: var(--vayo-white);
+    margin-top: 10px;
+}
+
+#success-message {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(0, 168, 150, 0.1);
+    border-radius: 10px;
+    color: var(--vayo-teal);
 }
