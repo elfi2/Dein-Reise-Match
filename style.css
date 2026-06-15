@@ -67,6 +67,7 @@ body {
         grid-template-columns: 1.2fr 1fr; 
         gap: 45px; 
         text-align: left; 
+        /* align-items: start; WURDE ENTFERNT, damit die Spalten wieder gleich lang werden */
     }
     
     .quiz-container:has(#result-screen:not(.hidden)) .vayo-header {
@@ -92,8 +93,10 @@ body {
         justify-content: flex-start;
         border-left: 1.5px solid #cbd5e1;
         padding-left: 45px; 
+        /* height: fit-content; WURDE ENTFERNT, damit die Trennlinie mit dem Reiseplan nach unten wächst */
     }
     
+    #vayo-piktogramm-box { margin: 0 0 20px 0; }
     #restart-btn { margin-top: 15px; } 
 }
 
@@ -117,26 +120,20 @@ h2 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem;
 #match-headline { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.35rem; color: var(--vayo-teal); margin: 5px 0 15px 0; }
 p { font-size: 1rem; line-height: 1.6; color: #374151; }
 
-/* REPARATUR: Piktogramm-Box (Cutter für weiße Ränder oben und unten) */
 #vayo-piktogramm-box {
     width: 120px;
     height: 120px;
-    margin: 0 auto 20px auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    overflow: hidden; /* Schneidet überstehende weiße Ränder ab */
-    border: 3px solid var(--vayo-dark);
-    border-radius: 20px;
-    background-color: var(--vayo-white);
 }
 
 #vayo-piktogramm-box img {
     width: 100%;
-    height: auto;
-    position: relative;
-    top: -12.5%; /* Zieht das Bild nach oben, um den Rand abzuschneiden */
-    margin-bottom: -12.5%; 
+    height: 100%;
+    object-fit: contain;
+    border: 3px solid var(--vayo-dark);
+    border-radius: 20px;
 }
 
 .details-badge {
@@ -156,7 +153,7 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
 }
 .details-badge:hover { background-color: var(--vayo-yellow); }
 
-/* Reiseplan: Jetzt mit durchgezogenen Linien */
+/* Reiseplan: Jetzt mit durchgezogenen Linien (solid) */
 .itinerary-box {
     background-color: var(--vayo-bg);
     border: 3px solid var(--vayo-dark);
@@ -256,4 +253,5 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     .vayo-logo-img { height: 50px; }
     #answer-buttons .btn { padding: 12px 16px; font-size: 0.88rem; }
     #quiz-screen { overflow-y: auto; }
+    #vayo-piktogramm-box { margin: 0 auto 20px auto; }
 }
