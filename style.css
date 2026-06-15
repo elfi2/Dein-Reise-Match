@@ -28,7 +28,7 @@ body {
     box-sizing: border-box;
 }
 
-/* BASIS-KASTEN: Standardmäßig flexibel für Start und Auflösung (wie davor) */
+/* BASIS-KASTEN: Startbildschirm startet bei 540px */
 .quiz-container {
     background-color: var(--vayo-white);
     border-radius: 24px;
@@ -45,11 +45,17 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    transition: max-width 0.2s ease, height 0.1s ease;
 }
 
-/* GEZIELTE REGELUNG: Nur wenn der Quiz-Screen aktiv ist, friert der Kasten starr auf 640px ein! */
+/* REGELUNG 1: Während des Quizes friert der Kasten starr auf 640px Höhe ein */
 .quiz-container:has(#quiz-screen:not(.hidden)) {
     height: 640px;
+}
+
+/* REGELUNG 2: Bei der Auflösung wird der Kasten für eine bessere Übersicht auf 780px geweitet! */
+.quiz-container:has(#result-screen:not(.hidden)) {
+    max-width: 780px;
 }
 
 /* Regelt das Verhalten innerhalb der Box */
@@ -132,7 +138,6 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 #start-btn, #cta-btn { background-color: var(--vayo-pink); color: white; width: 100%; }
 #restart-btn { background-color: white; width: 100%; margin-top: 10px; }
 
-/* Die Antwortbox im Quiz zieht sich dynamisch auf */
 .btn-grid { 
     display: flex; 
     flex-direction: column; 
@@ -184,3 +189,38 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 .ranking-pct { color: var(--vayo-teal); }
 
 .hidden { display: none !important; }
+
+/* ==========================================
+   NEU: MOBILE OPTIMIERUNG FÜR SMARTPHONES
+   ========================================== */
+@media (max-width: 600px) {
+    /* Verhindert, dass die feste Höhe auf kleinen Handys den Inhalt abschneidet */
+    .quiz-container:has(#quiz-screen:not(.hidden)) {
+        height: auto;
+        min-height: calc(100vh - 180px); /* Nutzt den Bildschirm optimal aus */
+    }
+    
+    .quiz-container {
+        padding: 20px;
+        margin: 15px 15px 140px 15px; /* Kleinerer Außenabstand am Rand */
+        border-radius: 16px;
+    }
+    
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 0.95rem; }
+    #match-headline { font-size: 1.15rem; }
+    
+    .vayo-logo-img {
+        height: 50px; /* Logo wird auf Mobilgeräten etwas kompakter */
+    }
+    
+    #answer-buttons .btn {
+        padding: 12px 16px;
+        font-size: 0.88rem; /* Macht die Antworttexte auf kleinen Screens besser lesbar */
+    }
+    
+    /* Sorgt dafür, dass man im aktiven Quiz scrollen kann, falls ein Text extrem lang ist */
+    #quiz-screen {
+        overflow-y: auto;
+    }
+}
