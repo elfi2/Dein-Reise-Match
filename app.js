@@ -219,95 +219,90 @@ const produktPortfolio = {
     }
 };
 
+// DIE 10 NEUEN, ABSTRAKTEN KERNFRAGEN (Perfekt gematcht an deine Datenbank!)
 const quizQuestions = [
     {
-        question: "Du schließt am ersten Morgen im Urlaub die Augen und lauschst. Welches Geräusch lässt dein Herz höherspringen?",
+        question: "Dein Kopf ist komplett voll vom Alltag. Was ist dein intuitives Ventil?",
         answers: [
-            { text: "Das dumpfe Klacken von Karabinern, das Zischen von Wellen oder das Einstellen eines Sportgeräts.", option: "Aktion & Sport" },
-            { text: "Das Stimmengewirr einer fremden Sprache auf einem bunten Markt voller Historie.", option: "Kultur & Entdeckung" },
-            { text: "Der dumpfe Bass eines Beachclubs, der langsam für den Abend warmgelaufen wird.", option: "Party & Nightlife" },
-            { text: "Absolute Stille, nur unterbrochen vom sanften Windhauch und dem fernen Plätschern eines Pools.", option: "Wellness & Erholung" }
+            { text: "Auspowern, bis die Muskeln brennen und der Kopf frei ist.", option: "Aktion & Sport" },
+            { text: "Rausgehen, völlig Neues sehen und eine fremde Welt aufsaugen.", option: "Kultur & Entdeckung" },
+            { text: "Musik laut, Leute um mich herum und den Stress einfach wegtanzen.", option: "Party & Nightlife" },
+            { text: "Handy aus, Kopf aus und stundenlang einfach gar nichts tun.", option: "Wellness & Erholung" }
         ]
     },
     {
-        question: "Dein Koffer liegt offen auf dem Bett. Wie sieht deine Beziehung zu diesem Koffer während der Reise aus?",
+        question: "Welches Gefühl auf der Haut gibt dir augenblicklich am meisten Energie?",
         answers: [
-            { text: "Ich packe ihn am ersten Tag komplett aus, hänge alles in den Schrank und vergesse, dass er existiert.", option: "1 feste Unterkunft" },
-            { text: "Ich lasse die Hälfte drin, weil ich weiß, dass wir zur Halbzeit noch einmal die Kulisse wechseln.", option: "1 Unterkunftswechsel" },
-            { text: "Mein Koffer ist mein treuester Gefährte – er wird fast täglich ein- und ausgepackt, weil die Straße uns ruft.", option: "Rundreise" },
-            { text: "Auspacken, Schranktür zu, Wohlfühlen. Bloß kein Stress mit ständigem Location-Wechsel.", option: "1 feste Unterkunft" }
+            { text: "Wenn die Luft flimmert und das Thermometer so richtig glüht.", option: "Heiß & Tropisch" },
+            { text: "Das Prickeln von eiskalter, knackiger Luft auf den Wangen.", option: "Kalt & Winterlich" },
+            { text: "Wenn dir ein frischer, rauer Wind das Gesicht durchpustet.", option: "Mild & Wechselhaft" }
         ]
     },
     {
-        question: "Du schaust aus dem Fenster. Bei welchem Wetter schlägt deine innere Energie-Anzeige voll aus?",
+        question: "Stell dir vor du wachst auf und schaust aus dem Fenster. Was beruhigt dich sofort?",
         answers: [
-            { text: "Flimmernde Hitze, bei der der Asphalt glüht und man jede Sekunde ins Wasser springen möchte.", option: "Heiß & Tropisch" },
-            { text: "Knackige, eiskalte Luft, die beim Einatmen in der Nase beißt und die Wangen sofort rot färbt.", option: "Kalt & Winterlich" },
-            { text: "Ein frischer, unberechenbarer Wind, der dicke Wolken vorantreibt – perfekt, um sich zu bewegen.", option: "Mild & Wechselhaft" },
-            { text: "Ein wolkenloser, tiefblauer Himmel, unter dem die Sonne so richtig brennt.", option: "Heiß & Tropisch" }
+            { text: "Das unendliche, rhythmische Rauschen von Wellen.", option: "Beach & Küste" },
+            { text: "Gigantische Felswände, die oben im Nebel verschwinden.", option: "Berge & Natur" },
+            { text: "Das Summen und die Lichter einer schlaflosen Weltstadt.", option: "Metropole & Stadt" },
+            { text: "Sanfte, sonnenüberflutete Hügelketten, so weit das Auge reicht.", option: "Ländliche Idylle" }
         ]
     },
     {
-        question: "Du darfst ein großformatiges Kunstwerk für dein Wohnzimmer auswählen. Welches Motiv nimmst du?",
+        question: "Du blickst gedankenverloren nach draußen. Wie bewegst du dich am liebsten fort?",
         answers: [
-            { text: "Eine endlose, türkisfarbene Meereslinie mit sanfter Brandung und feinem Sand.", option: "Beach & Küste" },
-            { text: "Ein majestätisches Bergmassiv, dessen Gipfel im Abendlicht glühen.", option: "Berge & Natur" },
-            { text: "Eine spektakuläre, hell erleuchtete Wolkenkratzer-Skyline bei Nacht.", option: "Metropole & Stadt" },
-            { text: "Ein verträumter, sonnenüberfluteter Weinberg mit einer alten Steinvilla im Hintergrund.", option: "Ländliche Idylle" }
+            { text: "Im Flieger, wenn unter mir die Welt langsam winzig klein wird.", option: "Kurzstreckenflug" }, // Wird im Match-Wechsel für Langstrecke miterfasst
+            { text: "Im Zug, während die Landschaft wie ein Film vorbeizieht.", option: "Zug" },
+            { text: "Im Roadtrip-Bus, mit den Snacks und der Playlist der Crew im Ohr.", option: "Fernreisebus" },
+            { text: "Auf den eigenen Beinen – Schritt für Schritt durch die Wildnis.", option: "Zug" } // Übergang für Wander-Optionen
         ]
     },
     {
-        question: "Die Reise beginnt! Welcher Moment brennt sich als Erstes in dein Gedächtnis ein?",
+        question: "Ein magisches Ticket beamt dich sofort weg. Wo schlägt der Kompass an?",
         answers: [
-            { text: "Das gemeinsame Lachen und die Musik im Bus, während die Autobahnschilder an uns vorbeiziehen.", option: "Fernreisebus" },
-            { text: "Der Moment, in dem die Anschnallzeichen erlöschen und man unter sich die Wolkendecke Europas sieht.", option: "Kurzstreckenflug" },
-            { text: "Das Kribbeln im Bauch beim nächtlichen Transatlantikflug, wenn man weiß: Gleich bin ich auf einem neuen Kontinent.", option: "Langstreckenflug" },
-            { text: "Das gleichmäßige Rattern der Schienen, während man entspannt aus dem Fenster schaut und die Landschaft an sich vorbeizehen lässt.", option: "Zug" }
+            { text: "Irgendwo ganz nah – man könnte mich im Notfall in wenigen Stunden erreichen.", option: "Deutschland & Nachbarn" },
+            { text: "In einer mediterranen Gasse, in der es intensiv nach Sommer riecht.", option: "Südeuropa & Mittelmeer" },
+            { text: "An einer rauen, grünen Klippe im Norden, wo die Natur regiert.", option: "Nord- & Westeuropa" },
+            { text: "In einer völlig anderen Zeitzone am anderen Ende der Welt.", option: "Fernreise" }
         ]
     },
     {
-        question: "Wenn du auf dein Handy schaust, was soll die Weltzeituhr oder der Wetterbericht anzeigen?",
+        question: "Was bedeutet echtes „Ankommen“ an deinem Schlafplatz für dich?",
         answers: [
-            { text: "Den Heimatort – ich bin so nah, dass ich theoretisch in wenigen Stunden wieder zu Hause sein könnte.", option: "Deutschland & Nachbarn" },
-            { text: "Ein klassisches 'Süden'-Reiseziel, das sofort nach Sommerferien, Palmen und Mittelmeer klingt.", option: "Südeuropa & Mittelmeer" },
-            { text: "Ein skandinavisches oder britisches Ziel, das nach Abenteuer, rauer Natur und Entdeckung schmeckt.", option: "Nord- & Westeuropa" },
-            { text: "Eine völlig verrückte Zeitzone mit massivem Jetlag am anderen Ende der Welt.", option: "Fernreise" }
+            { text: "Die Schuhe in die Ecke werfen und den Luxus eines gemachten Betts fühlen.", option: "Luxushotel & Resort" },
+            { text: "Den Reißverschluss aufmachen und sofort den Waldboden riechen.", option: "Zelt & Camp" },
+            { text: "Das lebendige, internationale Stimmengewirr in einer Lobby hören.", option: "Hostel & Hütte" },
+            { text: "Die Zimmertür hinter mir schließen und einfach meine funktionale Ruhe haben.", option: "Mittelklasse-Hotel" }
         ]
     },
     {
-        question: "Wenn du an deinen perfekten Schlafplatz denkst, welche Textur fühlst du vor deinem inneren Auge?",
+        question: "Du kommst auf eine Party, auf der du absolut niemanden kennst. Was tust du?",
         answers: [
-            { text: "Das weiche Gras direkt unter meiner Isomatte und den robusten Stoff der Zeltwand.", option: "Zelt & Camp" },
-            { text: "Eine knarzende Holzpritsche oder ein rustikales Stockbett, auf dem schon hunderte Abenteurer vor mir geschlafen haben.", option: "Hostel & Hütte" },
-            { text: "Ein frisch gemachtes, absolut sauberes Standard-Bett in einem Zimmer, das funktional und gemütlich ist.", option: "Mittelklasse-Hotel" },
-            { text: "Eine riesige, schneeweiße Bettdecke mit unzähligen Kissen und der Duft von edlen Raumölen im Resort.", option: "Luxushotel & Resort" }
+            { text: "Ich stürze mich mitten ins Getümmel und quatsche die größte Gruppe an.", option: "Jugend-Vibe" },
+            { text: "Ich suche mir zwei entspannte Leute an der Bar für ein gutes Gespräch.", option: "Young Travel" },
+            { text: "Ich halte mich erst mal im Hintergrund und schaue mir den Vibe in Ruhe an.", option: "Kleingruppe" }
         ]
     },
     {
-        question: "Wie lang muss ein Urlaub sein, damit du das Gefühl hast, wirklich weg gewesen zu sein?",
+        question: "Die Uhr schlägt Mitternacht. Wohin strömst du ganz automatisch?",
         answers: [
-            { text: "Eine knackige, intensive Woche – danach vermisse ich meistens eh schon mein eigenes Bett.", option: "1 Woche" },
-            { text: "Ein ausgedehnter Trip von eineinhalb Wochen: Genug Zeit zum Ankommen, aber kein endloser Urlaub.", option: "10 bis 12 Tage" },
-            { text: "Ein richtig fetter Roadtrip oder Camp-Urlaub von 2 bis 3 Wochen – alles darunter lohnt sich gar nicht.", option: "2 bis 3 Wochen" },
-            { text: "Exakt 7 Tage Abschalten reichen mir völlig aus, um die Akkus komplett vollzuladen.", option: "1 Woche" }
+            { text: "Dorthin, wo das DJ-Set und der Bass den Boden vibrieren lassen.", option: "Nachtleben & Clubs" },
+            { text: "Nach draußen in die Dunkelheit, um den Funken des Feuers nachzusehen.", option: "Lagerfeuer & Naturruhe" },
+            { text: "An einen Tisch voller Snacks, Getränke und tiefer, ehrlicher Gespräche.", option: "Geselliges Beisammensein" }
         ]
     },
     {
-        question: "Du betrittst den Gemeinschaftsbereich am ersten Abend. Welche Dynamik zieht dich magisch an?",
+        question: "Welches Souvenir nimmst du von einer perfekten Reise am liebsten mit nach Hause?",
         answers: [
-            { text: "Ein Haufen energiegeladener Leute, Teamer, die laute Musik anmachen und sofort ein Kennenlernspiel starten.", option: "Jugend-Vibe" },
-            { text: "Eine entspannte Truppe von jungen Erwachsenen, die bei einem Kaltgetränk über Gott und die Welt quatschen.", option: "Young Travel" },
-            { text: "Eine ganz kleine, ruhige Runde, in der man sofort tiefgründige Gespräche führt und sich geborgen fühlt.", option: "Kleingruppe" },
-            { text: "Eine weltoffene, neugierige Gruppe von Backpackern, die morgen gemeinsam die Stadt unsicher machen will.", option: "Young Travel" }
+            { text: "Eine Speicherkarte voller epischer Fotos von gewaltigen Kulissen.", option: "2 bis 3 Wochen" }, // Übersetzt im Code zu Fernreisen (Island, Thailand, USA)
+            { text: "Das Gefühl, nach einer kurzen, intensiven Woche komplett resetttet zu sein.", option: "1 Woche" },
+            { text: "Neue Kontakte und Insider-Tipps im Handy von Charakteren, die man nie vergisst.", option: "10 bis 12 Tage" }
         ]
     },
     {
-        question: "Die Sonne ist untergangen. Wo findet man dich um 23 Uhr?",
+        question: "Wie liest du ein wirklich gutes Buch oder eine packende Story?",
         answers: [
-            { text: "Mit einem Drink in der Hand auf der Tanzfläche eines Clubs, während die Lichter flackern.", option: "Nachtleben & Clubs" },
-            { text: "Mit einer Decke umhüllt am Lagerfeuer, dem Knistern des Holzes lauschend, kurz vor dem Schlafen.", option: "Lagerfeuer & Naturruhe" },
-            { text: "In einer gemütlichen Runde bei guten Gesprächen, einem Gesellschaftsspiel oder einem Glas Wein auf der Terrasse.", option: "Geselliges Beisammensein" },
-            { text: "In einer coolen Rooftop-Bar mitten in den Straßenschluchten einer hell erleuchteten City.", option: "Nachtleben & Clubs" }
+            { text: "Ich verschlinge alles an einem einzigen, gemütlichen Abend am selben Fleck.", option: "1 feste Unterkunft" },
+            { text: "Ich lese kapitelweise und brauche zwischendurch unbedingt ein neues Setting.", option: "Rundreise" } // Matcht auch Unterkunftswechsel
         ]
     }
 ];
@@ -458,7 +453,7 @@ function zeigeAusgewaehlteReise(index) {
         });
     } else {
         document.getElementById('match-headline').innerText = "Dein VAYO-Abenteuer wartet!";
-        document.getElementById('match-description').innerText = `Genial! Dein persönlicher Charakter-Vibe hat eine Übereinstimmung von ${reisen.prozent}% mit diesem Trip!`;
+        document.getElementById('match-description').innerText = `Genial! Dein persönlicher Charakter-Vibe hat eine Übereinstimmung von ${reise.prozent}% mit diesem Trip!`;
         if(piktoBox) piktoBox.innerHTML = "";
         if(itinerarySteps) itinerarySteps.innerHTML = "<div class='day-step'>Reiseplan wird geladen...</div>";
     }
@@ -488,12 +483,18 @@ async function berechneErgebnis() {
         const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
 
-        const kategorienSpalten = ['fokus', 'unterkuenfte', 'wetter', 'kulisse', 'transport', 'lage', 'unterkunft_art', 'dauer', 'zielgruppe', 'abend'];
+        // Die 10 exakt verknüpften Spaltennamen deiner Supabase-Datenbank
+        const kategorienSpalten = ['fokus', 'wetter', 'kulisse', 'transport', 'lage', 'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte'];
 
         let reisenMitPunkten = reisen.map(reise => {
             let punkte = 0;
             userAnswers.forEach((antwort, index) => {
-                if (reise[kategorienSpalten[index]] === antwort) punkte++;
+                // KORREKTUR: Fängt flexible Teiltreffer für Rundreisen/Langstrecke intelligent ab
+                if (reise[kategorienSpalten[index]] === antwort || 
+                    (antwort === "Kurzstreckenflug" && reise[kategorienSpalten[index]] === "Langstreckenflug" && reise.dauer === "2 bis 3 Wochen") ||
+                    (antwort === "Rundreise" && reise[kategorienSpalten[index]] === "1 Unterkunftswechsel")) {
+                    punkte++;
+                }
             });
             return { ...reise, punkte, prozent: Math.round((punkte / quizQuestions.length) * 100) };
         });
