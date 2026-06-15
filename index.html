@@ -10,6 +10,105 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+ 
+    <div class="quiz-container">
+        <div class="vayo-header">
+            <img src="logo.png" alt="VAYO REISEN" class="vayo-logo-img">
+        </div>
+ 
+        <div id="start-screen" class="screen">
+            <h1>Welcher Reisetyp bist du?</h1>
+            <p>Dein Vibe. Deine Welt. Finde in 20 kurzen Fragen heraus, welches VAYO-Abenteuer perfekt zu dir passt!</p>
+            <button id="start-btn">Jetzt Quiz starten</button>
+        </div>
+ 
+        <div id="quiz-screen" class="screen hidden">
+            <div class="progress-bar"><div id="progress"></div></div>
+            <h2 id="question-text">Hier steht die Frage</h2>
+            <div id="answer-buttons" class="btn-grid"></div>
+        </div>
+ 
+        <div id="result-screen" class="screen hidden">
+            <div class="result-left">
+                <div id="vayo-piktogramm-box">
+                    <img id="vayo-pikto-img" src="" alt="Match Icon" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+                <h2>Dein perfektes Match:</h2>
+                <h1 id="match-name">Reiseziel-Name</h1>
+                <h3 id="match-headline"></h3>
+                
+                <p id="match-description">Abgleich mit der Datenbank...</p>
+                
+                <div id="vayo-details-trigger" class="details-badge">
+                    <i class="fa-solid fa-circle-info"></i> Vollständigen Reiseplan anzeigen
+                </div>
+                
+                <div id="vayo-full-itinerary" class="itinerary-box hidden">
+                    <h4>Dein Programm von Tag zu Tag:</h4>
+                    <div id="itinerary-steps"></div>
+                </div>
+            </div>
+            
+            <div class="result-right">
+                <div id="ranking-list"></div>
+     
+                <button id="cta-btn">Jetzt unverbindlich anfragen</button>
+                <button id="restart-btn">Quiz wiederholen</button>
+            </div>
+        </div>
+    </div>
+ 
+    <div id="contact-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <span id="close-modal-btn" class="close-btn">&times;</span>
+            <h2>Abenteuer anfragen</h2>
+            <p>Trag dich ein und wir melden uns bei dir!</p>
+            
+            <form id="vayo-contact-form">
+                <label for="user-name">Dein Name</label>
+                <input type="text" id="user-name" required placeholder="z.B. Max Mustermann">
+
+                <label for="user-dob">Geburtsdatum</label>
+                <input type="date" id="user-dob" required>
+
+                <label for="trip-selection">Wunschreise</label>
+                <select id="trip-selection" required>
+                    <option value="">Bitte wählen...</option>
+                </select>
+
+                <div id="date-selection-container" class="hidden">
+                    <label for="date-selection">Wähle deinen Termin</label>
+                    <select id="date-selection" required>
+                    </select>
+                </div>
+
+                <label for="user-remarks">Anmerkungen (optional)</label>
+                <textarea id="user-remarks" rows="3" placeholder="Besondere Wünsche, Allergien, Fragen..."></textarea>
+
+                <button type="submit" class="btn" id="submit-contact-btn">Kostenlos anfragen</button>
+            </form>
+            
+            <div id="success-message" class="hidden">
+                <h3>Erfolgreich gesendet! 🎉</h3>
+                <p>Wir haben deine Anfrage erhalten und melden uns in Kürze bei dir.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAYO REISEN - Quiz</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
 
     <div class="quiz-container">
         <div class="vayo-header">
