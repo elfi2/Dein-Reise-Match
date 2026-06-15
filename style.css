@@ -28,7 +28,7 @@ body {
     box-sizing: border-box;
 }
 
-/* BASIS-KASTEN: Startbildschirm startet bei 540px */
+/* BASIS-KASTEN */
 .quiz-container {
     background-color: var(--vayo-white);
     border-radius: 24px;
@@ -36,7 +36,10 @@ body {
     border: 3px solid var(--vayo-dark);
     width: 100%;
     max-width: 540px;
-    margin: 40px 20px 160px 20px; 
+    
+    /* REPARATUR: margin-bottom auf 60px gesetzt, damit die Box exakt in der Mitte des 120px-Musters aufhört! */
+    margin: 40px 20px 60px 20px; 
+    
     box-sizing: border-box;
     text-align: center;
     position: relative;
@@ -53,7 +56,7 @@ body {
     height: 640px;
 }
 
-/* REGELUNG 2: Bei der Auflösung wird der Kasten für eine bessere Übersicht auf 780px geweitet! */
+/* REGELUNG 2: Bei der Auflösung wird der Kasten für eine bessere Übersicht auf 780px geweitet */
 .quiz-container:has(#result-screen:not(.hidden)) {
     max-width: 780px;
 }
@@ -190,19 +193,17 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
 
 .hidden { display: none !important; }
 
-/* ==========================================
-   NEU: MOBILE OPTIMIERUNG FÜR SMARTPHONES
-   ========================================== */
+/* MOBILE OPTIMIERUNG */
 @media (max-width: 600px) {
-    /* Verhindert, dass die feste Höhe auf kleinen Handys den Inhalt abschneidet */
     .quiz-container:has(#quiz-screen:not(.hidden)) {
         height: auto;
-        min-height: calc(100vh - 180px); /* Nutzt den Bildschirm optimal aus */
+        min-height: calc(100vh - 120px); 
     }
     
     .quiz-container {
         padding: 20px;
-        margin: 15px 15px 140px 15px; /* Kleinerer Außenabstand am Rand */
+        /* Auch mobil an das Muster angepasst */
+        margin: 15px 15px 50px 15px; 
         border-radius: 16px;
     }
     
@@ -211,15 +212,14 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     #match-headline { font-size: 1.15rem; }
     
     .vayo-logo-img {
-        height: 50px; /* Logo wird auf Mobilgeräten etwas kompakter */
+        height: 50px; 
     }
     
     #answer-buttons .btn {
         padding: 12px 16px;
-        font-size: 0.88rem; /* Macht die Antworttexte auf kleinen Screens besser lesbar */
+        font-size: 0.88rem; 
     }
     
-    /* Sorgt dafür, dass man im aktiven Quiz scrollen kann, falls ein Text extrem lang ist */
     #quiz-screen {
         overflow-y: auto;
     }
