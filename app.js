@@ -3,7 +3,7 @@ const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
-// Piktogramm-Mapping passend zum VAYO-Branding (Bleibt im Code, da es reines Design/Style ist)
+// Piktogramm-Mapping passend zum VAYO-Branding
 const piktogrammMapping = {
     "TOSKANA": { icon: "fa-solid fa-mortar-pestle", color: "#FFAA00" },
     "ALPEN-TREKKING": { icon: "fa-solid fa-boot", color: "#00A896" },
@@ -19,15 +19,30 @@ const piktogrammMapping = {
     "NEW YORK": { icon: "fa-solid fa-city", color: "#FF4A7A" },
     "Default": { icon: "fa-solid fa-map-location-dot", color: "#00A896" }
 };
- 
-// Container für die dynamischen Cloud-Daten
+
+// Dynamische Speicher aus der DB
 let quizQuestions = [];
 let reiseDetails = [];
 let currentQuestionIndex = 0;
 let userAnswers = [];
 let topMatchesZwischenspeicher = [];
 
-// DOM Elemente
+// Statische Termine für das Formular
+const verfuegbareTermine = {
+    "1. Toskana": ["15.08.2026 - 22.08.2026", "10.09.2026 - 17.09.2026"],
+    "2. Alpen-Trekking": ["01.07.2026 - 08.07.2026", "15.07.2026 - 22.07.2026"],
+    "3. Malta": ["20.06.2026 - 30.06.2026", "15.08.2026 - 25.08.2026"],
+    "4. Island": ["05.09.2026 - 17.09.2026"],
+    "5. Frankreich Surf": ["01.08.2026 - 15.08.2026"],
+    "6. West Coast USA": ["10.09.2026 - 01.10.2026"],
+    "7. Schottland": ["01.10.2026 - 11.10.2026"],
+    "8. Schweden Kanu": ["10.07.2026 - 20.07.2026"],
+    "9. Thailand": ["15.11.2026 - 06.12.2026"],
+    "10. Ski-Camp": ["15.02.2027 - 22.02.2027"],
+    "11. Griechenland": ["05.09.2026 - 12.09.2026"],
+    "12. New York City": ["01.12.2026 - 09.12.2026"]
+};
+ 
 const startBtn = document.getElementById('start-btn');
 const restartBtn = document.getElementById('restart-btn');
 const ctaBtn = document.getElementById('cta-btn');
@@ -39,12 +54,14 @@ const answerButtonsElement = document.getElementById('answer-buttons');
 const progressElement = document.getElementById('progress');
 const matchNameElement = document.getElementById('match-name');
 
-// Pop-up DOM Elemente
 const contactModal = document.getElementById('contact-modal');
 const closeModalBtn = document.getElementById('close-modal-btn');
+const tripSelect = document.getElementById('trip-selection');
+const dateSelectContainer = document.getElementById('date-selection-container');
+const dateSelect = document.getElementById('date-selection');
 const contactForm = document.getElementById('vayo-contact-form');
 const successMessage = document.getElementById('success-message');
-const hiddenDestinationInput = document.getElementById('form-match-destination');
+const submitBtn = document.getElementById('submit-contact-btn');
  
 if(startBtn) startBtn.addEventListener('click', startQuiz);
 if(restartBtn) restartBtn.addEventListener('click', startQuiz);
@@ -54,11 +71,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if(resultScreen) resultScreen.classList.add('hidden');
     
     if(startBtn) {
-        startBtn.innerText = "Daten werden geladen...";
+        startBtn.innerText = "Daten laden...";
         startBtn.disabled = true;
     }
 
-    // Lädt Fragen und Details live aus der Cloud
     await ladeDatenAusSupabase();
 
     const trigger = document.getElementById('vayo-details-trigger');
@@ -73,90 +89,24 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         });
     }
-
-    // Modal öffnen/schließen
-    if (ctaBtn) {
-        ctaBtn.addEventListener('click', () => {
-            if (contactModal) contactModal.classList.remove('hidden');
-        });
-    }
-
-    if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-            if (contactModal) contactModal.classList.add('hidden');
-        });
-    }
-
-    window.addEventListener('click', (e) => {
-        if (e.target === contactModal) contactModal.classList.add('hidden');
-    });
-
-    // Formular an Supabase senden
-    if (contactForm) {
-        contactForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const name = document.getElementById('form-name').value;
-            const email = document.getElementById('form-email').value;
-            const zeitraum = document.getElementById('form-zeitraum').value;
-            const nachricht = document.getElementById('form-nachricht').value;
-            const reiseziel = hiddenDestinationInput.value;
-
-            try {
-                const { error } = await supabaseClient
-                    .from('anfragen')
-                    .insert([
-                        { 
-                            name: name, 
-                            email: email, 
-                            zeitraum: zeitraum, 
-                            nachricht: nachricht, 
-                            reiseziel: reiseziel 
-                        }
-                    ]);
-
-                if (error) throw error;
-
-                contactForm.classList.add('hidden');
-                if (successMessage) successMessage.classList.remove('hidden');
-
-                setTimeout(() => {
-                    contactModal.classList.add('hidden');
-                    contactForm.reset();
-                    contactForm.classList.remove('hidden');
-                    successMessage.classList.add('hidden');
-                }, 4000);
-
-            } catch (err) {
-                console.error("Fehler beim Speichern:", err);
-                alert("Ups, da gab es ein Problem. Bitte versuche es noch einmal!");
-            }
-        });
-    }
 });
 
-// Holt die Fragen und Texte live aus Supabase
 async function ladeDatenAusSupabase() {
     try {
-        const { data: fragenData, error: fragenError } = await supabaseClient
-            .from('quiz_fragen')
-            .select('*')
-            .order('sort_order', { ascending: true });
-        if (fragenError) throw fragenError;
-        quizQuestions = fragenData;
+        const { data: fragen, error: e1 } = await supabaseClient.from('quiz_fragen').select('*').order('sort_order', { ascending: true });
+        if(e1) throw e1;
+        quizQuestions = fragen;
 
-        const { data: detailsData, error: detailsError } = await supabaseClient
-            .from('reise_details')
-            .select('*');
-        if (detailsError) throw detailsError;
-        reiseDetails = detailsData;
+        const { data: details, error: e2 } = await supabaseClient.from('reise_details').select('*');
+        if(e2) throw e2;
+        reiseDetails = details;
 
         if(startBtn) {
             startBtn.innerText = "Jetzt Quiz starten";
             startBtn.disabled = false;
         }
-    } catch (err) {
-        console.error("Fehler beim Laden:", err);
+    } catch(err) {
+        console.error(err);
     }
 }
  
@@ -168,6 +118,7 @@ function startQuiz() {
     if(box) box.classList.add('hidden');
     currentQuestionIndex = 0;
     userAnswers = [];
+    topMatchesZwischenspeicher = [];
     showNextQuestion();
 }
  
@@ -213,17 +164,61 @@ function holeSauberenNamen(nameRaw) {
     if (!nameRaw) return "Unbekanntes VAYO-Match";
     return nameRaw.replace(/^\d+\.\s*/, '').trim();
 }
+
+// REPARATUR: Macht die Plätze wieder voll anklickbar!
+function zeigeAusgewaehlteReise(index) {
+    const reise = topMatchesZwischenspeicher[index];
+    if (!reise) return;
+
+    const saubererName = holeSauberenNamen(reise.name);
+    matchNameElement.innerText = saubererName;
+
+    const itinerarySteps = document.getElementById('itinerary-steps');
+    if(itinerarySteps) itinerarySteps.innerHTML = "";
+
+    let mappingKey = Object.keys(piktogrammMapping).find(k => saubererName.toUpperCase().includes(k.toUpperCase()));
+    let meta = piktogrammMapping[mappingKey] || piktogrammMapping["Default"];
+     
+    const piktoBox = document.getElementById('vayo-piktogramm-box');
+    if(piktoBox) {
+        piktoBox.innerHTML = `<i class="${meta.icon}"></i>`;
+        piktoBox.style.backgroundColor = meta.color;
+    }
+
+    const zielData = reiseDetails.find(detail => detail.portfolio_key === reise.name);
+     
+    if (zielData) {
+        document.getElementById('match-headline').innerText = zielData.headline;
+        document.getElementById('match-description').innerText = zielData.teaser;
+         
+        zielData.programm.forEach(schritt => {
+            const parts = schritt.split(':');
+            const stepDiv = document.createElement('div');
+            stepDiv.className = "day-step";
+            if(parts.length > 1) {
+                stepDiv.innerHTML = `<span class="day-title">${parts[0]}:</span>${parts.slice(1).join(':')}`;
+            } else {
+                stepDiv.innerHTML = schritt;
+            }
+            itinerarySteps.appendChild(stepDiv);
+        });
+    }
+
+    document.querySelectorAll('.ranking-item').forEach((item, idx) => {
+        if(idx === index) {
+            item.classList.add('active-card');
+        } else {
+            item.classList.remove('active-card');
+        }
+    });
+}
  
 async function berechneErgebnis() {
     quizScreen.classList.add('hidden');
     resultScreen.classList.remove('hidden');
     
     const rankingListElement = document.getElementById('ranking-list');
-    const itinerarySteps = document.getElementById('itinerary-steps');
-    const detailsTrigger = document.getElementById('vayo-details-trigger');
-    
     if(rankingListElement) rankingListElement.innerHTML = "";
-    if(itinerarySteps) itinerarySteps.innerHTML = "";
  
     try {
         const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
@@ -240,69 +235,96 @@ async function berechneErgebnis() {
         });
  
         reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
-        const topMatch = reisenMitPunkten[0];
+        topMatchesZwischenspeicher = reisenMitPunkten.slice(0, 5);
  
-        if (topMatch && topMatch.punkte > 0) {
-            const saubererTopName = holeSauberenNamen(topMatch.name);
-            matchNameElement.innerText = saubererTopName;
-
-            if (hiddenDestinationInput) hiddenDestinationInput.value = saubererTopName;
-             
-            let mappingKey = Object.keys(piktogrammMapping).find(k => saubererTopName.toUpperCase().includes(k.toUpperCase()));
-            let meta = piktogrammMapping[mappingKey] || piktogrammMapping["Default"];
-             
-            const piktoBox = document.getElementById('vayo-piktogramm-box');
-            if(piktoBox) {
-                piktoBox.innerHTML = `<i class="${meta.icon}"></i>`;
-                piktoBox.style.backgroundColor = meta.color;
-            }
+        zeigeAusgewaehlteReise(0);
+         
+        if (rankingListElement) {
+            rankingListElement.innerHTML = "<h3>Deine weiteren Plätze:</h3>";
  
-            // Sucht das Match dynamisch in den aus Supabase geladenen Details
-            const zielData = reiseDetails.find(detail => detail.portfolio_key.toUpperCase().includes(saubererTopName.toUpperCase()));
-             
-            if (zielData) {
-                if(detailsTrigger) detailsTrigger.classList.remove('hidden');
-                document.getElementById('match-headline').innerText = zielData.headline;
-                document.getElementById('match-description').innerText = zielData.teaser;
+            topMatchesZwischenspeicher.forEach((r, i) => {
+                if(i === 0) return; // Platz 1 ist die Hauptkarte
+                const bereinigterRangName = holeSauberenNamen(r.name);
                  
-                zielData.programm.forEach(schritt => {
-                    const parts = schritt.split(':');
-                    const stepDiv = document.createElement('div');
-                    stepDiv.className = "day-step";
-                    if(parts.length > 1) {
-                        stepDiv.innerHTML = `<span class="day-title">${parts[0]}:</span>${parts.slice(1).join(':')}`;
-                    } else {
-                        stepDiv.innerHTML = schritt;
-                    }
-                    itinerarySteps.appendChild(stepDiv);
-                });
-            } else {
-                if(detailsTrigger) detailsTrigger.classList.add('hidden');
-                document.getElementById('match-headline').innerText = "Dein VAYO-Abenteuer wartet!";
-                document.getElementById('match-description').innerText = `Genial! Dein persönlicher Charakter-Vibe hat eine Übereinstimmung von ${topMatch.prozent}% mit diesem Trip!`;
-            }
-             
-            if (rankingListElement) {
-                rankingListElement.innerHTML = "<h3>Deine weiteren Plätze:</h3>";
- 
-                for (let i = 1; i < Math.min(reisenMitPunkten.length, 5); i++) {
-                    const r = reisenMitPunkten[i];
-                    const bereinigterRangName = holeSauberenNamen(r.name);
-                     
-                    const item = document.createElement('div');
-                    item.className = "ranking-item";
-                    item.innerHTML = `
-                        <span class="rank-name">Platz ${i + 1}: ${bereinigterRangName}</span>
-                        <span class="rank-pct">${r.prozent}%</span>
-                    `;
-                    rankingListElement.appendChild(item);
-                }
-            }
-        } else {
-            matchNameElement.innerText = "Berechnung läuft...";
+                const item = document.createElement('div');
+                item.className = "ranking-item";
+                item.innerHTML = `
+                    <span class="rank-name">Platz ${i + 1}: ${bereinigterRangName}</span>
+                    <span class="rank-pct">${r.prozent}%</span>
+                `;
+                item.addEventListener('click', () => zeigeAusgewaehlteReise(i));
+                rankingListElement.appendChild(item);
+            });
         }
     } catch (err) {
         console.error(err);
-        matchNameElement.innerText = "Verbindungsfehler";
     }
+}
+
+// --- FORMULAR LOGIK ---
+function ladeTermine(reiseKey) {
+    dateSelect.innerHTML = '<option value="">Bitte Termin wählen...</option>';
+    const termine = verfuegbareTermine[reiseKey] || ["Auf Anfrage"];
+    termine.forEach(t => {
+        const o = document.createElement('option');
+        o.value = t; o.textContent = t; dateSelect.appendChild(o);
+    });
+    dateSelectContainer.classList.remove('hidden');
+}
+
+if(tripSelect) {
+    tripSelect.addEventListener('change', (e) => {
+        if(e.target.value) ladeTermine(e.target.value);
+        else dateSelectContainer.classList.add('hidden');
+    });
+}
+
+if(ctaBtn) {
+    ctaBtn.addEventListener('click', () => {
+        contactForm.reset();
+        contactForm.classList.remove('hidden');
+        successMessage.classList.add('hidden');
+        
+        tripSelect.innerHTML = '<option value="">Bitte wählen...</option>';
+        reiseDetails.forEach(r => {
+            const o = document.createElement('option');
+            o.value = r.portfolio_key; o.textContent = holeSauberenNamen(r.portfolio_key);
+            tripSelect.appendChild(o);
+        });
+
+        if(topMatchesZwischenspeicher.length > 0) {
+            const activeMatch = topMatchesZwischenspeicher[0].name;
+            tripSelect.value = activeMatch;
+            ladeTermine(activeMatch);
+        }
+        contactModal.classList.remove('hidden');
+    });
+}
+
+if(closeModalBtn) closeModalBtn.addEventListener('click', () => contactModal.classList.add('hidden'));
+
+if(contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        submitBtn.innerText = "Wird gesendet...";
+        submitBtn.disabled = true;
+
+        try {
+            const { error } = await supabaseClient.from('anfragen').insert([{
+                name: document.getElementById('user-name').value,
+                geburtsdatum: document.getElementById('user-dob').value,
+                reise: holeSauberenNamen(tripSelect.value),
+                termin: dateSelect.value,
+                anmerkungen: document.getElementById('user-remarks').value
+            }]);
+            if(error) throw error;
+            contactForm.classList.add('hidden');
+            successMessage.classList.remove('hidden');
+        } catch(err) {
+            alert("Fehler beim Senden!");
+        } finally {
+            submitBtn.innerText = "Kostenlos anfragen";
+            submitBtn.disabled = false;
+        }
+    });
 }
