@@ -11,7 +11,9 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Open Sans', sans-serif;
-    background-color: var(--vayo-bg);
+    
+    /* ÄNDERUNG 1: Hintergrund ist jetzt euer Corporate-Pink statt Beige */
+    background-color: var(--vayo-pink);
     
     background-image: url('muster.jpg.png');
     background-position: bottom center;
@@ -39,6 +41,20 @@ body {
     text-align: center;
     position: relative;
     z-index: 10;
+    
+    /* ÄNDERUNG 2: Feste Mindesthöhe stoppt das lästige Springen zwischen den Fragen */
+    min-height: 580px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/* Sorgt dafür, dass die Screens innerhalb der Box die Höhe sauber ausnutzen */
+.screen {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex-grow: 1;
 }
 
 /* NEUES LOGO STYLING */
@@ -50,7 +66,7 @@ body {
 }
 
 .vayo-logo-img {
-    height: 65px; /* Perfekte Höhe, damit es genau wie das Original wirkt */
+    height: 65px; 
     width: auto;
     object-fit: contain;
 }
@@ -112,7 +128,7 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
 button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding: 16px 24px; border-radius: 14px; border: 3px solid var(--vayo-dark); cursor: pointer; transition: background-color 0.1s ease; }
 #start-btn, #cta-btn { background-color: var(--vayo-pink); color: white; width: 100%; }
 #restart-btn { background-color: white; width: 100%; margin-top: 10px; }
-.btn-grid { display: flex; flex-direction: column; gap: 12px; }
+.btn-grid { display: flex; flex-direction: column; gap: 12px; margin-top: auto; } /* Drückt die Antworten nach unten */
 
 #answer-buttons .btn { background-color: var(--vayo-white); text-align: left; border: 3px solid var(--vayo-dark); }
 #answer-buttons .btn:hover { background-color: var(--vayo-teal); color: white; }
