@@ -67,7 +67,6 @@ body {
         grid-template-columns: 1.2fr 1fr; 
         gap: 45px; 
         text-align: left; 
-        /* align-items: start; WURDE ENTFERNT, damit die Spalten wieder gleich lang werden */
     }
     
     .quiz-container:has(#result-screen:not(.hidden)) .vayo-header {
@@ -93,11 +92,10 @@ body {
         justify-content: flex-start;
         border-left: 1.5px solid #cbd5e1;
         padding-left: 45px; 
-        /* height: fit-content; WURDE ENTFERNT, damit die Trennlinie mit dem Reiseplan nach unten wächst */
     }
     
     #vayo-piktogramm-box { margin: 0 0 20px 0; }
-    #restart-btn { margin-top: 15px; } 
+    #restart-btn { margin-top: 10px; } 
 }
 
 /* STANDARD STYLINGS */
@@ -126,14 +124,12 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 20px;
 }
 
-#vayo-piktogramm-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border: 3px solid var(--vayo-dark);
-    border-radius: 20px;
+#vayo-piktogramm-box i {
+    font-size: 3.5rem;
+    color: var(--vayo-white);
 }
 
 .details-badge {
@@ -153,7 +149,7 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
 }
 .details-badge:hover { background-color: var(--vayo-yellow); }
 
-/* Reiseplan: Jetzt mit durchgezogenen Linien (solid) */
+/* Reiseplan */
 .itinerary-box {
     background-color: var(--vayo-bg);
     border: 3px solid var(--vayo-dark);
@@ -256,8 +252,7 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     #vayo-piktogramm-box { margin: 0 auto 20px auto; }
 }
 
-/* --- NEU: ANFRAGE POP-UP (MODAL) --- */
-/* Perfekt angepasst an deine Variablen und Border-Radii */
+/* MODAL / POP-UP STYLING */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -285,12 +280,6 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     overflow-y: auto;
 }
 
-.modal-content h2 {
-    font-size: 1.8rem;
-    color: var(--vayo-dark);
-    margin-top: 0;
-}
-
 .close-btn {
     position: absolute;
     top: 15px;
@@ -300,11 +289,6 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     cursor: pointer;
     color: var(--vayo-dark);
     line-height: 1;
-    transition: color 0.1s ease;
-}
-
-.close-btn:hover {
-    color: var(--vayo-pink);
 }
 
 #vayo-contact-form {
@@ -337,401 +321,14 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     box-sizing: border-box;
 }
 
-#vayo-contact-form input:focus,
-#vayo-contact-form select:focus,
-#vayo-contact-form textarea:focus {
-    outline: none;
-    border-color: var(--vayo-teal);
-}
-
-#vayo-contact-form textarea {
-    resize: vertical;
-}
-
 #submit-contact-btn {
     background-color: var(--vayo-teal);
     color: var(--vayo-white);
     margin-top: 10px;
 }
 
-#submit-contact-btn:hover {
-    background-color: var(--vayo-dark);
-}
-
 #success-message {
     text-align: center;
-    margin-top: 20px;
-    padding: 25px;
-    background-color: var(--vayo-bg);
-    border: 3px solid var(--vayo-teal);
-    border-radius: 16px;
-    color: var(--vayo-dark);
-}
-
-#success-message h3 {
-    color: var(--vayo-teal);
-    margin-top: 0;
-}:root {
-    --vayo-dark: #1A1D20;
-    --vayo-white: #FFFFFF;
-    --vayo-bg: #F4F6F8;
-    --vayo-teal: #00A896;
-    --vayo-pink: #FF5A5F;
-    --vayo-gray: #E0E0E0;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Open Sans', sans-serif;
-    background-color: var(--vayo-pink); /* Der pinke Außenhintergrund laut Screenshot */
-    color: var(--vayo-dark);
-    margin: 0;
     padding: 20px;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* DIE GROSSE WEISSE HAUPTKARTE */
-.vayo-main-card {
-    width: 100%;
-    max-width: 1100px;
-    background-color: var(--vayo-white);
-    border: 4px solid var(--vayo-dark); /* Fetter dunkler Rahmen */
-    border-radius: 30px; /* Schön abgerundet */
-    padding: 40px;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-}
-
-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-#logo {
-    max-width: 140px;
-    display: block;
-    margin: 0 auto 5px auto;
-}
-
-h1 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 1.4rem;
-    letter-spacing: 2px;
-    color: var(--vayo-dark);
-    margin: 0;
-}
-
-h2, h3, h4 {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    margin: 0 0 15px 0;
-}
-
-/* SCREEN LAYOUTS (START & QUIZ) */
-.screen {
-    text-align: center;
-    padding: 20px 0;
-}
-
-.hidden {
-    display: none !important;
-}
-
-/* Fette Progress Bar */
-.progress-bar {
-    width: 100%;
-    max-width: 600px;
-    height: 16px;
-    background: var(--vayo-bg);
-    border: 3px solid var(--vayo-dark);
-    border-radius: 20px;
-    margin: 0 auto 30px auto;
-    overflow: hidden;
-}
-
-#progress {
-    height: 100%;
-    width: 0%;
-    background: var(--vayo-teal);
-    transition: width 0.3s ease;
-}
-
-/* UNIVERSELLE FETTE BUTTONS */
-.btn {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800;
-    font-size: 1rem;
-    color: var(--vayo-white);
-    background-color: var(--vayo-dark);
-    border: 3px solid var(--vayo-dark);
-    border-radius: 15px;
-    padding: 14px 28px;
-    cursor: pointer;
-    transition: transform 0.1s, background-color 0.2s;
-    text-align: center;
-    display: inline-block;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn:active {
-    transform: translateY(0);
-}
-
-.btn-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Button-Variationen */
-.primary-btn {
-    background-color: var(--vayo-pink) !important;
-    border-color: var(--vayo-dark) !important;
-    color: var(--vayo-white) !important;
-    width: 100%;
-}
-
-.outline-btn {
-    background-color: var(--vayo-white) !important;
-    color: var(--vayo-dark) !important;
-    border: 3px solid var(--vayo-dark) !important;
-}
-
-/* ERGEBNIS-CONTAINER (2 SPALTEN) */
-.result-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 40px;
-    align-items: flex-start;
-}
-
-/* LINKE SPALTE: TOP MATCH (Alles zentriert) */
-.top-match-card {
-    flex: 1.2;
-    min-width: 320px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Das quadratische Bildgehäuse aus dem Screenshot */
-#vayo-piktogramm-box {
-    width: 160px;
-    height: 160px;
-    border: 3px solid var(--vayo-dark);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--vayo-white);
-    overflow: hidden;
-    margin-bottom: 20px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--vayo-dark);
-}
-
-#vayo-piktogramm-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-#match-status-title {
-    color: var(--vayo-pink);
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-}
-
-#match-name {
-    font-size: 2.5rem;
-    color: var(--vayo-dark);
-    margin-bottom: 8px;
-}
-
-#match-headline {
-    color: var(--vayo-teal);
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 20px;
-}
-
-#match-description {
-    font-size: 1rem;
-    color: var(--vayo-dark);
-    line-height: 1.6;
-    max-width: 500px;
-    margin: 0 auto 20px auto;
-}
-
-#vayo-details-trigger {
-    width: auto;
-    padding: 12px 24px;
-}
-
-/* RECHTE SPALTE: RANKING BOARD */
-.ranking-board {
-    flex: 1;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.ranking-title {
-    font-size: 1.1rem;
-    color: var(--vayo-dark);
-    margin-bottom: 10px;
-    text-align: left;
-}
-
-/* Fette Listenelemente aus dem Screenshot */
-.ranking-item {
-    background: var(--vayo-white);
-    border: 3px solid var(--vayo-dark);
-    padding: 16px 20px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 1rem;
-    transition: background-color 0.2s, border-color 0.2s;
-}
-
-.ranking-item:hover {
-    background-color: var(--vayo-bg);
-}
-
-/* Türkiser Aktiv-Status */
-.ranking-item.active-card {
-    border-color: var(--vayo-teal);
-    background-color: rgba(0, 168, 150, 0.08);
-}
-
-/* Reiseplan Box */
-#vayo-full-itinerary {
-    margin-top: 25px;
-    background: var(--vayo-bg);
-    padding: 25px;
-    border-radius: 15px;
-    border: 3px solid var(--vayo-dark);
-    border-left: 8px solid var(--vayo-teal);
-    text-align: left;
-    width: 100%;
-    max-width: 550px;
-}
-
-.day-step {
-    margin-bottom: 12px;
-    font-size: 0.95rem;
-    line-height: 1.5;
-}
-
-.day-title {
-    font-weight: bold;
-    color: var(--vayo-pink);
-    margin-right: 6px;
-}
-
-/* ANFRAGE POP-UP (MODAL) */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(26, 29, 32, 0.85);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 15px;
-}
-
-.modal-content {
-    background-color: var(--vayo-white);
-    padding: 35px;
-    border: 4px solid var(--vayo-dark);
-    border-radius: 25px;
-    width: 100%;
-    max-width: 460px;
-    position: relative;
-    box-sizing: border-box;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-content h2 {
-    font-size: 1.8rem;
-    margin-bottom: 5px;
-}
-
-.close-btn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 2.2rem;
-    font-weight: 800;
-    cursor: pointer;
-    color: var(--vayo-dark);
-    line-height: 1;
-}
-
-#vayo-contact-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-top: 25px;
-}
-
-#vayo-contact-form label {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--vayo-dark);
-    margin-bottom: -10px;
-}
-
-#vayo-contact-form input,
-#vayo-contact-form select,
-#vayo-contact-form textarea {
-    padding: 14px;
-    border: 3px solid var(--vayo-dark);
-    border-radius: 12px;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 1rem;
-    background-color: var(--vayo-bg);
-    width: 100%;
-}
-
-#vayo-contact-form textarea {
-    resize: vertical;
-}
-
-#success-message {
-    text-align: center;
-    margin-top: 20px;
-    padding: 25px;
-    background-color: rgba(0, 168, 150, 0.1);
-    border: 3px solid var(--vayo-teal);
-    border-radius: 15px;
     color: var(--vayo-teal);
 }
