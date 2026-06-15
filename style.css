@@ -20,10 +20,11 @@ body {
     background-attachment: fixed; 
     
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--vayo-dark);
+    
+    /* DER ULTIMATIVE FIX: Block statt Flex! 
+       Dadurch ist es physikalisch unmöglich, dass der Kasten nach oben "rutscht". 
+       Er drückt wie ein normaler Textblock immer nur nach unten. */
+    display: block; 
     box-sizing: border-box;
 }
 
@@ -33,9 +34,12 @@ body {
     border-radius: 24px;
     padding: 35px;
     border: 3px solid var(--vayo-dark);
-    width: 100%;
+    width: calc(100% - 40px); /* Schützt vor Überlappungen am Rand */
     max-width: 540px;
-    margin: 40px 20px 60px 20px; 
+    
+    /* Verankert den Kasten starr 10vh von oben und zentriert ihn horizontal (auto) */
+    margin: 10vh auto 120px auto; 
+    
     box-sizing: border-box;
     position: relative;
     z-index: 10;
@@ -51,11 +55,11 @@ body {
     height: 640px;
 }
 
-/* KORREKTUR: Bei der Auflösung darf die Box jetzt unbegrenzt nach unten wachsen, wenn der Plan aufklappt */
+/* Bei der Auflösung darf die Box unbegrenzt nach unten wachsen */
 .quiz-container:has(#result-screen:not(.hidden)) {
     max-width: 1100px; 
-    max-height: none; /* Begrenzung aufgehoben */
-    overflow-y: visible; /* Kein Scrollbalken mehr an der Hauptbox */
+    max-height: none; 
+    overflow-y: visible; 
 }
 
 .screen {
@@ -72,6 +76,8 @@ body {
         grid-template-columns: 1.2fr 1fr; 
         gap: 45px; 
         text-align: left; 
+        /* FIX 2: Verhindert, dass die rechte Spalte mitwächst und den Text verschiebt! */
+        align-items: start; 
     }
     
     .quiz-container:has(#result-screen:not(.hidden)) .vayo-header {
@@ -95,12 +101,16 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
-        border-left: 2px dashed #cbd5e1;
+        /* Gewünschte durchgezogene Linie, 1.5px dick */
+        border-left: 1.5px solid #cbd5e1;
         padding-left: 45px; 
+        height: fit-content; /* Sichert ab, dass die Spalte genau so hoch bleibt wie ihr Text */
     }
     
     #vayo-piktogramm-box { margin: 0 0 20px 0; }
-    #restart-btn { margin-top: auto; } 
+    
+    /* Knopf darf sich nicht mehr mitbewegen, sondern bleibt fest unter der Liste */
+    #restart-btn { margin-top: 15px; } 
 }
 
 /* STANDARD STYLINGS */
@@ -156,7 +166,7 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
 }
 .details-badge:hover { background-color: var(--vayo-yellow); }
 
-/* KORREKTUR: Der Reiseplan rollt sich jetzt voll aus ohne internen Scrollbalken */
+/* Der Reiseplan rollt sich voll aus */
 .itinerary-box {
     background-color: var(--vayo-bg);
     border: 3px solid var(--vayo-dark);
@@ -164,8 +174,8 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
     padding: 20px;
     margin-bottom: 25px;
     text-align: left;
-    max-height: none; /* Begrenzung entfernt */
-    overflow-y: visible; /* Scrollen innerhalb entfernt */
+    max-height: none; 
+    overflow-y: visible; 
 }
 .itinerary-box h4 { font-family: 'Montserrat', sans-serif; margin-top: 0; color: var(--vayo-dark); border-bottom: 2px solid var(--vayo-dark); padding-bottom: 8px; }
 .day-step { margin-bottom: 12px; font-size: 0.9rem; line-height: 1.5; border-bottom: 1px dashed #cbd5e1; padding-bottom: 6px; }
@@ -235,7 +245,7 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     
     .quiz-container {
         padding: 25px 20px;
-        margin: 20px 15px 140px 15px; 
+        margin: 5vh auto 140px auto; 
         border-radius: 16px;
     }
     
