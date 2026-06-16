@@ -252,7 +252,6 @@ async function berechneErgebnis() {
         const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
  
-        // JETZT GEKÜRZT: Exakt die 10 Kategorien, die im Quiz als Fragen vorkommen
         const kategorienSpalten = [
             'fokus', 'wetter', 'kulisse', 'transport', 'lage', 
             'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte'
@@ -288,7 +287,6 @@ async function berechneErgebnis() {
                 }
             });
             
-            // Jetzt wird der Prozentsatz an der echten Anzahl der gespielten Fragen gemessen (10 Fragen)
             let gesamtFragen = kategorienSpalten.length; 
             let prozentSatz = Math.round((punkte / gesamtFragen) * 100);
             return { ...reise, punkte, prozent: prozentSatz };
@@ -347,6 +345,10 @@ if(ctaBtn) {
         if(contactForm) contactForm.classList.remove('hidden');
         if(successMessage) successMessage.classList.add('hidden');
         
+        // Warn-Badge standardmäßig verstecken beim Öffnen
+        const warningBadge = document.getElementById('vayo-overbooked-warning');
+        if(warningBadge) warningBadge.classList.add('hidden');
+        
         if(tripSelect) {
             tripSelect.innerHTML = '<option value="">Bitte wählen...</option>';
             reiseDetails.forEach(r => {
@@ -380,18 +382,43 @@ if(contactForm) {
         e.preventDefault();
         if(submitBtn) { submitBtn.innerText = "Wird gesendet..."; submitBtn.disabled = true; }
 
+        const gewaehlteReiseKey = tripSelect.value;
+        const saubereWunschreise = holeSauberenNamen(gewaehlteReiseKey);
+
         try {
-            const { error } = await supabaseClient.from('anfragen').insert([{
+            // 1. LIVE-ABFRAGE GEGEN SUPABASE: Wie viele Anfragen gibt es für diese Reise bereits?
+            const { count, error: countError } = await supabaseClient
+                .from('anfragen')
+                .select('*', { count: 'exact', head: true })
+                .eq('reise', saubereWunschreise);
+
+            if(countError) throw countError;
+
+            // 2. EINTRAG IN DIE DB SPEICHERN
+            const { error: insertError } = await supabaseClient.from('anfragen').insert([{
                 name: document.getElementById('user-name').value,
                 geburtsdatum: document.getElementById('user-dob').value,
-                reise: holeSauberenNamen(tripSelect.value),
+                reise: saubereWunschreise,
                 termin: dateSelect.value,
                 anmerkungen: document.getElementById('user-remarks').value
             }]);
-            if(error) throw error;
+            
+            if(insertError) throw insertError;
+            
+            // 3. SEITENEFFEKT AUSWERTEN: Ab der 11. Person (count >= 10) wird das pinke Warn-Badge eingeblendet
+            const warningBadge = document.getElementById('vayo-overbooked-warning');
+            if(warningBadge) {
+                if (count >= 10) {
+                    warningBadge.classList.remove('hidden');
+                } else {
+                    warningBadge.classList.add('hidden');
+                }
+            }
+
             if(contactForm) contactForm.classList.add('hidden');
             if(successMessage) successMessage.classList.remove('hidden');
         } catch(err) {
+            console.error(err);
             alert("Fehler beim Senden!");
         } finally {
             if(submitBtn) { submitBtn.innerText = "Kostenlos anfragen"; submitBtn.disabled = false; }
