@@ -249,7 +249,7 @@ async function berechneErgebnis() {
     if(rankingListElement) rankingListElement.innerHTML = "";
  
     try {
-        const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
+        const { data: reisen, error = null } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
  
         const kategorienSpalten = [
@@ -345,7 +345,6 @@ if(ctaBtn) {
         if(contactForm) contactForm.classList.remove('hidden');
         if(successMessage) successMessage.classList.add('hidden');
         
-        // Warn-Badge standardmäßig verstecken beim Öffnen
         const warningBadge = document.getElementById('vayo-overbooked-warning');
         if(warningBadge) warningBadge.classList.add('hidden');
         
@@ -386,15 +385,14 @@ if(contactForm) {
         const saubereWunschreise = holeSauberenNamen(gewaehlteReiseKey);
 
         try {
-            // 1. LIVE-ABFRAGE GEGEN SUPABASE: Wie viele Anfragen gibt es für diese Reise bereits?
+            // FIX: Nutzt .ilike für eine krisensichere Suche ohne Fallstricke bei Groß-/Kleinschreibung oder Nummern-Fragmenten
             const { count, error: countError } = await supabaseClient
                 .from('anfragen')
                 .select('*', { count: 'exact', head: true })
-                .eq('reise', saubereWunschreise);
+                .ilike('reise', `%${saubereWunschreise}%`);
 
             if(countError) throw countError;
 
-            // 2. EINTRAG IN DIE DB SPEICHERN
             const { error: insertError } = await supabaseClient.from('anfragen').insert([{
                 name: document.getElementById('user-name').value,
                 geburtsdatum: document.getElementById('user-dob').value,
@@ -405,7 +403,6 @@ if(contactForm) {
             
             if(insertError) throw insertError;
             
-            // 3. SEITENEFFEKT AUSWERTEN: Ab der 11. Person (count >= 10) wird das pinke Warn-Badge eingeblendet
             const warningBadge = document.getElementById('vayo-overbooked-warning');
             if(warningBadge) {
                 if (count >= 10) {
