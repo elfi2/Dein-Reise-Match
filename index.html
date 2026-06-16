@@ -66,7 +66,7 @@
             
             <form id="vayo-contact-form">
                 <label for="user-name">Dein Name</label>
-                <input type="text" id="user-name" required placeholder="z.B. Max Mustermann">
+                <input type="text" id="text" id="user-name" required placeholder="z.B. Max Mustermann">
 
                 <label for="user-dob">Geburtsdatum</label>
                 <input type="date" id="user-dob" required>
@@ -91,6 +91,13 @@
             <div id="success-message" class="hidden">
                 <h3>Erfolgreich gesendet! 🎉</h3>
                 <p>Wir haben deine Anfrage erhalten und melden uns in Kürze bei dir.</p>
+                
+                <div id="vayo-overbooked-warning" class="hidden">
+                    <div class="warning-icon-wrapper">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                    </div>
+                    <p class="warning-text">Diese Reise ist vermutlich bereits ausgebucht!</p>
+                </div>
             </div>
         </div>
     </div>
