@@ -32,7 +32,7 @@ body {
     border: 3px solid var(--vayo-dark);
     width: calc(100% - 40px); 
     max-width: 540px;
-    height: auto;
+    height: auto;                
     margin: 10vh auto 120px auto; 
     box-sizing: border-box;
     position: relative;
@@ -331,4 +331,34 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     text-align: center;
     padding: 20px;
     color: var(--vayo-teal);
+}
+
+/* AUSBUCHUNGS-WARNUNG STYLING (VAYO PINK!) */
+#vayo-overbooked-warning {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: #FFF0F3; 
+    border: 2px solid var(--vayo-pink);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    text-align: left;
+}
+
+.warning-icon-wrapper {
+    color: var(--vayo-pink);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.warning-text {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--vayo-dark);
+    margin: 0;
+    line-height: 1.4;
 }
