@@ -333,7 +333,6 @@ button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding:
     color: var(--vayo-teal);
 }
 
-/* AUSBUCHUNGS-WARNUNG STYLING (VAYO PINK!) */
 #vayo-overbooked-warning {
     margin-top: 25px;
     padding: 15px;
