@@ -12,28 +12,23 @@
 <body>
  
     <div class="quiz-container">
-        <!-- HEADER MIT DEINEM ORIGINALEN PNG LOGO -->
         <div class="vayo-header">
             <img src="logo.png" alt="VAYO REISEN" class="vayo-logo-img">
         </div>
  
-        <!-- START SCREEN (Passt sich jetzt dynamisch in der Höhe an) -->
         <div id="start-screen" class="screen">
             <h1>Welcher Reisetyp bist du?</h1>
             <p>Dein Vibe. Deine Welt. Finde in 10 kurzen Fragen heraus, welches VAYO-Abenteuer perfekt zu dir passt!</p>
             <button id="start-btn">Jetzt Quiz starten</button>
         </div>
  
-        <!-- QUIZ SCREEN -->
         <div id="quiz-screen" class="screen hidden">
             <div class="progress-bar"><div id="progress"></div></div>
             <h2 id="question-text">Hier steht die Frage</h2>
             <div id="answer-buttons" class="btn-grid"></div>
         </div>
  
-        <!-- RESULT SCREEN -->
         <div id="result-screen" class="screen hidden">
-            <!-- Linke Spalte -->
             <div class="result-left">
                 <div id="vayo-piktogramm-box">
                     <img id="vayo-pikto-img" src="" alt="Match Icon" style="width:100%; height:100%; object-fit:contain;">
@@ -54,7 +49,6 @@
                 </div>
             </div>
             
-            <!-- Rechte Spalte -->
             <div class="result-right">
                 <div id="ranking-list"></div>
      
@@ -64,7 +58,6 @@
         </div>
     </div>
  
-    <!-- POP-UP MODAL FÜR ANFRAGEN -->
     <div id="contact-modal" class="modal-overlay hidden">
         <div class="modal-content">
             <span id="close-modal-btn" class="close-btn">&times;</span>
