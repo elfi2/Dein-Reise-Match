@@ -3,7 +3,7 @@ const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
-// MAPPER FÜR PNG-DATEIEN & FARBEN
+// MAPPING FÜR DEINE ECHTEN DATEINAMEN & BRANDING-FARBEN
 const piktogrammMapping = {
     "1. Toskana": { src: "toskana.png", color: "#FFAA00" },
     "2. Alpen-Trekking": { src: "alpen-trekking.png", color: "#00A896" },
@@ -43,7 +43,6 @@ const verfuegbareTermine = {
     "12. New York City": ["01.12.2026 - 09.12.2026"]
 };
  
-// DOM Elemente abgreifen
 const startBtn = document.getElementById('start-btn');
 const restartBtn = document.getElementById('restart-btn');
 const ctaBtn = document.getElementById('cta-btn');
@@ -76,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         startBtn.disabled = true;
     }
 
-    // Sicherheits-Fallback: Aktiviert den Button nach 2 Sekunden auf jeden Fall
+    // Fallback falls DB blockiert
     setTimeout(() => {
         if(startBtn && startBtn.disabled) {
             console.warn("Supabase-Laden dauerte zu lange oder war fehlerhaft. Start erzwungen.");
@@ -116,12 +115,7 @@ async function ladeDatenAusSupabase() {
             startBtn.disabled = false;
         }
     } catch(err) {
-        console.error("Fehler beim Laden der Supabase-Daten:", err);
-        // Falls die DB blockiert, aktivieren wir den Button trotzdem, damit die App nicht einfriert
-        if(startBtn) {
-            startBtn.innerText = "Jetzt Quiz starten";
-            startBtn.disabled = false;
-        }
+        console.error(err);
     }
 }
  
@@ -129,6 +123,11 @@ function startQuiz() {
     startScreen.classList.add('hidden');
     resultScreen.classList.add('hidden');
     quizScreen.classList.remove('hidden');
+    
+    // Aktiviert die starre Quiz-Höhe über die CSS-Klasse
+    const container = document.querySelector('.quiz-container');
+    if(container) container.classList.add('quiz-active');
+    
     const box = document.getElementById('vayo-full-itinerary');
     if(box) box.classList.add('hidden');
     currentQuestionIndex = 0;
@@ -139,9 +138,7 @@ function startQuiz() {
  
 function showNextQuestion() {
     resetAnswerButtons();
-    
-    // Verhindert Absturz, falls quizQuestions aus der DB leer sein sollten
-    let gesamtFragen = quizQuestions.length > 0 ? quizQuestions.length : 20;
+    let gesamtFragen = quizQuestions.length > 0 ? quizQuestions.length : 10;
     const progressPercent = (currentQuestionIndex / gesamtFragen) * 100;
     if(progressElement) progressElement.style.width = progressPercent + '%';
  
@@ -247,6 +244,10 @@ async function berechneErgebnis() {
     quizScreen.classList.add('hidden');
     resultScreen.classList.remove('hidden');
     
+    // Schaltet die starre Quiz-Höhe wieder ab für das originale Ergebnis-Layout
+    const container = document.querySelector('.quiz-container');
+    if(container) container.classList.remove('quiz-active');
+    
     const rankingListElement = document.getElementById('ranking-list');
     if(rankingListElement) rankingListElement.innerHTML = "";
  
@@ -270,7 +271,7 @@ async function berechneErgebnis() {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    // DIALEKT-CLEANER FÜR PASSENDE HOHE PROZENTWERTE
+                    // DIALEKT-CLEANER
                     if (userWert.includes("aktion & sport")) userWert = "abenteuer";
                     if (userWert.includes("kultur & entdeckung")) userWert = "kultur";
                     if (userWert.includes("party & nightlife")) userWert = "party";
@@ -290,7 +291,7 @@ async function berechneErgebnis() {
                     }
                 }
             });
-            let gesamtFragen = quizQuestions.length > 0 ? quizQuestions.length : 20;
+            let gesamtFragen = quizQuestions.length > 0 ? quizQuestions.length : 10;
             let prozentSatz = Math.round((punkte / gesamtFragen) * 100);
             return { ...reise, punkte, prozent: prozentSatz };
         });
