@@ -32,7 +32,7 @@ body {
     border: 3px solid var(--vayo-dark);
     width: calc(100% - 40px); 
     max-width: 540px;
-    height: auto;                /* Start-Screen ist dadurch perfekt flach! */
+    height: auto;
     margin: 10vh auto 120px auto; 
     box-sizing: border-box;
     position: relative;
@@ -162,7 +162,6 @@ p { font-size: 1rem; line-height: 1.6; color: #374151; }
 .itinerary-box h4 { font-family: 'Montserrat', sans-serif; margin-top: 0; color: var(--vayo-dark); border-bottom: 2px solid var(--vayo-dark); padding-bottom: 8px; }
 .day-step { margin-bottom: 12px; font-size: 0.9rem; line-height: 1.5; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; }
 .day-step:last-child { border-bottom: none; }
-.day-step4:last-child { border-bottom: none; }
 .day-title { font-weight: 800; color: var(--vayo-pink); }
 
 button, .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; padding: 16px 24px; border-radius: 14px; border: 3px solid var(--vayo-dark); cursor: pointer; transition: background-color 0.1s ease; }
