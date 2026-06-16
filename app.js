@@ -3,21 +3,21 @@ const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
-// Piktogramm-Mapping passend zum VAYO-Branding
+// MAPPING FÜR DEINE ECHTEN DATEINAMEN & BRANDING-FARBEN
 const piktogrammMapping = {
-    "TOSKANA": { icon: "fa-solid fa-mortar-pestle", color: "#FFAA00" },
-    "ALPEN-TREKKING": { icon: "fa-solid fa-boot", color: "#00A896" },
-    "MALTA": { icon: "fa-solid fa-champagne-glasses", color: "#FF4A7A" },
-    "ISLAND": { icon: "fa-solid fa-caravan", color: "#FFAA00" },
-    "ATLANTIK": { icon: "fa-solid fa-water", color: "#00A896" },
-    "WEST COAST": { icon: "fa-solid fa-van-shuttle", color: "#FFAA00" },
-    "SCHOTTLAND": { icon: "fa-solid fa-fort-awesome", color: "#FF4A7A" },
-    "SCHWEDEN": { icon: "fa-solid fa-campground", color: "#FF4A7A" },
-    "THAILAND": { icon: "fa-solid fa-leaf", color: "#00A896" },
-    "ÖSTERREICH": { icon: "fa-solid fa-person-skiing", color: "#00A896" },
-    "GRIECHENLAND": { icon: "fa-solid fa-spa", color: "#00A896" },
-    "NEW YORK": { icon: "fa-solid fa-city", color: "#FF4A7A" },
-    "Default": { icon: "fa-solid fa-map-location-dot", color: "#00A896" }
+    "1. Toskana": { src: "toskana.png", color: "#FFAA00" },
+    "2. Alpen-Trekking": { src: "alpen-trekking.png", color: "#00A896" },
+    "3. Malta": { src: "malta.png", color: "#FF4A7A" },
+    "4. Island": { src: "island.png", color: "#FFAA00" },
+    "5. Frankreich Surf": { src: "frankreich surf.png", color: "#00A896" },
+    "6. West Coast USA": { src: "west coast usa.png", color: "#FFAA00" },
+    "7. Schottland": { src: "schottland.png", color: "#FF4A7A" },
+    "8. Schweden Kanu": { src: "schweden kanu.png", color: "#FF4A7A" },
+    "9. Thailand": { src: "thailand.png", color: "#00A896" },
+    "10. Ski-Camp": { src: "ski-camp.png", color: "#00A896" },
+    "11. Griechenland": { src: "griechenland.png", color: "#00A896" },
+    "12. New York City": { src: "new york city.png", color: "#FF4A7A" },
+    "Default": { src: "logo.png", color: "#00A896" }
 };
 
 // Dynamische Speicher aus der DB
@@ -163,26 +163,28 @@ function selectAnswer(e) {
 function holeSauberenNamen(nameRaw) {
     if (!nameRaw) return "Unbekanntes VAYO-Match";
     return nameRaw.replace(/^\d+\.\s*/, '').trim();
-}
-
-// REPARATUR: Macht die Plätze wieder voll anklickbar!
+}// Zeigt die links angeklickte oder berechnete Reise an
 function zeigeAusgewaehlteReise(index) {
     const reise = topMatchesZwischenspeicher[index];
     if (!reise) return;
 
     const saubererName = holeSauberenNamen(reise.name);
+    
+    // Ändert die Headline dynamisch je nach Rangklick
+    document.getElementById('result-screen').querySelector('.result-left h2').innerText = index === 0 ? "Dein perfektes Match:" : `VAYO Match (Platz ${index + 1}):`;
     matchNameElement.innerText = saubererName;
 
     const itinerarySteps = document.getElementById('itinerary-steps');
     if(itinerarySteps) itinerarySteps.innerHTML = "";
 
-    let mappingKey = Object.keys(piktogrammMapping).find(k => saubererName.toUpperCase().includes(k.toUpperCase()));
-    let meta = piktogrammMapping[mappingKey] || piktogrammMapping["Default"];
+    // PNG MAPPER STARTEN
+    let meta = piktogrammMapping[reise.name] || piktogrammMapping["Default"];
      
     const piktoBox = document.getElementById('vayo-piktogramm-box');
-    if(piktoBox) {
-        piktoBox.innerHTML = `<i class="${meta.icon}"></i>`;
-        piktoBox.style.backgroundColor = meta.color;
+    const piktoImg = document.getElementById('vayo-pikto-img');
+    if(piktoBox && piktoImg) {
+        piktoImg.src = meta.src; 
+        piktoBox.style.backgroundColor = meta.color; 
     }
 
     const zielData = reiseDetails.find(detail => detail.portfolio_key === reise.name);
@@ -229,9 +231,14 @@ async function berechneErgebnis() {
         let reisenMitPunkten = reisen.map(reise => {
             let punkte = 0;
             userAnswers.forEach((antwort, index) => {
-                if (reise[kategorienSpalten[index]] === antwort) punkte++;
+                const spaltenName = kategorienSpalten[index];
+                if (reise[spaltenName] === antwort) {
+                    punkte++;
+                }
             });
-            return { ...reise, punkte, prozent: Math.round((punkte / quizQuestions.length) * 100) };
+            // PROZENTBERECHNUNG FIX
+            let prozentSatz = quizQuestions.length > 0 ? Math.round((punkte / quizQuestions.length) * 100) : 0;
+            return { ...reise, punkte, prozent: prozentSatz };
         });
  
         reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
@@ -240,14 +247,15 @@ async function berechneErgebnis() {
         zeigeAusgewaehlteReise(0);
          
         if (rankingListElement) {
-            rankingListElement.innerHTML = "<h3>Deine weiteren Plätze:</h3>";
+            rankingListElement.innerHTML = "<h3>Klicke auf eine Reise für Details:</h3>";
  
             topMatchesZwischenspeicher.forEach((r, i) => {
-                if(i === 0) return; // Platz 1 ist die Hauptkarte
                 const bereinigterRangName = holeSauberenNamen(r.name);
                  
                 const item = document.createElement('div');
                 item.className = "ranking-item";
+                if(i === 0) item.classList.add('active-card');
+                
                 item.innerHTML = `
                     <span class="rank-name">Platz ${i + 1}: ${bereinigterRangName}</span>
                     <span class="rank-pct">${r.prozent}%</span>
@@ -293,7 +301,15 @@ if(ctaBtn) {
         });
 
         if(topMatchesZwischenspeicher.length > 0) {
-            const activeMatch = topMatchesZwischenspeicher[0].name;
+            const activeCard = document.querySelector('.ranking-item.active-card');
+            let activeMatch = topMatchesZwischenspeicher[0].name;
+            
+            if(activeCard) {
+                const rangText = activeCard.querySelector('.rank-name').textContent;
+                const matchFound = reiseDetails.find(d => rangText.includes(holeSauberenNamen(d.portfolio_key)));
+                if(matchFound) activeMatch = matchFound.portfolio_key;
+            }
+
             tripSelect.value = activeMatch;
             ladeTermine(activeMatch);
         }
