@@ -75,7 +75,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         startBtn.disabled = true;
     }
 
-    // Fallback falls DB blockiert
     setTimeout(() => {
         if(startBtn && startBtn.disabled) {
             console.warn("Supabase-Laden dauerte zu lange oder war fehlerhaft. Start erzwungen.");
@@ -124,7 +123,6 @@ function startQuiz() {
     resultScreen.classList.add('hidden');
     quizScreen.classList.remove('hidden');
     
-    // Aktiviert die starre Quiz-Höhe über die CSS-Klasse
     const container = document.querySelector('.quiz-container');
     if(container) container.classList.add('quiz-active');
     
@@ -244,7 +242,6 @@ async function berechneErgebnis() {
     quizScreen.classList.add('hidden');
     resultScreen.classList.remove('hidden');
     
-    // Schaltet die starre Quiz-Höhe wieder ab für das originale Ergebnis-Layout
     const container = document.querySelector('.quiz-container');
     if(container) container.classList.remove('quiz-active');
     
@@ -255,11 +252,10 @@ async function berechneErgebnis() {
         const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
  
+        // JETZT GEKÜRZT: Exakt die 10 Kategorien, die im Quiz als Fragen vorkommen
         const kategorienSpalten = [
             'fokus', 'wetter', 'kulisse', 'transport', 'lage', 
-            'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte',
-            'kulturraum', 'fitness', 'gepaeck', 'digital', 'verpflegung',
-            'gruppe', 'lernfokus', 'co2', 'zeitplan', 'wohlfuehl'
+            'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte'
         ];
  
         let reisenMitPunkten = reisen.map(reise => {
@@ -291,7 +287,9 @@ async function berechneErgebnis() {
                     }
                 }
             });
-            let gesamtFragen = quizQuestions.length > 0 ? quizQuestions.length : 10;
+            
+            // Jetzt wird der Prozentsatz an der echten Anzahl der gespielten Fragen gemessen (10 Fragen)
+            let gesamtFragen = kategorienSpalten.length; 
             let prozentSatz = Math.round((punkte / gesamtFragen) * 100);
             return { ...reise, punkte, prozent: prozentSatz };
         });
