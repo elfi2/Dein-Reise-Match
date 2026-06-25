@@ -1,5 +1,5 @@
-// 1. Supabase Verbindung aufsetzen (JETZT MIT KORREKTER URL!)
-const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
+// 1. Supabase Verbindung aufsetzen
+const SUPABASE_URL = "https://kqqzxhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
@@ -262,7 +262,6 @@ async function berechneErgebnis() {
         let reisenMitPunkten = reisen.map(reise => {
             let punkte = 0;
             
-            // Loggt alle Abgleiche für JEDES Ziel, um DB-Fehler live zu jagen
             let istTestReise = true;
             if(istTestReise) console.log(`--- Prüfe Werte für ${reise.name} ---`);
 
@@ -273,16 +272,19 @@ async function berechneErgebnis() {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    // DIALEKT-CLEANER (Fängt die restlichen Abweichungen im Flug ab)
+                    // DER ERWEITERTE DIALEKT-CLEANER
                     if (userWert === "party") userWert = "party & nightlife";
                     if (userWert === "metropole") userWert = "metropole & stadt";
                     if (userWert === "fernreise" && dbWert.includes("fernreise")) userWert = dbWert;
                     
+                    if (userWert === "abenteuer" && dbWert === "aktion & sport") userWert = "aktion & sport";
+                    if (userWert === "berge" && dbWert === "berge & natur") userWert = "berge & natur";
+                    if (userWert === "jugend-vibe" && dbWert === "young travel") userWert = "young travel";
+
                     if (userWert.includes("aktion & sport")) userWert = "abenteuer";
                     if (userWert.includes("kultur & entdeckung")) userWert = "kultur";
                     if (userWert.includes("wellness & erholung")) userWert = "wellness";
                     if (userWert.includes("beach & küste")) userWert = "strand & meer";
-                    if (userWert.includes("berge & natur")) userWert = "berge";
                     if (userWert.includes("ländliche idylle")) userWert = "natur & idylle";
 
                     if (istTestReise) {
