@@ -257,8 +257,16 @@ async function berechneErgebnis() {
             'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte'
         ];
  
+        // DIAGNOSE-LOG 1: Zeigt an, welche Antworten das Skript gesammelt hat
+        console.log("Deine ausgewählten Antworten im Quiz:", userAnswers);
+
         let reisenMitPunkten = reisen.map(reise => {
             let punkte = 0;
+            
+            // DIAGNOSE-LOG 2: Wir tracken exakt die Vergleiche für New York City und Malta
+            let istTestReise = reise.name.includes("New York") || reise.name.includes("Malta");
+            if(istTestReise) console.log(`--- Prüfe Werte für ${reise.name} ---`);
+
             userAnswers.forEach((antwort, index) => {
                 const spaltenName = kategorienSpalten[index];
                 
@@ -280,6 +288,10 @@ async function berechneErgebnis() {
                     if (userWert.includes("berge & natur")) userWert = "berge";
                     if (userWert.includes("metropole & stadt")) userWert = "metropole";
                     if (userWert.includes("ländliche idylle")) userWert = "natur & idylle";
+
+                    if (istTestReise) {
+                        console.log(`Spalte [${spaltenName}]: DB sagt '${dbWert}' vs. Deine Auswahl '${userWert}' -> ${dbWert === userWert ? 'MATCH! 🎉' : 'Kein Punkt ❌'}`);
+                    }
 
                     if (userWert === dbWert) {
                         punkte++;
@@ -385,7 +397,6 @@ if(contactForm) {
         const saubereWunschreise = holeSauberenNamen(gewaehlteReiseKey);
 
         try {
-            // FIX: Nutzt .ilike für eine krisensichere Suche ohne Fallstricke bei Groß-/Kleinschreibung oder Nummern-Fragmenten
             const { count, error: countError } = await supabaseClient
                 .from('anfragen')
                 .select('*', { count: 'exact', head: true })
