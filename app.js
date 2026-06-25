@@ -1,4 +1,6 @@
 // 1. Supabase Verbindung aufsetzen (Mit der korrekten Schreibweise für dein HTML-Skript!)
+// 1. Supabase Verbindung aufsetzen (Mit der korrekten Schreibweise für dein HTML-Skript!)
+// 1. Supabase Verbindung aufsetzen (Mit der korrekten Schreibweise für dein HTML-Skript!)
 const SUPABASE_URL = "https://kqqzxhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcXp4a2hpeWx4ZmpneGtydnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDY2NjUsImV4cCI6MjA5NTg4MjY2NX0.4qyuvNLniTnvPtiLgs41M1YnaCc6g8PeiE0bVXFuwKU";
 
