@@ -75,41 +75,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         startBtn.disabled = true;
     }
 
+    await ladeDatenAusSupabase();
+
+    // Fallback-Schutz: Falls nach dem API-Call aus irgendeinem Grund keine Fragen geladen wurden
     setTimeout(() => {
-        if(startBtn && startBtn.disabled) {
-            console.warn("Supabase-Laden dauerte zu lange oder war fehlerhaft. Start erzwungen.");
+        if(startBtn && startBtn.disabled && quizQuestions.length > 0) {
             startBtn.innerText = "Jetzt Quiz starten";
             startBtn.disabled = false;
         }
-    }, 2000);
-
-    await ladeDatenAusSupabase();
-
-    const trigger = document.getElementById('vayo-details-trigger');
-    if(trigger) {
-        trigger.addEventListener('click', () => {
-            const box = document.getElementById('vayo-full-itinerary');
-            if(box) {
-                box.classList.toggle('hidden');
-                trigger.innerHTML = box.classList.contains('hidden') 
-                    ? `<i class="fa-solid fa-circle-info"></i> Vollständigen Reiseplan anzeigen`
-                    : `<i class="fa-solid fa-circle-chevron-up"></i> Reiseplan einklappen`;
-            }
-        });
-    }
+    }, 1000);
 });
 
 async function ladeDatenAusSupabase() {
     try {
         const { data: fragen, error: e1 } = await supabaseClient.from('quiz_fragen').select('*').order('sort_order', { ascending: true });
         if(e1) throw e1;
-        quizQuestions = fragen;
+        quizQuestions = fragen || [];
 
         const { data: details, error: e2 } = await supabaseClient.from('reise_details').select('*');
         if(e2) throw e2;
-        reiseDetails = details;
+        reiseDetails = details || [];
 
-        if(startBtn) {
+        // Aktiviert den Button erst, wenn die Daten WIRKLICH geladen sind
+        if(startBtn && quizQuestions.length > 0) {
             startBtn.innerText = "Jetzt Quiz starten";
             startBtn.disabled = false;
         }
@@ -119,6 +107,12 @@ async function ladeDatenAusSupabase() {
 }
  
 function startQuiz() {
+    // Sicherheits-Check: Wenn keine Fragen geladen sind, brechen wir ab, statt zum Ende zu springen
+    if (!quizQuestions || quizQuestions.length === 0) {
+        alert("Fehler: Die Quizfragen konnten nicht aus Supabase geladen werden. Bitte Seite neu laden!");
+        return;
+    }
+
     startScreen.classList.add('hidden');
     resultScreen.classList.add('hidden');
     quizScreen.classList.remove('hidden');
@@ -136,19 +130,23 @@ function startQuiz() {
  
 function showNextQuestion() {
     resetAnswerButtons();
-    let gesamtFragen = quizQuestions.length > 0 ? quizQuestions.length : 10;
+    
+    let gesamtFragen = quizQuestions.length;
     const progressPercent = (currentQuestionIndex / gesamtFragen) * 100;
     if(progressElement) progressElement.style.width = progressPercent + '%';
  
-    if (currentQuestionIndex >= gesamtFragen || quizQuestions.length === 0) {
+    // FIX: Springt erst zur Berechnung, wenn alle geladenen Fragen beantwortet wurden
+    if (currentQuestionIndex >= gesamtFragen) {
         berechneErgebnis();
         return;
     }
  
     const currentQuestion = quizQuestions[currentQuestionIndex];
-    if(questionTextElement) questionTextElement.innerText = currentQuestion.question;
+    if(questionTextElement && currentQuestion) {
+        questionTextElement.innerText = currentQuestion.question;
+    }
  
-    if(currentQuestion.answers && Array.isArray(currentQuestion.answers)) {
+    if(currentQuestion && currentQuestion.answers && Array.isArray(currentQuestion.answers)) {
         currentQuestion.answers.forEach(answer => {
             const button = document.createElement('button');
             button.innerText = answer.text;
