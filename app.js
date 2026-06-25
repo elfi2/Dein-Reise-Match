@@ -77,39 +77,52 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await ladeDatenAusSupabase();
 
-    // Fallback-Schutz: Falls nach dem API-Call aus irgendeinem Grund keine Fragen geladen wurden
-    setTimeout(() => {
-        if(startBtn && startBtn.disabled && quizQuestions.length > 0) {
-            startBtn.innerText = "Jetzt Quiz starten";
-            startBtn.disabled = false;
-        }
-    }, 1000);
+    const trigger = document.getElementById('vayo-details-trigger');
+    if(trigger) {
+        trigger.addEventListener('click', () => {
+            const box = document.getElementById('vayo-full-itinerary');
+            if(box) {
+                box.classList.toggle('hidden');
+                trigger.innerHTML = box.classList.contains('hidden') 
+                    ? `<i class="fa-solid fa-circle-info"></i> Vollständigen Reiseplan anzeigen`
+                    : `<i class="fa-solid fa-circle-chevron-up"></i> Reiseplan einklappen`;
+            }
+        });
+    }
 });
 
 async function ladeDatenAusSupabase() {
     try {
         const { data: fragen, error: e1 } = await supabaseClient.from('quiz_fragen').select('*').order('sort_order', { ascending: true });
         if(e1) throw e1;
-        quizQuestions = fragen || [];
+        
+        if (!fragen || fragen.length === 0) {
+            throw new Error("Keine Fragen in der Datenbank gefunden.");
+        }
+        quizQuestions = fragen;
 
         const { data: details, error: e2 } = await supabaseClient.from('reise_details').select('*');
         if(e2) throw e2;
         reiseDetails = details || [];
 
-        // Aktiviert den Button erst, wenn die Daten WIRKLICH geladen sind
-        if(startBtn && quizQuestions.length > 0) {
+        // Button erst freigeben, wenn die echten Daten WIRKLICH da sind
+        if(startBtn) {
             startBtn.innerText = "Jetzt Quiz starten";
             startBtn.disabled = false;
         }
     } catch(err) {
-        console.error("Fehler beim Abrufen aus der DB:", err);
+        console.error("Supabase-Verbindungsfehler:", err);
+        if(startBtn) {
+            startBtn.innerText = "Datenbank-Fehler beim Laden";
+            startBtn.style.backgroundColor = "#cc0000";
+        }
     }
 }
  
 function startQuiz() {
-    // Sicherheits-Check: Wenn keine Fragen geladen sind, brechen wir ab, statt zum Ende zu springen
+    // Absoluter Schutz vor Überspringen: Wenn keine echten Fragen da sind, geht es nicht weiter
     if (!quizQuestions || quizQuestions.length === 0) {
-        alert("Fehler: Die Quizfragen konnten nicht aus Supabase geladen werden. Bitte Seite neu laden!");
+        alert("Fehler: Die Quizfragen konnten nicht geladen werden. Bitte überprüfe deine Internetverbindung und lade die Seite neu.");
         return;
     }
 
@@ -135,7 +148,6 @@ function showNextQuestion() {
     const progressPercent = (currentQuestionIndex / gesamtFragen) * 100;
     if(progressElement) progressElement.style.width = progressPercent + '%';
  
-    // FIX: Springt erst zur Berechnung, wenn alle geladenen Fragen beantwortet wurden
     if (currentQuestionIndex >= gesamtFragen) {
         berechneErgebnis();
         return;
@@ -270,7 +282,7 @@ async function berechneErgebnis() {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    // DER HOCHPRÄZISE DIALEKT-CLEANER
+                    // DIALEKT-CLEANER
                     if (userWert === "party") userWert = "party & nightlife";
                     if (userWert === "metropole") userWert = "metropole & stadt";
                     if (userWert === "fernreise" && dbWert.includes("fernreise")) userWert = dbWert;
