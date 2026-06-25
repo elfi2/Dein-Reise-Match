@@ -1,5 +1,5 @@
 // 1. Supabase Verbindung aufsetzen
-const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
+const SUPABASE_URL = "https://kqqzxhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
@@ -263,8 +263,8 @@ async function berechneErgebnis() {
         let reisenMitPunkten = reisen.map(reise => {
             let punkte = 0;
             
-            // DIAGNOSE-LOG 2: Wir tracken exakt die Vergleiche für New York City und Malta
-            let istTestReise = reise.name.includes("New York") || reise.name.includes("Malta");
+            // HIER IST DIE GEÄNDERTE ZEILE: Erlaubt das Test-Logging für JEDES Reiseziel
+            let istTestReise = true;
             if(istTestReise) console.log(`--- Prüfe Werte für ${reise.name} ---`);
 
             userAnswers.forEach((antwort, index) => {
@@ -274,19 +274,16 @@ async function berechneErgebnis() {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    // DIALEKT-CLEANER
+                    // DIALEKT-CLEANER (Übergangslösung, bis die DB harmonisiert ist)
+                    if (userWert === "party") userWert = "party & nightlife";
+                    if (userWert === "metropole") userWert = "metropole & stadt";
+                    if (userWert === "fernreise" && dbWert.includes("fernreise")) userWert = dbWert;
+                    
                     if (userWert.includes("aktion & sport")) userWert = "abenteuer";
                     if (userWert.includes("kultur & entdeckung")) userWert = "kultur";
-                    if (userWert.includes("party & nightlife")) userWert = "party";
                     if (userWert.includes("wellness & erholung")) userWert = "wellness";
-                    
-                    if (userWert.includes("heiß & tropisch")) userWert = "heiß & tropisch";
-                    if (userWert.includes("kalt & winterlich")) userWert = "kalt & winterlich";
-                    if (userWert.includes("mild & wechselhaft")) userWert = "mild & wechselhaft";
-                    
                     if (userWert.includes("beach & küste")) userWert = "strand & meer";
                     if (userWert.includes("berge & natur")) userWert = "berge";
-                    if (userWert.includes("metropole & stadt")) userWert = "metropole";
                     if (userWert.includes("ländliche idylle")) userWert = "natur & idylle";
 
                     if (istTestReise) {
