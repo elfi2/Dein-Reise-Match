@@ -1,6 +1,6 @@
-// 1. Supabase Verbindung aufsetzen
+// 1. Supabase Verbindung aufsetzen (JETZT MIT DEINEM ECHTEN ANON KEY!)
 const SUPABASE_URL = "https://kqqzxhiylxfjgxkrvpd.supabase.co";
-const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcXp4a2hpeWx4ZmpneGtydnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDY2NjUsImV4cCI6MjA5NTg4MjY2NX0.4qyuvNLniTnvPtiLgs41M1YnaCc6g8PeiE0bVXFuwKU";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
 // MAPPING FÜR DEINE ECHTEN DATEINAMEN & BRANDING-FARBEN
@@ -120,7 +120,6 @@ async function ladeDatenAusSupabase() {
 }
  
 function startQuiz() {
-    // Absoluter Schutz vor Überspringen: Wenn keine echten Fragen da sind, geht es nicht weiter
     if (!quizQuestions || quizQuestions.length === 0) {
         alert("Fehler: Die Quizfragen konnten nicht geladen werden. Bitte überprüfe deine Internetverbindung und lade die Seite neu.");
         return;
