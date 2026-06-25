@@ -135,8 +135,7 @@ resultScreen.classList.add('hidden');
     setTimeout(() => {
         if(startBtn &&
 startBtn.disabled) {
-            console.warn("Supabase-Laden
-dauerte zu lange oder war fehlerhaft. Start erzwungen.");
+            console.warn("Supabase-Laden dauerte zu lange oder war fehlerhaft. Start erzwungen.");
            startBtn.innerText = "Jetzt Quiz starten";
            startBtn.disabled = false;
         }
@@ -268,8 +267,7 @@ selectAnswer(e) {
  
 function
 holeSauberenNamen(nameRaw) {
-    if (!nameRaw) return "Unbekanntes
-VAYO-Match";
+    if (!nameRaw) return "Unbekanntes VAYO-Match";
     return nameRaw.replace(/^\d+\.\s*/,
 '').trim();
 }
@@ -347,7 +345,7 @@ itinerarySteps.appendChild(stepDiv);
             });
         }
     }
- 
+
    document.querySelectorAll('.ranking-item').forEach((item, idx) => {
         if(idx === index) {
             item.classList.add('active-card');
@@ -377,8 +375,7 @@ rankingListElement.innerHTML = "";
 supabaseClient.from('reisen').select('*');
         if (error) throw error;
  
-        // JETZT
-GEKÜRZT: Exakt die 10 Kategorien, die im Quiz als Fragen vorkommen
+        // JETZT GEKÜRZT: Exakt die 10 Kategorien, die im Quiz als Fragen vorkommen
         const
 kategorienSpalten = [
             'fokus',
@@ -444,9 +441,7 @@ idylle";
                 }
             });
             
-            // Jetzt
-wird der Prozentsatz an der echten Anzahl der gespielten Fragen gemessen (10
-Fragen)
+            // Jetzt wird der Prozentsatz an der echten Anzahl der gespielten Fragen gemessen (10 Fragen)
             let
 gesamtFragen = kategorienSpalten.length; 
             let
@@ -462,8 +457,7 @@ prozentSatz = Math.round((punkte / gesamtFragen) * 100);
          
         if
 (rankingListElement) {
-           rankingListElement.innerHTML = "<h3>Klicke auf eine Reise für
-Details:</h3>";
+           rankingListElement.innerHTML = "<h3>Klicke auf eine Reise für Details:</h3>";
  
            topMatchesZwischenspeicher.forEach((r, i) => {
                 const
@@ -488,19 +482,16 @@ class="rank-pct">${r.prozent}%</span>
             });
         }
     } catch (err) {
-        console.error("Fehler bei
-der Berechnung:", err);
+        console.error("Fehler bei der Berechnung:", err);
     }
 }
  
-// ---
-FORMULAR LOGIK ---
+// --- FORMULAR LOGIK ---
 function
 ladeTermine(reiseKey) {
     if(!dateSelect || !dateSelectContainer)
 return;
-    dateSelect.innerHTML = '<option
-value="">Bitte Termin wählen...</option>';
+    dateSelect.innerHTML = '<option value="">Bitte Termin wählen...</option>';
     const termine =
 verfuegbareTermine[reiseKey] || ["Auf Anfrage"];
     termine.forEach(t => {
@@ -532,8 +523,7 @@ if(ctaBtn)
 successMessage.classList.add('hidden');
         
         if(tripSelect) {
-            tripSelect.innerHTML = '<option
-value="">Bitte wählen...</option>';
+            tripSelect.innerHTML = '<option value="">Bitte wählen...</option>';
             reiseDetails.forEach(r => {
                 const o =
 document.createElement('option');
@@ -577,37 +567,37 @@ if(contactForm)
     contactForm.addEventListener('submit',
 async (e) => {
         e.preventDefault();
-        if(submitBtn) { submitBtn.innerText =
-"Wird gesendet..."; submitBtn.disabled = true; }
+        if(submitBtn) { submitBtn.innerText = "Wird gesendet..."; submitBtn.disabled = true; }
  
-        const ausgewaehlteReise = holeSauberenNamen(tripSelect.value);
+        // Holt den sauberen Namen wie er exakt in deiner anfragen-Tabelle steht (z.B. "Schottland")
+        const dbSucheName = holeSauberenNamen(tripSelect.value);
  
         try {
-            // 1. PRÜFUNG: Wie viele Anfragen gibt es bereits für diese Reise?
+            // 1. PRÜFUNG: Matcht jetzt perfekt mit dem reinen Textwert deiner anfragen-Tabelle
             const { data: anfragenBisher, error: checkError } = await supabaseClient
                 .from('anfragen')
                 .select('id')
-                .eq('reise', ausgewaehlteReise);
+                .eq('reise', dbSucheName);
  
             if (checkError) throw checkError;
  
             // Wenn es 10 oder mehr Anmeldungen gibt, wird die Warnmeldung ausgegeben
             if (anfragenBisher && anfragenBisher.length >= 10) {
-                const fortfahren = confirm(`Hinweis: Für die Reise "${ausgewaehlteReise}" liegen bereits ${anfragenBisher.length} Anfragen vor. Sie ist vermutlich voll. Möchtest du dich trotzdem auf die Warteliste setzen lassen?`);
+                const fortfahren = confirm(`Hinweis: Für die Reise "${dbSucheName}" liegen bereits ${anfragenBisher.length} Anfragen vor. Sie ist vermutlich voll. Möchtest du dich trotzdem auf die Warteliste setzen lassen?`);
                 if (!fortfahren) {
                     if(submitBtn) { submitBtn.innerText = "Kostenlos anfragen"; submitBtn.disabled = false; }
                     return; // Abbrechen
                 }
             }
  
-            // 2. Eigentliches Absenden der Anfrage
+            // 2. Eigentliches Absenden der Anfrage (speichert sauber ab!)
             const { error } = await
 supabaseClient.from('anfragen').insert([{
                 name:
 document.getElementById('user-name').value,
                 geburtsdatum:
 document.getElementById('user-dob').value,
-                reise: ausgewaehlteReise,
+                reise: dbSucheName,
                 termin: dateSelect.value,
                 anmerkungen:
 document.getElementById('user-remarks').value
