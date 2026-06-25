@@ -279,7 +279,7 @@ topMatchesZwischenspeicher[index];
  
     const saubererName =
 holeSauberenNamen(reise.name);
- 
+    
     if(resultScreen) {
         const h2Element =
 resultScreen.querySelector('.result-left h2');
@@ -345,7 +345,7 @@ itinerarySteps.appendChild(stepDiv);
             });
         }
     }
-
+ 
    document.querySelectorAll('.ranking-item').forEach((item, idx) => {
         if(idx === index) {
             item.classList.add('active-card');
@@ -420,7 +420,7 @@ String(antwort).trim().toLowerCase();
                     if
 (userWert.includes("mild & wechselhaft")) userWert = "mild
 & wechselhaft";
- 
+                    
                     if
 (userWert.includes("beach & küste")) userWert = "strand
 & meer";
@@ -537,7 +537,7 @@ o.textContent = holeSauberenNamen(r.portfolio_key);
 > 0 && tripSelect) {
             const activeCard =
 document.querySelector('.ranking-item.active-card');
-            let activeMatch =
+        let activeMatch =
 topMatchesZwischenspeicher[0].name;
             
             if(activeCard) {
@@ -567,37 +567,33 @@ if(contactForm)
     contactForm.addEventListener('submit',
 async (e) => {
         e.preventDefault();
-        if(submitBtn) { submitBtn.innerText = "Wird gesendet..."; submitBtn.disabled = true; }
+        if(submitBtn) { submitBtn.innerText =
+"Wird gesendet..."; submitBtn.disabled = true; }
  
-        // Holt den sauberen Namen wie er exakt in deiner anfragen-Tabelle steht (z.B. "Schottland")
-        const dbSucheName = holeSauberenNamen(tripSelect.value);
+        const gewaehlteReiseAusDropdown = holeSauberenNamen(tripSelect.value);
  
         try {
-            // 1. PRÜFUNG: Matcht jetzt perfekt mit dem reinen Textwert deiner anfragen-Tabelle
-            const { data: anfragenBisher, error: checkError } = await supabaseClient
+            // 1. ZÄHLEN: Holt alle bisherigen Anfragen für diese Reise, um zu sehen, ob das Limit erreicht ist
+            const { data: bisherigeEintraege, error: checkError } = await supabaseClient
                 .from('anfragen')
                 .select('id')
-                .eq('reise', dbSucheName);
- 
+                .eq('reise', gewaehlteReiseAusDropdown);
+
             if (checkError) throw checkError;
- 
-            // Wenn es 10 oder mehr Anmeldungen gibt, wird die Warnmeldung ausgegeben
-            if (anfragenBisher && anfragenBisher.length >= 10) {
-                const fortfahren = confirm(`Hinweis: Für die Reise "${dbSucheName}" liegen bereits ${anfragenBisher.length} Anfragen vor. Sie ist vermutlich voll. Möchtest du dich trotzdem auf die Warteliste setzen lassen?`);
-                if (!fortfahren) {
-                    if(submitBtn) { submitBtn.innerText = "Kostenlos anfragen"; submitBtn.disabled = false; }
-                    return; // Abbrechen
-                }
+
+            // Wenn bereits 10 Einträge vorhanden sind, kommt ab dem 11. Versuch die Warnung
+            if (bisherigeEintraege && bisherigeEintraege.length >= 10) {
+                alert("Diese Reise ist vermutlich bereits voll");
             }
  
-            // 2. Eigentliches Absenden der Anfrage (speichert sauber ab!)
             const { error } = await
 supabaseClient.from('anfragen').insert([{
                 name:
 document.getElementById('user-name').value,
                 geburtsdatum:
 document.getElementById('user-dob').value,
-                reise: dbSucheName,
+                reise:
+gewaehlteReiseAusDropdown,
                 termin: dateSelect.value,
                 anmerkungen:
 document.getElementById('user-remarks').value
