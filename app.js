@@ -1,9 +1,9 @@
-// 1. Supabase Verbindung aufsetzen (Originale, funktionierende Version)
+// 1. Supabase Verbindung aufsetzen (Mit der korrekten Schreibweise für dein HTML-Skript!)
 const SUPABASE_URL = "https://kqqzxhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcXp4a2hpeWx4ZmpneGtydnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDY2NjUsImV4cCI6MjA5NTg4MjY2NX0.4qyuvNLniTnvPtiLgs41M1YnaCc6g8PeiE0bVXFuwKU";
 
-// Wichtig: Großes 'S' falls du das CDN v2 nutzt, falls es vorhin kleines 's' war, kannst du es auch so lassen.
-const supabaseClient = Supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Hier ist das korrigierte, kleine 's' für das v1-CDN!
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
 // MAPPING FÜR DEINE DATEINAMEN & BRANDING-FARBEN
 const piktogrammMapping = {
