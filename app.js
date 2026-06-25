@@ -1,5 +1,5 @@
-// 1. Supabase Verbindung aufsetzen
-const SUPABASE_URL = "https://kqqzxhiylxfjgxkrvpd.supabase.co";
+// 1. Supabase Verbindung aufsetzen (JETZT MIT KORREKTER URL!)
+const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
@@ -257,13 +257,12 @@ async function berechneErgebnis() {
             'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte'
         ];
  
-        // DIAGNOSE-LOG 1: Zeigt an, welche Antworten das Skript gesammelt hat
         console.log("Deine ausgewählten Antworten im Quiz:", userAnswers);
 
         let reisenMitPunkten = reisen.map(reise => {
             let punkte = 0;
             
-            // HIER IST DIE GEÄNDERTE ZEILE: Erlaubt das Test-Logging für JEDES Reiseziel
+            // Loggt alle Abgleiche für JEDES Ziel, um DB-Fehler live zu jagen
             let istTestReise = true;
             if(istTestReise) console.log(`--- Prüfe Werte für ${reise.name} ---`);
 
@@ -274,7 +273,7 @@ async function berechneErgebnis() {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    // DIALEKT-CLEANER (Übergangslösung, bis die DB harmonisiert ist)
+                    // DIALEKT-CLEANER (Fängt die restlichen Abweichungen im Flug ab)
                     if (userWert === "party") userWert = "party & nightlife";
                     if (userWert === "metropole") userWert = "metropole & stadt";
                     if (userWert === "fernreise" && dbWert.includes("fernreise")) userWert = dbWert;
