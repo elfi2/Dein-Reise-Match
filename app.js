@@ -114,7 +114,7 @@ async function ladeDatenAusSupabase() {
             startBtn.disabled = false;
         }
     } catch(err) {
-        console.error(err);
+        console.error("Fehler beim Abrufen aus der DB:", err);
     }
 }
  
@@ -272,7 +272,7 @@ async function berechneErgebnis() {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    // DER ERWEITERTE DIALEKT-CLEANER
+                    // DER HOCHPRÄZISE DIALEKT-CLEANER
                     if (userWert === "party") userWert = "party & nightlife";
                     if (userWert === "metropole") userWert = "metropole & stadt";
                     if (userWert === "fernreise" && dbWert.includes("fernreise")) userWert = dbWert;
