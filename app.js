@@ -1,6 +1,6 @@
 // 1. Supabase Verbindung aufsetzen
-const SUPABASE_URL = "https://kqqzxhiylxfjgxkrvpd.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcXp4a2hpeWx4ZmpneGtydnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDY2NjUsImV4cCI6MjA5NTg4MjY2NX0.4qyuvNLniTnvPtiLgs41M1YnaCc6g8PeiE0bVXFuwKU";
+const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
 // MAPPING FÜR DEINE ECHTEN DATEINAMEN & BRANDING-FARBEN
@@ -19,14 +19,14 @@ const piktogrammMapping = {
     "12. New York City": { src: "new york city.png", color: "#FF4A7A" },
     "Default": { src: "logo.png", color: "#00A896" }
 };
- 
+
 // Dynamische Speicher aus der DB
 let quizQuestions = [];
 let reiseDetails = [];
 let currentQuestionIndex = 0;
 let userAnswers = [];
 let topMatchesZwischenspeicher = [];
- 
+
 // Statische Termine für das Formular
 const verfuegbareTermine = {
     "1. Toskana": ["15.08.2026 - 22.08.2026", "10.09.2026 - 17.09.2026"],
@@ -53,7 +53,7 @@ const questionTextElement = document.getElementById('question-text');
 const answerButtonsElement = document.getElementById('answer-buttons');
 const progressElement = document.getElementById('progress');
 const matchNameElement = document.getElementById('match-name');
- 
+
 const contactModal = document.getElementById('contact-modal');
 const closeModalBtn = document.getElementById('close-modal-btn');
 const tripSelect = document.getElementById('trip-selection');
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         startBtn.innerText = "Daten laden...";
         startBtn.disabled = true;
     }
- 
+
     setTimeout(() => {
         if(startBtn && startBtn.disabled) {
             console.warn("Supabase-Laden dauerte zu lange oder war fehlerhaft. Start erzwungen.");
@@ -82,9 +82,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             startBtn.disabled = false;
         }
     }, 2000);
- 
+
     await ladeDatenAusSupabase();
- 
+
     const trigger = document.getElementById('vayo-details-trigger');
     if(trigger) {
         trigger.addEventListener('click', () => {
@@ -98,18 +98,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 });
- 
+
 async function ladeDatenAusSupabase() {
     try {
         const { data: fragen, error: e1 } = await supabaseClient.from('quiz_fragen').select('*').order('sort_order', { ascending: true });
         if(e1) throw e1;
         quizQuestions = fragen;
- 
+
         const { data: details, error: e2 } = await supabaseClient.from('reise_details').select('*');
         if(e2) throw e2;
         reiseDetails = details;
- 
-        if(startBtn && quizQuestions && quizQuestions.length > 0) {
+
+        if(startBtn) {
             startBtn.innerText = "Jetzt Quiz starten";
             startBtn.disabled = false;
         }
@@ -119,11 +119,6 @@ async function ladeDatenAusSupabase() {
 }
  
 function startQuiz() {
-    if (!quizQuestions || quizQuestions.length === 0) {
-        alert("Fehler: Die Quizfragen konnten nicht aus der Datenbank geladen werden.");
-        return;
-    }
-
     startScreen.classList.add('hidden');
     resultScreen.classList.add('hidden');
     quizScreen.classList.remove('hidden');
@@ -184,11 +179,11 @@ function holeSauberenNamen(nameRaw) {
     if (!nameRaw) return "Unbekanntes VAYO-Match";
     return nameRaw.replace(/^\d+\.\s*/, '').trim();
 }
- 
+
 function zeigeAusgewaehlteReise(index) {
     const reise = topMatchesZwischenspeicher[index];
     if (!reise) return;
- 
+
     const saubererName = holeSauberenNamen(reise.name);
     
     if(resultScreen) {
@@ -198,10 +193,10 @@ function zeigeAusgewaehlteReise(index) {
         }
     }
     if(matchNameElement) matchNameElement.innerText = saubererName;
- 
+
     const itinerarySteps = document.getElementById('itinerary-steps');
     if(itinerarySteps) itinerarySteps.innerHTML = "";
- 
+
     let meta = piktogrammMapping[reise.name] || piktogrammMapping["Default"];
      
     const piktoBox = document.getElementById('vayo-piktogramm-box');
@@ -210,7 +205,7 @@ function zeigeAusgewaehlteReise(index) {
         piktoImg.src = meta.src; 
         piktoBox.style.backgroundColor = meta.color; 
     }
- 
+
     const zielData = reiseDetails.find(detail => detail.portfolio_key === reise.name);
      
     if (zielData) {
@@ -233,7 +228,7 @@ function zeigeAusgewaehlteReise(index) {
             });
         }
     }
- 
+
     document.querySelectorAll('.ranking-item').forEach((item, idx) => {
         if(idx === index) {
             item.classList.add('active-card');
@@ -257,6 +252,7 @@ async function berechneErgebnis() {
         const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
  
+        // JETZT GEKÜRZT: Exakt die 10 Kategorien, die im Quiz als Fragen vorkommen
         const kategorienSpalten = [
             'fokus', 'wetter', 'kulisse', 'transport', 'lage', 
             'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte'
@@ -271,52 +267,28 @@ async function berechneErgebnis() {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    // NEUER DYNAMISCHER DIALEKT-CLEANER FÜR DEINE ECHTE REISEN-TABELLE
-                    if (userWert.includes("aktion & sport") || userWert === "abenteuer") {
-                        if (dbWert.includes("aktion & sport")) userWert = dbWert;
-                    }
-                    if (userWert.includes("kultur & entdeckung") || userWert === "kultur") {
-                        if (dbWert.includes("kultur & entdeckung")) userWert = dbWert;
-                    }
-                    if (userWert.includes("wellness & erholung") || userWert === "wellness") {
-                        if (dbWert.includes("wellness & erholung")) userWert = dbWert;
-                    }
-                    if (userWert.includes("party & nightlife") || userWert === "party") {
-                        if (dbWert.includes("party & nightlife")) userWert = dbWert;
-                    }
-                    if (userWert.includes("heiß & tropisch")) {
-                        if (dbWert.includes("heiß & tropisch")) userWert = dbWert;
-                    }
-                    if (userWert.includes("kalt & winterlich")) {
-                        if (dbWert.includes("kalt & winterlich")) userWert = dbWert;
-                    }
-                    if (userWert.includes("mild & wechselhaft")) {
-                        if (dbWert.includes("mild & wechselhaft")) userWert = dbWert;
-                    }
-                    if (userWert.includes("beach & küste") || userWert.includes("strand & meer")) {
-                        if (dbWert.includes("beach & küste")) userWert = dbWert;
-                    }
-                    if (userWert.includes("berge & natur") || userWert === "berge") {
-                        if (dbWert.includes("berge & natur")) userWert = dbWert;
-                    }
-                    if (userWert.includes("metropole & stadt") || userWert === "metropole") {
-                        if (dbWert.includes("metropole & stadt")) userWert = dbWert;
-                    }
-                    if (userWert.includes("ländliche idylle") || userWert.includes("natur & idylle")) {
-                        if (dbWert.includes("ländliche idylle")) userWert = dbWert;
-                    }
-                    if (userWert === "young travel" || userWert === "jugend-vibe") {
-                        if (dbWert === "young travel" || dbWert === "jugend-vibe") {
-                            punkte++; return; // Direkt matchen, falls beide Jugend-Vibes beschreiben
-                        }
-                    }
- 
+                    // DIALEKT-CLEANER
+                    if (userWert.includes("aktion & sport")) userWert = "abenteuer";
+                    if (userWert.includes("kultur & entdeckung")) userWert = "kultur";
+                    if (userWert.includes("party & nightlife")) userWert = "party";
+                    if (userWert.includes("wellness & erholung")) userWert = "wellness";
+                    
+                    if (userWert.includes("heiß & tropisch")) userWert = "heiß & tropisch";
+                    if (userWert.includes("kalt & winterlich")) userWert = "kalt & winterlich";
+                    if (userWert.includes("mild & wechselhaft")) userWert = "mild & wechselhaft";
+                    
+                    if (userWert.includes("beach & küste")) userWert = "strand & meer";
+                    if (userWert.includes("berge & natur")) userWert = "berge";
+                    if (userWert.includes("metropole & stadt")) userWert = "metropole";
+                    if (userWert.includes("ländliche idylle")) userWert = "natur & idylle";
+
                     if (userWert === dbWert) {
                         punkte++;
                     }
                 }
             });
             
+            // Jetzt wird der Prozentsatz an der echten Anzahl der gespielten Fragen gemessen (10 Fragen)
             let gesamtFragen = kategorienSpalten.length; 
             let prozentSatz = Math.round((punkte / gesamtFragen) * 100);
             return { ...reise, punkte, prozent: prozentSatz };
@@ -349,7 +321,7 @@ async function berechneErgebnis() {
         console.error("Fehler bei der Berechnung:", err);
     }
 }
- 
+
 // --- FORMULAR LOGIK ---
 function ladeTermine(reiseKey) {
     if(!dateSelect || !dateSelectContainer) return;
@@ -361,14 +333,14 @@ function ladeTermine(reiseKey) {
     });
     dateSelectContainer.classList.remove('hidden');
 }
- 
+
 if(tripSelect) {
     tripSelect.addEventListener('change', (e) => {
         if(e.target.value) ladeTermine(e.target.value);
         else if(dateSelectContainer) dateSelectContainer.classList.add('hidden');
     });
 }
- 
+
 if(ctaBtn) {
     ctaBtn.addEventListener('click', () => {
         if(contactForm) contactForm.reset();
@@ -383,7 +355,7 @@ if(ctaBtn) {
                 tripSelect.appendChild(o);
             });
         }
- 
+
         if(topMatchesZwischenspeicher.length > 0 && tripSelect) {
             const activeCard = document.querySelector('.ranking-item.active-card');
             let activeMatch = topMatchesZwischenspeicher[0].name;
@@ -393,21 +365,21 @@ if(ctaBtn) {
                 const matchFound = reiseDetails.find(d => rangText.includes(holeSauberenNamen(d.portfolio_key)));
                 if(matchFound) activeMatch = matchFound.portfolio_key;
             }
- 
+
             tripSelect.value = activeMatch;
             ladeTermine(activeMatch);
         }
         if(contactModal) contactModal.classList.remove('hidden');
     });
 }
- 
+
 if(closeModalBtn) closeModalBtn.addEventListener('click', () => { if(contactModal) contactModal.classList.add('hidden'); });
- 
+
 if(contactForm) {
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if(submitBtn) { submitBtn.innerText = "Wird gesendet..."; submitBtn.disabled = true; }
- 
+
         try {
             const { error } = await supabaseClient.from('anfragen').insert([{
                 name: document.getElementById('user-name').value,
