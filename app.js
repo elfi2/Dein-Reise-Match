@@ -1,13 +1,9 @@
-// 1. Supabase Verbindung aufsetzen (Mit der korrekten Schreibweise für dein HTML-Skript!)
-// 1. Supabase Verbindung aufsetzen (Mit der korrekten Schreibweise für dein HTML-Skript!)
-// 1. Supabase Verbindung aufsetzen (Mit der korrekten Schreibweise für dein HTML-Skript!)
-const SUPABASE_URL = "https://kqqzxhiylxfjgxkrvpd.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtxcXp4a2hpeWx4ZmpneGtydnBkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMDY2NjUsImV4cCI6MjA5NTg4MjY2NX0.4qyuvNLniTnvPtiLgs41M1YnaCc6g8PeiE0bVXFuwKU";
-
-// Hier ist das korrigierte, kleine 's' für das v1-CDN!
+// 1. Supabase Verbindung aufsetzen
+const SUPABASE_URL = "https://kqqzxkhiylxfjgxkrvpd.supabase.co";
+const SUPABASE_KEY = "sb_publishable_4uFBv3Zs2oYV3uo-3ni3xg_dsKcuXyD";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
  
-// MAPPING FÜR DEINE DATEINAMEN & BRANDING-FARBEN
+// MAPPING FÜR DEINE ECHTEN DATEINAMEN & BRANDING-FARBEN
 const piktogrammMapping = {
     "1. Toskana": { src: "toskana.png", color: "#FFAA00" },
     "2. Alpen-Trekking": { src: "alpen-trekking.png", color: "#00A896" },
@@ -24,12 +20,14 @@ const piktogrammMapping = {
     "Default": { src: "logo.png", color: "#00A896" }
 };
 
+// Dynamische Speicher aus der DB
 let quizQuestions = [];
 let reiseDetails = [];
 let currentQuestionIndex = 0;
 let userAnswers = [];
 let topMatchesZwischenspeicher = [];
 
+// Statische Termine für das Formular
 const verfuegbareTermine = {
     "1. Toskana": ["15.08.2026 - 22.08.2026", "10.09.2026 - 17.09.2026"],
     "2. Alpen-Trekking": ["01.07.2026 - 08.07.2026", "15.07.2026 - 22.07.2026"],
@@ -68,12 +66,24 @@ const submitBtn = document.getElementById('submit-contact-btn');
 if(startBtn) startBtn.addEventListener('click', startQuiz);
 if(restartBtn) restartBtn.addEventListener('click', startQuiz);
  
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     if(quizScreen) quizScreen.classList.add('hidden');
     if(resultScreen) resultScreen.classList.add('hidden');
     
-    // Initialisiere das Laden im Hintergrund
-    ladeDatenAusSupabase();
+    if(startBtn) {
+        startBtn.innerText = "Daten laden...";
+        startBtn.disabled = true;
+    }
+
+    setTimeout(() => {
+        if(startBtn && startBtn.disabled) {
+            console.warn("Supabase-Laden dauerte zu lange oder war fehlerhaft. Start erzwungen.");
+            startBtn.innerText = "Jetzt Quiz starten";
+            startBtn.disabled = false;
+        }
+    }, 2000);
+
+    await ladeDatenAusSupabase();
 
     const trigger = document.getElementById('vayo-details-trigger');
     if(trigger) {
@@ -92,33 +102,23 @@ document.addEventListener("DOMContentLoaded", () => {
 async function ladeDatenAusSupabase() {
     try {
         const { data: fragen, error: e1 } = await supabaseClient.from('quiz_fragen').select('*').order('sort_order', { ascending: true });
-        if(!e1 && fragen) quizQuestions = fragen;
+        if(e1) throw e1;
+        quizQuestions = fragen;
 
         const { data: details, error: e2 } = await supabaseClient.from('reise_details').select('*');
-        if(!e2 && details) reiseDetails = details;
+        if(e2) throw e2;
+        reiseDetails = details;
 
-        console.log("Daten erfolgreich im Hintergrund geladen:", quizQuestions.length, "Fragen.");
+        if(startBtn) {
+            startBtn.innerText = "Jetzt Quiz starten";
+            startBtn.disabled = false;
+        }
     } catch(err) {
-        console.error("Hintergrund-Ladefehler:", err);
+        console.error(err);
     }
 }
  
 function startQuiz() {
-    // Falls die Daten im Hintergrund noch nicht da sind, versuchen wir es kurz erneut
-    if (quizQuestions.length === 0) {
-        ladeDatenAusSupabase().then(() => {
-            if (quizQuestions.length > 0) {
-                ausfuehrenStart();
-            } else {
-                alert("Die Fragen werden noch geladen oder die DB blockiert. Bitte lade die Seite neu.");
-            }
-        });
-    } else {
-        ausfuehrenStart();
-    }
-}
-
-function ausfuehrenStart() {
     startScreen.classList.add('hidden');
     resultScreen.classList.add('hidden');
     quizScreen.classList.remove('hidden');
@@ -126,6 +126,8 @@ function ausfuehrenStart() {
     const container = document.querySelector('.quiz-container');
     if(container) container.classList.add('quiz-active');
     
+    const box = document.getElementById('vayo-full-itinerary');
+    if(box) box.classList.add('hidden');
     currentQuestionIndex = 0;
     userAnswers = [];
     topMatchesZwischenspeicher = [];
@@ -134,22 +136,19 @@ function ausfuehrenStart() {
  
 function showNextQuestion() {
     resetAnswerButtons();
-    
     let gesamtFragen = quizQuestions.length > 0 ? quizQuestions.length : 10;
     const progressPercent = (currentQuestionIndex / gesamtFragen) * 100;
     if(progressElement) progressElement.style.width = progressPercent + '%';
  
-    if (currentQuestionIndex >= quizQuestions.length) {
+    if (currentQuestionIndex >= gesamtFragen || quizQuestions.length === 0) {
         berechneErgebnis();
         return;
     }
  
     const currentQuestion = quizQuestions[currentQuestionIndex];
-    if(questionTextElement && currentQuestion) {
-        questionTextElement.innerText = currentQuestion.question;
-    }
+    if(questionTextElement) questionTextElement.innerText = currentQuestion.question;
  
-    if(currentQuestion && currentQuestion.answers && Array.isArray(currentQuestion.answers)) {
+    if(currentQuestion.answers && Array.isArray(currentQuestion.answers)) {
         currentQuestion.answers.forEach(answer => {
             const button = document.createElement('button');
             button.innerText = answer.text;
@@ -250,9 +249,10 @@ async function berechneErgebnis() {
     if(rankingListElement) rankingListElement.innerHTML = "";
  
     try {
-        const { data: reisen, error = null } = await supabaseClient.from('reisen').select('*');
+        const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
  
+        // JETZT GEKÜRZT: Exakt die 10 Kategorien, die im Quiz als Fragen vorkommen
         const kategorienSpalten = [
             'fokus', 'wetter', 'kulisse', 'transport', 'lage', 
             'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte'
@@ -262,25 +262,33 @@ async function berechneErgebnis() {
             let punkte = 0;
             userAnswers.forEach((antwort, index) => {
                 const spaltenName = kategorienSpalten[index];
+                
                 if (reise[spaltenName] !== undefined && reise[spaltenName] !== null) {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    if (userWert === "party") userWert = "party & nightlife";
-                    if (userWert === "metropole") userWert = "metropole & stadt";
-                    if (userWert === "fernreise" && dbWert.includes("fernreise")) userWert = dbWert;
-                    if (userWert === "abenteuer" && dbWert === "aktion & sport") userWert = "aktion & sport";
-                    if (userWert === "berge" && dbWert === "berge & natur") userWert = "berge & natur";
-                    if (userWert === "jugend-vibe" && dbWert === "young travel") userWert = "young travel";
+                    // DIALEKT-CLEANER
                     if (userWert.includes("aktion & sport")) userWert = "abenteuer";
                     if (userWert.includes("kultur & entdeckung")) userWert = "kultur";
+                    if (userWert.includes("party & nightlife")) userWert = "party";
                     if (userWert.includes("wellness & erholung")) userWert = "wellness";
+                    
+                    if (userWert.includes("heiß & tropisch")) userWert = "heiß & tropisch";
+                    if (userWert.includes("kalt & winterlich")) userWert = "kalt & winterlich";
+                    if (userWert.includes("mild & wechselhaft")) userWert = "mild & wechselhaft";
+                    
                     if (userWert.includes("beach & küste")) userWert = "strand & meer";
+                    if (userWert.includes("berge & natur")) userWert = "berge";
+                    if (userWert.includes("metropole & stadt")) userWert = "metropole";
                     if (userWert.includes("ländliche idylle")) userWert = "natur & idylle";
 
-                    if (userWert === dbWert) punkte++;
+                    if (userWert === dbWert) {
+                        punkte++;
+                    }
                 }
             });
+            
+            // Jetzt wird der Prozentsatz an der echten Anzahl der gespielten Fragen gemessen (10 Fragen)
             let gesamtFragen = kategorienSpalten.length; 
             let prozentSatz = Math.round((punkte / gesamtFragen) * 100);
             return { ...reise, punkte, prozent: prozentSatz };
@@ -288,15 +296,19 @@ async function berechneErgebnis() {
  
         reisenMitPunkten.sort((a, b) => b.punkte - a.punkte);
         topMatchesZwischenspeicher = reisenMitPunkten.slice(0, 5);
+ 
         zeigeAusgewaehlteReise(0);
          
         if (rankingListElement) {
             rankingListElement.innerHTML = "<h3>Klicke auf eine Reise für Details:</h3>";
+ 
             topMatchesZwischenspeicher.forEach((r, i) => {
                 const bereinigterRangName = holeSauberenNamen(r.name);
+                 
                 const item = document.createElement('div');
                 item.className = "ranking-item";
                 if(i === 0) item.classList.add('active-card');
+                
                 item.innerHTML = `
                     <span class="rank-name">Platz ${i + 1}: ${bereinigterRangName}</span>
                     <span class="rank-pct">${r.prozent}%</span>
@@ -343,8 +355,46 @@ if(ctaBtn) {
                 tripSelect.appendChild(o);
             });
         }
+
+        if(topMatchesZwischenspeicher.length > 0 && tripSelect) {
+            const activeCard = document.querySelector('.ranking-item.active-card');
+            let activeMatch = topMatchesZwischenspeicher[0].name;
+            
+            if(activeCard) {
+                const rangText = activeCard.querySelector('.rank-name').textContent;
+                const matchFound = reiseDetails.find(d => rangText.includes(holeSauberenNamen(d.portfolio_key)));
+                if(matchFound) activeMatch = matchFound.portfolio_key;
+            }
+
+            tripSelect.value = activeMatch;
+            ladeTermine(activeMatch);
+        }
         if(contactModal) contactModal.classList.remove('hidden');
     });
 }
 
 if(closeModalBtn) closeModalBtn.addEventListener('click', () => { if(contactModal) contactModal.classList.add('hidden'); });
+
+if(contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if(submitBtn) { submitBtn.innerText = "Wird gesendet..."; submitBtn.disabled = true; }
+
+        try {
+            const { error } = await supabaseClient.from('anfragen').insert([{
+                name: document.getElementById('user-name').value,
+                geburtsdatum: document.getElementById('user-dob').value,
+                reise: holeSauberenNamen(tripSelect.value),
+                termin: dateSelect.value,
+                anmerkungen: document.getElementById('user-remarks').value
+            }]);
+            if(error) throw error;
+            if(contactForm) contactForm.classList.add('hidden');
+            if(successMessage) successMessage.classList.remove('hidden');
+        } catch(err) {
+            alert("Fehler beim Senden!");
+        } finally {
+            if(submitBtn) { submitBtn.innerText = "Kostenlos anfragen"; submitBtn.disabled = false; }
+        }
+    });
+}
