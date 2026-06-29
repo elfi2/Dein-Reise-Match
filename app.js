@@ -19,14 +19,14 @@ const piktogrammMapping = {
     "12. New York City": { src: "new york city.png", color: "#FF4A7A" },
     "Default": { src: "logo.png", color: "#00A896" }
 };
-
+ 
 // Dynamische Speicher aus der DB
 let quizQuestions = [];
 let reiseDetails = [];
 let currentQuestionIndex = 0;
 let userAnswers = [];
 let topMatchesZwischenspeicher = [];
-
+ 
 // Statische Termine für das Formular
 const verfuegbareTermine = {
     "1. Toskana": ["15.08.2026 - 22.08.2026", "10.09.2026 - 17.09.2026"],
@@ -53,7 +53,7 @@ const questionTextElement = document.getElementById('question-text');
 const answerButtonsElement = document.getElementById('answer-buttons');
 const progressElement = document.getElementById('progress');
 const matchNameElement = document.getElementById('match-name');
-
+ 
 const contactModal = document.getElementById('contact-modal');
 const closeModalBtn = document.getElementById('close-modal-btn');
 const tripSelect = document.getElementById('trip-selection');
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         startBtn.innerText = "Daten laden...";
         startBtn.disabled = true;
     }
-
+ 
     setTimeout(() => {
         if(startBtn && startBtn.disabled) {
             console.warn("Supabase-Laden dauerte zu lange oder war fehlerhaft. Start erzwungen.");
@@ -82,9 +82,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             startBtn.disabled = false;
         }
     }, 2000);
-
+ 
     await ladeDatenAusSupabase();
-
+ 
     const trigger = document.getElementById('vayo-details-trigger');
     if(trigger) {
         trigger.addEventListener('click', () => {
@@ -98,17 +98,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 });
-
+ 
 async function ladeDatenAusSupabase() {
     try {
         const { data: fragen, error: e1 } = await supabaseClient.from('quiz_fragen').select('*').order('sort_order', { ascending: true });
         if(e1) throw e1;
         quizQuestions = fragen;
-
+ 
         const { data: details, error: e2 } = await supabaseClient.from('reise_details').select('*');
         if(e2) throw e2;
         reiseDetails = details;
-
+ 
         if(startBtn) {
             startBtn.innerText = "Jetzt Quiz starten";
             startBtn.disabled = false;
@@ -179,11 +179,11 @@ function holeSauberenNamen(nameRaw) {
     if (!nameRaw) return "Unbekanntes VAYO-Match";
     return nameRaw.replace(/^\d+\.\s*/, '').trim();
 }
-
+ 
 function zeigeAusgewaehlteReise(index) {
     const reise = topMatchesZwischenspeicher[index];
     if (!reise) return;
-
+ 
     const saubererName = holeSauberenNamen(reise.name);
     
     if(resultScreen) {
@@ -193,10 +193,10 @@ function zeigeAusgewaehlteReise(index) {
         }
     }
     if(matchNameElement) matchNameElement.innerText = saubererName;
-
+ 
     const itinerarySteps = document.getElementById('itinerary-steps');
     if(itinerarySteps) itinerarySteps.innerHTML = "";
-
+ 
     let meta = piktogrammMapping[reise.name] || piktogrammMapping["Default"];
      
     const piktoBox = document.getElementById('vayo-piktogramm-box');
@@ -205,7 +205,7 @@ function zeigeAusgewaehlteReise(index) {
         piktoImg.src = meta.src; 
         piktoBox.style.backgroundColor = meta.color; 
     }
-
+ 
     const zielData = reiseDetails.find(detail => detail.portfolio_key === reise.name);
      
     if (zielData) {
@@ -228,7 +228,7 @@ function zeigeAusgewaehlteReise(index) {
             });
         }
     }
-
+ 
     document.querySelectorAll('.ranking-item').forEach((item, idx) => {
         if(idx === index) {
             item.classList.add('active-card');
@@ -252,7 +252,6 @@ async function berechneErgebnis() {
         const { data: reisen, error } = await supabaseClient.from('reisen').select('*');
         if (error) throw error;
  
-        // JETZT GEKÜRZT: Exakt die 10 Kategorien, die im Quiz als Fragen vorkommen
         const kategorienSpalten = [
             'fokus', 'wetter', 'kulisse', 'transport', 'lage', 
             'unterkunft_art', 'zielgruppe', 'abend', 'dauer', 'unterkuenfte'
@@ -281,14 +280,13 @@ async function berechneErgebnis() {
                     if (userWert.includes("berge & natur")) userWert = "berge";
                     if (userWert.includes("metropole & stadt")) userWert = "metropole";
                     if (userWert.includes("ländliche idylle")) userWert = "natur & idylle";
-
+ 
                     if (userWert === dbWert) {
                         punkte++;
                     }
                 }
             });
             
-            // Jetzt wird der Prozentsatz an der echten Anzahl der gespielten Fragen gemessen (10 Fragen)
             let gesamtFragen = kategorienSpalten.length; 
             let prozentSatz = Math.round((punkte / gesamtFragen) * 100);
             return { ...reise, punkte, prozent: prozentSatz };
@@ -321,7 +319,7 @@ async function berechneErgebnis() {
         console.error("Fehler bei der Berechnung:", err);
     }
 }
-
+ 
 // --- FORMULAR LOGIK ---
 function ladeTermine(reiseKey) {
     if(!dateSelect || !dateSelectContainer) return;
@@ -333,14 +331,14 @@ function ladeTermine(reiseKey) {
     });
     dateSelectContainer.classList.remove('hidden');
 }
-
+ 
 if(tripSelect) {
     tripSelect.addEventListener('change', (e) => {
         if(e.target.value) ladeTermine(e.target.value);
         else if(dateSelectContainer) dateSelectContainer.classList.add('hidden');
     });
 }
-
+ 
 if(ctaBtn) {
     ctaBtn.addEventListener('click', () => {
         if(contactForm) contactForm.reset();
@@ -355,7 +353,7 @@ if(ctaBtn) {
                 tripSelect.appendChild(o);
             });
         }
-
+ 
         if(topMatchesZwischenspeicher.length > 0 && tripSelect) {
             const activeCard = document.querySelector('.ranking-item.active-card');
             let activeMatch = topMatchesZwischenspeicher[0].name;
@@ -365,29 +363,46 @@ if(ctaBtn) {
                 const matchFound = reiseDetails.find(d => rangText.includes(holeSauberenNamen(d.portfolio_key)));
                 if(matchFound) activeMatch = matchFound.portfolio_key;
             }
-
+ 
             tripSelect.value = activeMatch;
             ladeTermine(activeMatch);
         }
         if(contactModal) contactModal.classList.remove('hidden');
     });
 }
-
+ 
 if(closeModalBtn) closeModalBtn.addEventListener('click', () => { if(contactModal) contactModal.classList.add('hidden'); });
-
+ 
 if(contactForm) {
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if(submitBtn) { submitBtn.innerText = "Wird gesendet..."; submitBtn.disabled = true; }
-
+ 
+        const dbSucheName = holeSauberenNamen(tripSelect.value);
+ 
         try {
+            // 1. ANZAHL PRÜFEN: Abrufen, ob für diesen sauberen Namen bereits 10 Buchungen vorliegen
+            const { data: bisherigeEintraege, error: checkError } = await supabaseClient
+                .from('anfragen')
+                .select('id')
+                .eq('reise', dbSucheName);
+ 
+            if (checkError) throw checkError;
+ 
+            // Ab der 11. Anmeldung (also wenn 10 oder mehr Einträge existieren) poppt die Warnung auf
+            if (bisherigeEintraege && bisherigeEintraege.length >= 10) {
+                alert("Achtung! Die Reise ist vermutlich bereits voll!");
+            }
+ 
+            // 2. DATENSATZ SPEICHERN
             const { error } = await supabaseClient.from('anfragen').insert([{
                 name: document.getElementById('user-name').value,
                 geburtsdatum: document.getElementById('user-dob').value,
-                reise: holeSauberenNamen(tripSelect.value),
+                reise: dbSucheName,
                 termin: dateSelect.value,
                 anmerkungen: document.getElementById('user-remarks').value
             }]);
+            
             if(error) throw error;
             if(contactForm) contactForm.classList.add('hidden');
             if(successMessage) successMessage.classList.remove('hidden');
