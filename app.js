@@ -213,7 +213,7 @@ async function berechneErgebnis() {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
                     
-                    // KORRIGIERTER CLEANER: Übersetzt Quiz-Klicks exakt in deinen SQL-Tabellen-Inhalt
+                    // DIALEKT-CLEANER FÜR 100% EXAKTES SQL-MATCHING
                     if (userWert === "abenteuer") userWert = "aktion & sport";
                     if (userWert === "kultur") userWert = "kultur & entdeckung";
                     if (userWert === "party") userWert = "party & nightlife";
@@ -223,13 +223,16 @@ async function berechneErgebnis() {
                     if (userWert === "berge") userWert = "berge & natur";
                     if (userWert === "metropole") userWert = "metropole & stadt";
                     if (userWert === "natur & idylle") userWert = "ländliche idylle";
-
-                    if (userWert === "nachtleben & clubs") userWert = "nachtleben & clubs";
-                    if (userWert === "lagerfeuer & naturruhe") userWert = "lagerfeuer & naturruhe";
-                    if (userWert === "geselliges beisammensein") userWert = "geselliges beisammensein";
                     
-                    if (userWert === "1 feste unterkunft") userWert = "1 feste unterkunft";
-                    if (userWert === "rundreise") userWert = "rundreise";
+                    // ERWEITERUNG: Damit "kurzstreckenflug" bei Transatlantik-Zielen auch als Langstreckenflug zählt!
+                    if (userWert === "kurzstreckenflug" && dbWert === "langstreckenflug") {
+                        userWert = "langstreckenflug";
+                    }
+
+                    // ERWEITERUNG: Damit Jugend-Vibe und Young Travel flexibel matchen
+                    if ((userWert === "jugend-vibe" || userWert === "young travel") && (dbWert === "jugend-vibe" || dbWert === "young travel")) {
+                        userWert = dbWert;
+                    }
  
                     if (userWert === dbWert) { punkte++; }
                 }
@@ -311,7 +314,7 @@ if(contactForm) {
         const dbSucheName = holeSauberenNamen(tripSelect.value);
         let istVoll = false;
         try {
-            const { data: bisherigeEintraege, error: checkError } = await supabaseClient
+            const { data: bisherigeEintraege, error: checkError = null } = await supabaseClient
                 .from('anfragen')
                 .select('id')
                 .eq('reise', dbSucheName);
