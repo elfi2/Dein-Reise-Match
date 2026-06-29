@@ -212,17 +212,25 @@ async function berechneErgebnis() {
                 if (reise[spaltenName] !== undefined && reise[spaltenName] !== null) {
                     let dbWert = String(reise[spaltenName]).trim().toLowerCase();
                     let userWert = String(antwort).trim().toLowerCase();
-                    if (userWert.includes("aktion & sport")) userWert = "abenteuer";
-                    if (userWert.includes("kultur & entdeckung")) userWert = "kultur";
-                    if (userWert.includes("party & nightlife")) userWert = "party";
-                    if (userWert.includes("wellness & erholung")) userWert = "wellness";
-                    if (userWert.includes("heiß & tropisch")) userWert = "heiß & tropisch";
-                    if (userWert.includes("kalt & winterlich")) userWert = "kalt & winterlich";
-                    if (userWert.includes("mild & wechselhaft")) userWert = "mild & wechselhaft";
-                    if (userWert.includes("beach & küste")) userWert = "strand & meer";
-                    if (userWert.includes("berge & natur")) userWert = "berge";
-                    if (userWert.includes("metropole & stadt")) userWert = "metropole";
-                    if (userWert.includes("ländliche idylle")) userWert = "natur & idylle";
+                    
+                    // KORRIGIERTER CLEANER: Übersetzt Quiz-Klicks exakt in deinen SQL-Tabellen-Inhalt
+                    if (userWert === "abenteuer") userWert = "aktion & sport";
+                    if (userWert === "kultur") userWert = "kultur & entdeckung";
+                    if (userWert === "party") userWert = "party & nightlife";
+                    if (userWert === "wellness") userWert = "wellness & erholung";
+                    
+                    if (userWert === "strand & meer") userWert = "beach & küste";
+                    if (userWert === "berge") userWert = "berge & natur";
+                    if (userWert === "metropole") userWert = "metropole & stadt";
+                    if (userWert === "natur & idylle") userWert = "ländliche idylle";
+
+                    if (userWert === "nachtleben & clubs") userWert = "nachtleben & clubs";
+                    if (userWert === "lagerfeuer & naturruhe") userWert = "lagerfeuer & naturruhe";
+                    if (userWert === "geselliges beisammensein") userWert = "geselliges beisammensein";
+                    
+                    if (userWert === "1 feste unterkunft") userWert = "1 feste unterkunft";
+                    if (userWert === "rundreise") userWert = "rundreise";
+ 
                     if (userWert === dbWert) { punkte++; }
                 }
             });
@@ -335,9 +343,9 @@ if(contactForm) {
                 successMessage.classList.remove('hidden');
             }
         } catch(err) {
-           alert("Fehler beim Senden!");
+            alert("Fehler beim Senden!");
         } finally {
-           if(submitBtn) { submitBtn.innerText = "Kostenlos anfragen"; submitBtn.disabled = false; }
+            if(submitBtn) { submitBtn.innerText = "Kostenlos anfragen"; submitBtn.disabled = false; }
         }
     });
 }
